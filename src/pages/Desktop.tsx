@@ -51,12 +51,20 @@ export default function Desktop() {
       >
         <AnimatePresence>
           {apps
-            .filter((app) => windows[app.id]?.open)
+            .filter((app) => !app.floating && windows[app.id]?.open)
             .map((app) => (
               <AppWindow key={app.id} app={app} />
             ))}
         </AnimatePresence>
       </main>
+
+      <AnimatePresence>
+        {apps
+          .filter((app) => app.floating && windows[app.id]?.open)
+          .map((app) => (
+            <FloatingPanel key={app.id} app={app} />
+          ))}
+      </AnimatePresence>
 
       <Dock />
       <Toast />

@@ -33,6 +33,8 @@ export interface AppDef {
   minWidth?: number;
   minHeight?: number;
   component: LazyExoticComponent<ComponentType>;
+  /** Rendered as a Siri-style floating panel instead of a normal window. */
+  floating?: boolean;
 }
 
 // Each app is code-split, so the first load only ships the desktop shell.
@@ -136,6 +138,31 @@ export const apps: AppDef[] = [
     height: 760,
     minWidth: 380,
     component: lazy(() => import("~/apps/Safari"))
+  },
+  {
+    id: "assistant",
+    title: "Ask Raj's AI",
+    description: "Ask questions about Raj's work",
+    icon: {
+      glyph: "i-ph:sparkle-fill",
+      tile: "bg-gradient-to-br from-[#5b8def] via-[#8a4fd8] to-[#e05a9c]"
+    },
+    width: 420,
+    height: 640,
+    floating: true,
+    component: lazy(() => import("~/apps/Assistant"))
+  },
+  {
+    id: "terminal",
+    title: "Terminal",
+    description: "Explore the portfolio from a command line",
+    icon: {
+      glyph: "i-ph:terminal-window-fill",
+      tile: "bg-gradient-to-b from-[#4a4a50] to-[#1f1f23]"
+    },
+    width: 760,
+    height: 480,
+    component: lazy(() => import("~/apps/Terminal"))
   }
 ];
 
