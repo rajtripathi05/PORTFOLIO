@@ -1,66 +1,29 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-
 import Desktop from "~/pages/Desktop";
-import Login from "~/pages/Login";
 import Boot from "~/pages/Boot";
+import { storage } from "~/utils";
 
+import "@fontsource-variable/inter";
 import "@unocss/reset/tailwind.css";
 import "uno.css";
-import "katex/dist/katex.min.css";
 import "~/styles/index.css";
 
 export default function App() {
-  const [login, setLogin] = useState<boolean>(false);
-  const [booting, setBooting] = useState<boolean>(false);
-  const [restart, setRestart] = useState<boolean>(false);
-  const [sleep, setSleep] = useState<boolean>(false);
+  // Returning visitors skip the intro entirely.
+  const [booted, setBooted] = useState(() => storage.get("seenIntro") === "1");
 
-  const shutMac = (e: React.MouseEvent): void => {
-    e.stopPropagation();
-    setRestart(false);
-    setSleep(false);
-    setLogin(false);
-    setBooting(true);
-  };
-
-  const restartMac = (e: React.MouseEvent): void => {
-    e.stopPropagation();
-    setRestart(true);
-    setSleep(false);
-    setLogin(false);
-    setBooting(true);
-  };
-
-  const sleepMac = (e: React.MouseEvent): void => {
-    e.stopPropagation();
-    setRestart(false);
-    setSleep(true);
-    setLogin(false);
-    setBooting(true);
-  };
-
-  if (booting) {
-    return <Boot restart={restart} sleep={sleep} setBooting={setBooting} />;
-  } else if (login) {
+  if (!booted)
     return (
-      <Desktop
-        setLogin={setLogin}
-        shutMac={shutMac}
-        sleepMac={sleepMac}
-        restartMac={restartMac}
+      <Boot
+        onDone={() => {
+          storage.set("seenIntro", "1");
+          setBooted(true);
+        }}
       />
     );
-  } else {
-    return (
-      <Login
-        setLogin={setLogin}
-        shutMac={shutMac}
-        sleepMac={sleepMac}
-        restartMac={restartMac}
-      />
-    );
-  }
+
+  return <Desktop />;
 }
 
 const rootElement = document.getElementById("root") as HTMLElement;

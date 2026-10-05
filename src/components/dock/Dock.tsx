@@ -1,69 +1,63 @@
 import { useMotionValue } from "framer-motion";
-import { apps } from "~/configs";
+import { apps, launchpadIcon } from "~/configs/apps";
+import { isTouchDevice } from "~/utils";
 
-interface DockProps {
-  open: (id: string) => void;
-  showApps: {
-    [key: string]: boolean;
-  };
-  showLaunchpad: boolean;
-  toggleLaunchpad: (target: boolean) => void;
-  hide: boolean;
-}
-
-export default function Dock({
-  open,
-  showApps,
-  showLaunchpad,
-  toggleLaunchpad,
-  hide
-}: DockProps) {
-  const { dockSize, dockMag } = useStore((state) => ({
-    dockSize: state.dockSize,
-    dockMag: state.dockMag
-  }));
-
-  const openApp = (id: string) => {
-    if (id === "launchpad") toggleLaunchpad(!showLaunchpad);
-    else {
-      toggleLaunchpad(false);
-      open(id);
-    }
-  };
+export default function Dock() {
+  const windows = useStore((s) => s.windows);
+  const openApp = useStore((s) => s.openApp);
+  const toggleOverlay = useStore((s) => s.toggleOverlay);
+  const setOverlay = useStore((s) => s.setOverlay);
+  const overlay = useStore((s) => s.overlay);
+  const { winWidth } = useWindowSize();
+  const reduced = useReducedMotion();
 
   const mouseX = useMotionValue<number | null>(null);
+  const magnify = !reduced && !isTouchDevice();
+  // Shrink icons on narrower desktops so every labelled icon still fits.
+  const size = winWidth < 1000 ? 38 : winWidth < 1200 ? 44 : 48;
+  const mag = 1.55;
 
   return (
-    <div
-      className={`dock fixed inset-x-0 mx-auto bottom-1 ${hide ? "z-0" : "z-50"}`}
-      w="full sm:max"
-      overflow="x-scroll sm:x-visible"
-    >
+    <nav aria-label="Dock" className="fixed inset-x-0 bottom-2 z-30 flex justify-center px-2">
       <ul
-        className="flex space-x-2 px-2 backdrop-blur-2xl bg-c-white/20"
-        border="~ c-400/40 rounded-none sm:rounded-xl"
-        onMouseMove={(e) => mouseX.set(e.nativeEvent.x)}
+        className="dock-bar glass-dock max-w-full"
+        onMouseMove={(e) => magnify && mouseX.set(e.nativeEvent.x)}
         onMouseLeave={() => mouseX.set(null)}
-        style={{
-          height: `${(dockSize + 15) / 16}rem`
-        }}
       >
+        <DockItem
+          id="launchpad"
+          title="Launchpad"
+          icon={launchpadIcon}
+          isOpen={overlay === "launchpad"}
+          launches={0}
+          mouseX={mouseX}
+          magnify={magnify}
+          bounce={false}
+          size={size}
+          mag={mag}
+          onOpen={() => toggleOverlay("launchpad")}
+        />
+        <li className="dock-sep" aria-hidden="true" />
         {apps.map((app) => (
           <DockItem
-            key={`dock-${app.id}`}
+            key={app.id}
             id={app.id}
             title={app.title}
-            img={app.img}
+            icon={app.icon}
+            isOpen={!!windows[app.id]?.open}
+            launches={windows[app.id]?.launches ?? 0}
             mouseX={mouseX}
-            desktop={app.desktop}
-            openApp={openApp}
-            isOpen={app.desktop && showApps[app.id]}
-            link={app.link}
-            dockSize={dockSize}
-            dockMag={dockMag}
+            magnify={magnify}
+            bounce={!reduced}
+            size={size}
+            mag={mag}
+            onOpen={() => {
+              setOverlay(null);
+              openApp(app.id);
+            }}
           />
         ))}
       </ul>
-    </div>
+    </nav>
   );
 }

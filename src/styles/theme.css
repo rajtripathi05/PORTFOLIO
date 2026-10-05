@@ -1,0 +1,186 @@
+/* Design tokens. One accent colour; light and dark sets meet WCAG AA for text. */
+:root {
+  --font-sans: -apple-system, BlinkMacSystemFont, "Inter Variable", "Inter", "Segoe UI", Roboto,
+    sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", Consolas, "Liberation Mono", monospace;
+
+  --accent: #2f62e0;
+  --accent-hover: #2554c7;
+  --accent-text: #2353c9;
+  --accent-soft: rgba(47, 98, 224, 0.12);
+  --ring: #2f62e0;
+
+  --text-1: #1d1d1f;
+  --text-2: #3f3f45;
+  --text-3: #63636b;
+
+  --panel: #ffffff;
+  --panel-2: #f4f4f7;
+  --panel-3: #e9e9ee;
+  --hairline: rgba(0, 0, 0, 0.12);
+
+  --window-solid: #f6f6f8;
+  --window-glass: rgba(246, 246, 248, 0.82);
+  --titlebar: rgba(234, 234, 238, 0.78);
+  --titlebar-solid: #eaeaee;
+  --menubar-solid: #eef0f4;
+  --menubar-glass: rgba(255, 255, 255, 0.58);
+  --dock-solid: #eceef2;
+  --dock-glass: rgba(255, 255, 255, 0.55);
+  --menu-solid: #f7f7f9;
+  --menu-glass: rgba(246, 246, 248, 0.97);
+
+  --shadow-window: 0 0 0 0.5px rgba(0, 0, 0, 0.08), 0 8px 24px -6px rgba(0, 0, 0, 0.18),
+    0 24px 64px -12px rgba(0, 0, 0, 0.28);
+  --shadow-window-focus: 0 0 0 0.5px rgba(0, 0, 0, 0.1), 0 12px 32px -6px rgba(0, 0, 0, 0.24),
+    0 32px 90px -12px rgba(0, 0, 0, 0.4);
+
+  --success: #1f8f4e;
+  --warning-bg: #fff6e0;
+  --warning-text: #7a4d00;
+}
+
+.dark {
+  --accent: #2f62e0;
+  --accent-hover: #3b6ff0;
+  --accent-text: #8fb0ff;
+  --accent-soft: rgba(110, 150, 255, 0.16);
+  --ring: #8fb0ff;
+
+  --text-1: #f5f5f7;
+  --text-2: #d6d6dc;
+  --text-3: #a8a8b0;
+
+  --panel: #1f1f22;
+  --panel-2: #26262a;
+  --panel-3: #323237;
+  --hairline: rgba(255, 255, 255, 0.12);
+
+  --window-solid: #232326;
+  --window-glass: rgba(35, 35, 38, 0.82);
+  --titlebar: rgba(48, 48, 52, 0.78);
+  --titlebar-solid: #303034;
+  --menubar-solid: #1c1c1f;
+  --menubar-glass: rgba(24, 24, 27, 0.5);
+  --dock-solid: #2a2a2e;
+  --dock-glass: rgba(40, 40, 44, 0.5);
+  --menu-solid: #2a2a2e;
+  --menu-glass: rgba(42, 42, 46, 0.97);
+
+  --shadow-window: 0 0 0 0.5px rgba(255, 255, 255, 0.06), 0 8px 24px -6px rgba(0, 0, 0, 0.5),
+    0 24px 64px -12px rgba(0, 0, 0, 0.6);
+  --shadow-window-focus: 0 0 0 0.5px rgba(255, 255, 255, 0.08), 0 12px 32px -6px rgba(0, 0, 0, 0.6),
+    0 32px 90px -12px rgba(0, 0, 0, 0.7);
+
+  --success: #4cd27f;
+  --warning-bg: #3a2e12;
+  --warning-text: #ffd88a;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--text-1);
+  background: var(--panel-2);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+}
+
+/* Visible keyboard focus everywhere; no ring for mouse clicks. */
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+button,
+[role="button"],
+a {
+  cursor: pointer;
+}
+button:disabled {
+  cursor: not-allowed;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* Translucent surfaces fall back to solid colours where backdrop-filter is unsupported. */
+.glass-window {
+  background: var(--window-solid);
+}
+.glass-titlebar {
+  background: var(--titlebar-solid);
+}
+.glass-menubar {
+  background: var(--menubar-solid);
+}
+.glass-dock {
+  background: var(--dock-solid);
+}
+.glass-menu {
+  background: var(--menu-solid);
+}
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass-window {
+    background: var(--window-glass);
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
+  }
+  .glass-titlebar {
+    background: var(--titlebar);
+  }
+  .glass-menubar {
+    background: var(--menubar-glass);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+  }
+  .glass-dock {
+    background: var(--dock-glass);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+  }
+  .glass-menu {
+    background: var(--menu-glass);
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

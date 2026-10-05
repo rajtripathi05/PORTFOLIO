@@ -1,135 +1,102 @@
-import React from "react";
+import type React from "react";
 import useRaf from "@rooks/use-raf";
 import {
   motion,
+  useAnimationControls,
   useMotionValue,
   useSpring,
   useTransform,
   type MotionValue
 } from "framer-motion";
+import type { IconSpec } from "~/configs/apps";
 
-// Hover effect is adopted from https://github.com/PuruVJ/macos-web/blob/main/src/components/dock/DockItem.tsx
-
+// Magnification curve adapted from https://github.com/PuruVJ/macos-web (via Renovamen/playground-macos).
 const useDockHoverAnimation = (
-  mouseX: MotionValue,
-  ref: React.RefObject<HTMLImageElement>,
-  dockSize: number,
-  dockMag: number
+  mouseX: MotionValue<number | null>,
+  ref: React.RefObject<HTMLDivElement>,
+  size: number,
+  mag: number
 ) => {
-  const distanceLimit = dockSize * 6;
-  const distanceInput = [
-    -distanceLimit,
-    -distanceLimit / (dockMag * 0.65),
-    -distanceLimit / (dockMag * 0.85),
-    0,
-    distanceLimit / (dockMag * 0.85),
-    distanceLimit / (dockMag * 0.65),
-    distanceLimit
-  ];
-  const widthOutput = [
-    dockSize,
-    dockSize * (dockMag * 0.55),
-    dockSize * (dockMag * 0.75),
-    dockSize * dockMag,
-    dockSize * (dockMag * 0.75),
-    dockSize * (dockMag * 0.55),
-    dockSize
-  ];
-  const beyondTheDistanceLimit = distanceLimit + 1;
+  const limit = size * 5;
+  const input = [-limit, -limit / 2, 0, limit / 2, limit];
+  const output = [size, size * (1 + (mag - 1) * 0.45), size * mag, size * (1 + (mag - 1) * 0.45), size];
+  const beyond = limit + 1;
 
-  const distance = useMotionValue(beyondTheDistanceLimit);
-  const widthPX = useSpring(useTransform(distance, distanceInput, widthOutput), {
+  const distance = useMotionValue(beyond);
+  const width = useSpring(useTransform(distance, input, output), {
     stiffness: 1700,
     damping: 90
   });
 
-  const width = useTransform(widthPX, (width) => `${width / 16}rem`);
-
   useRaf(() => {
     const el = ref.current;
-    const mouseXVal = mouseX.get();
-    if (el && mouseXVal !== null) {
+    const x = mouseX.get();
+    if (el && x !== null) {
       const rect = el.getBoundingClientRect();
-      const imgCenterX = rect.left + rect.width / 2;
-      // difference between the x coordinate value of the mouse pointer
-      // and the img center x coordinate value
-      const distanceDelta = mouseXVal - imgCenterX;
-      distance.set(distanceDelta);
+      distance.set(x - (rect.left + rect.width / 2));
       return;
     }
-
-    distance.set(beyondTheDistanceLimit);
+    distance.set(beyond);
   }, true);
 
-  return { width, widthPX };
+  return width;
 };
 
 interface DockItemProps {
   id: string;
   title: string;
-  img: string;
-  mouseX: MotionValue;
-  desktop: boolean;
-  openApp: (id: string) => void;
+  icon: IconSpec;
   isOpen: boolean;
-  link?: string;
-  dockSize: number;
-  dockMag: number;
+  launches: number;
+  mouseX: MotionValue<number | null>;
+  magnify: boolean;
+  bounce: boolean;
+  size: number;
+  mag: number;
+  onOpen: () => void;
 }
 
-export default function DockItem({
-  id,
-  title,
-  img,
-  mouseX,
-  desktop,
-  openApp,
-  isOpen,
-  link,
-  dockSize,
-  dockMag
-}: DockItemProps) {
-  const imgRef = useRef<HTMLImageElement>(null);
-  const { width } = useDockHoverAnimation(mouseX, imgRef, dockSize, dockMag);
-  const { winWidth } = useWindowSize();
+export default function DockItem(props: DockItemProps) {
+  const { id, title, icon, isOpen, launches, mouseX, magnify, bounce, size, mag, onOpen } =
+    props;
+  const ref = useRef<HTMLDivElement>(null);
+  const width = useDockHoverAnimation(mouseX, ref, size, mag);
+  const controls = useAnimationControls();
+  const first = useRef(true);
+
+  // Bounce once each time the app is launched from closed.
+  useEffect(() => {
+    if (first.current) {
+      first.current = false;
+      return;
+    }
+    if (bounce && launches > 0)
+      controls.start({ y: [0, -18, 0, -7, 0], transition: { duration: 0.75, ease: "easeOut" } });
+  }, [launches]);
 
   return (
-    <li
-      id={`dock-${id}`}
-      onClick={desktop || id === "launchpad" ? () => openApp(id) : () => {}}
-      className="relative flex flex-col justify-end mb-1"
-    >
-      <p
-        className="tooltip absolute inset-x-0 mx-auto w-max rounded-md bg-c-300/80"
-        p="x-3 y-1"
-        text="sm c-black"
+    <li className="flex">
+      <button
+        type="button"
+        id={`dock-${id}`}
+        className="dock-btn"
+        onClick={onOpen}
+        aria-label={`Open ${title}`}
+        title={title}
       >
-        {title}
-      </p>
-      {link ? (
-        <a href={link} target="_blank" rel="noreferrer">
-          <motion.img
-            ref={imgRef}
-            src={img}
-            alt={title}
-            title={title}
-            draggable={false}
-            style={winWidth < 640 ? {} : { width, willChange: "width" }}
-          />
-        </a>
-      ) : (
-        <motion.img
-          ref={imgRef}
-          src={img}
-          alt={title}
-          title={title}
-          draggable={false}
-          style={winWidth < 640 ? {} : { width, willChange: "width" }}
-        />
-      )}
-      <div
-        className={`size-1 mx-auto rounded-full bg-c-800 ${isOpen ? "" : "invisible"}`}
-      />
+        <motion.div
+          ref={ref}
+          animate={controls}
+          style={magnify ? { width, height: width } : { width: size, height: size }}
+        >
+          <AppIcon icon={icon} size="100%" />
+        </motion.div>
+        <span className="dock-label" aria-hidden="true">
+          {title}
+        </span>
+        <span className={`dock-dot ${isOpen ? "" : "invisible"}`} aria-hidden="true" />
+        {isOpen && <span className="sr-only">(open)</span>}
+      </button>
     </li>
   );
 }

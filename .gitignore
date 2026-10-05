@@ -3,3 +3,14 @@
 .cache/
 node_modules/
 dist/
+
+# Local media originals (never committed)
+media-src/
+
+# Env
+.env
+.env.*
+!.env.example
+
+# Netlify
+.netlify/

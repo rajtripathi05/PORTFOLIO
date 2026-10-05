@@ -1,78 +1,72 @@
 import {
   defineConfig,
-  presetAttributify,
   presetIcons,
   presetUno,
   transformerDirectives,
   transformerVariantGroup,
-  transformerAttributifyJsx
 } from "unocss";
 
-const colorReg = (prefix: string) => new RegExp("^" + prefix + "-([0-9a-z]+)(/(\\d+))?$");
-
-const colorAttr = (prefix: string, [, color, , opacity]: RegExpMatchArray) => {
-  let lightColor = "",
-    darkColor = "";
-
-  if (["black", "white"].includes(color)) {
-    lightColor = color;
-    darkColor = color === "white" ? "black" : "white";
-  } else {
-    lightColor = `gray-${color}`;
-    darkColor = `gray-${(
-      (+color === 900 || +color === 50 ? 950 : 900) - +color
-    ).toString()}`;
-  }
-
-  const attr = `${prefix}-${lightColor}${opacity ? "/" + opacity : ""}`;
-  const darkAttr = `${prefix}-${darkColor}${opacity ? "/" + opacity : ""}`;
-
-  return `${attr} dark:${darkAttr}`;
-};
-
 export default defineConfig({
+  // Colours come from CSS variables in src/styles/theme.css, so light/dark is automatic.
+  theme: {
+    colors: {
+      accent: {
+        DEFAULT: "var(--accent)",
+        hover: "var(--accent-hover)",
+        text: "var(--accent-text)",
+        soft: "var(--accent-soft)"
+      },
+      ink: {
+        1: "var(--text-1)",
+        2: "var(--text-2)",
+        3: "var(--text-3)"
+      },
+      panel: {
+        DEFAULT: "var(--panel)",
+        2: "var(--panel-2)",
+        3: "var(--panel-3)"
+      },
+      hairline: "var(--hairline)"
+    }
+  },
   shortcuts: [
     ["flex-center", "flex items-center justify-center"],
     ["hstack", "flex items-center"],
     ["vstack", "hstack flex-col"],
-    ["no-outline", "outline-none focus:outline-none"],
-    [colorReg("text-c"), (v) => colorAttr("text", v)],
-    [colorReg("border-c"), (v) => colorAttr("border", v)],
-    [colorReg("bg-c"), (v) => colorAttr("bg", v)],
-    ["shadow-menu", "shadow-md shadow-black/25 dark:shadow-black/50"],
-    ["window-btn", "size-3 text-black rounded-full flex-center no-outline"],
-    ["border-menu", "border-gray-500/50"],
     [
-      "menu-box",
-      "fixed top-8.5 text-c-black bg-c-200/90 border border-menu rounded-lg shadow-menu"
+      "btn",
+      "inline-flex items-center justify-center gap-2 h-9 px-4 rounded-lg text-[14px] font-semibold whitespace-nowrap select-none transition-colors duration-150"
     ],
+    ["btn-primary", "btn bg-accent text-white hover:bg-accent-hover"],
     [
-      "safari-btn",
-      "h-6 outline-none focus:outline-none rounded flex-center border border-c-300"
+      "btn-secondary",
+      "btn bg-panel text-ink-1 border border-hairline hover:bg-panel-3 shadow-sm"
     ],
-    ["cc-btn", "flex-center rounded-full size-8 text-white bg-blue-500"],
+    ["btn-ghost", "btn text-accent-text hover:bg-accent-soft"],
+    ["btn-sm", "h-8 px-3 text-[13.5px]"],
+    ["btn-lg", "h-11 px-5 text-[15px]"],
     [
-      "cc-btn-active",
-      "flex-center rounded-full size-8 text-c-700 bg-gray-400/25 dark:bg-gray-300/25"
-    ],
-    ["cc-text", "text-xs text-c-500"],
-    ["cc-grid", "bg-c-200/80 rounded-xl cc-grid-shadow backdrop-blur-2xl"],
-    ["battery-level", "absolute rounded-[1px] h-2 top-1/2 -mt-1 ml-0.5 left-0"]
+      "btn-disabled",
+      "btn bg-panel-2 text-ink-3 border border-dashed border-hairline cursor-not-allowed"
+    ]
   ],
-  rules: [["cc-grid-shadow", { "box-shadow": "0px 1px 5px 0px rgba(0, 0, 0, 0.3)" }]],
   presets: [
     presetUno(),
-    presetAttributify(),
     presetIcons({
       warn: true,
+      // Registered explicitly: auto-discovery of @iconify-json/* fails on this toolchain.
+      collections: {
+        ph: () => import("@iconify-json/ph/icons.json").then((i) => i.default as any)
+      },
       extraProperties: {
-        display: "inline-block"
+        display: "inline-block",
+        "vertical-align": "middle",
+        "flex-shrink": "0"
       }
     })
   ],
   transformers: [
     transformerDirectives(),
-    transformerVariantGroup(),
-    transformerAttributifyJsx()
+    transformerVariantGroup()
   ]
 });

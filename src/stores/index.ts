@@ -1,10 +1,10 @@
 import { create } from "zustand";
-import { createDockSlice, type DockSlice } from "./slices/dock";
 import { createSystemSlice, type SystemSlice } from "./slices/system";
-import { createUserSlice, type UserSlice } from "./slices/user";
+import { createUISlice, type UISlice } from "./slices/ui";
+import { createWindowsSlice, type WindowsSlice } from "./slices/windows";
 
-export const useStore = create<DockSlice & SystemSlice & UserSlice>((...a) => ({
-  ...createDockSlice(...a),
+export const useStore = create<SystemSlice & UISlice & WindowsSlice>((...a) => ({
   ...createSystemSlice(...a),
-  ...createUserSlice(...a)
+  ...createUISlice(...a),
+  ...createWindowsSlice(...a)
 }));
