@@ -75,7 +75,8 @@ export default function Boot({ onDone }: { onDone: () => void }) {
       <button
         type="button"
         onClick={finish}
-        className="btn-media btn-sm absolute bottom-8 right-8 border border-media-control-hover"
+        className="btn-media btn-sm absolute border border-media-control-hover"
+        style={{ bottom: "max(32px, env(safe-area-inset-bottom))", right: "max(32px, env(safe-area-inset-right))" }}
       >
         Skip
         <span className="i-ph:arrow-right-bold" aria-hidden="true" />

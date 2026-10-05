@@ -28,6 +28,7 @@ html.is-quick {
 .qv-header {
   position: sticky;
   top: 0;
+  padding-top: env(safe-area-inset-top);
   z-index: 40;
   border-bottom: 1px solid var(--hairline);
 }

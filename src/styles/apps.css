@@ -195,3 +195,30 @@
     opacity: 0.6;
   }
 }
+
+/* ---------------- mobile home: short screens ----------------
+   Keeps the whole app grid visible above the dock on phones like 360×740. */
+@media (max-height: 780px) {
+  .home .home-widget {
+    padding: var(--space-4);
+  }
+  .home .home-featured {
+    padding: var(--space-3) var(--space-4);
+  }
+  .home .home-photo {
+    width: 52px;
+    height: 52px;
+  }
+  .home .home-cta {
+    height: 44px;
+    margin-top: var(--space-3);
+  }
+  .home .home-grid {
+    margin-top: var(--space-4);
+    row-gap: var(--space-3);
+  }
+  .home .home-grid .app-icon {
+    width: 56px !important;
+    height: 56px !important;
+  }
+}

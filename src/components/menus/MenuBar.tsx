@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { duration, ease } from "~/styles/motion";
 import { portfolio } from "~/data/portfolio";
 import { wallpapers } from "~/configs/wallpapers";
-import { shortcutLabel } from "~/utils";
+import { MENU_BAR_HEIGHT, shortcutLabel } from "~/utils";
 import type { MenuEntry } from "./Menu";
 
 export const downloadResume = () => {
@@ -98,7 +98,8 @@ export default function MenuBar() {
 
   return (
     <motion.header
-      className="menubar material-menubar fixed inset-x-0 top-0 z-40 h-8 px-1.5 flex items-center justify-between"
+      className="menubar material-menubar fixed inset-x-0 top-0 z-40 px-1.5 flex items-center justify-between"
+      style={{ height: MENU_BAR_HEIGHT }}
       initial={reduced ? { opacity: 0 } : { y: -32 }}
       animate={revealed ? { y: 0, opacity: 1 } : undefined}
       transition={{ duration: duration.emphasis, ease: ease.standard, delay: 0.1 }}

@@ -147,3 +147,37 @@ button:disabled {
 .icon-drop {
   filter: var(--icon-drop);
 }
+
+/* ---------------- touch ----------------
+   On touch screens every control gets a 44×44px minimum target and a subtle
+   "pressed" scale (0.96) as haptic-like feedback. */
+@media (pointer: coarse) {
+  button,
+  a[class*="btn"],
+  input:not([type="checkbox"]):not([type="radio"]),
+  textarea,
+  select {
+    min-height: 44px;
+  }
+  button[class*="place-items-center"],
+  button[class*="size-"] {
+    min-width: 44px;
+  }
+  button,
+  a[class*="btn"] {
+    transition: transform var(--duration-micro) var(--ease-standard);
+    -webkit-tap-highlight-color: transparent;
+  }
+  button:active,
+  a[class*="btn"]:active {
+    transform: scale(0.96);
+  }
+  /* The menu bar grows to 44px on touch screens; pills stay visually compact. */
+  .menubar-btn {
+    min-width: 44px;
+    justify-content: center;
+  }
+  .menubar-pill {
+    min-height: 36px;
+  }
+}

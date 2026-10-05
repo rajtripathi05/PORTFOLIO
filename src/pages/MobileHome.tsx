@@ -68,10 +68,10 @@ export default function MobileHome() {
           </button>
         </header>
 
-        <main className="mx-auto mt-4 max-w-[560px]">
+        <main className="home mx-auto mt-4 max-w-[560px]">
           <a
             href="/quick"
-            className="material-menubar block rounded-panel border border-hairline p-5 shadow-raised transition-transform active:scale-[.98]"
+            className="home-widget material-menubar block rounded-panel border border-hairline p-5 shadow-raised transition-transform active:scale-[.98]"
           >
             <div className="flex items-center gap-4">
               <img
@@ -79,7 +79,7 @@ export default function MobileHome() {
                 alt=""
                 width={64}
                 height={64}
-                className="size-16 flex-none rounded-full object-cover ring-2 ring-[var(--photo-ring)]"
+                className="home-photo size-16 flex-none rounded-full object-cover ring-2 ring-[var(--photo-ring)]"
               />
               <div className="min-w-0">
                 <p className="text-headline font-bold leading-tight">Hi, I'm {portfolio.identity.firstName} 👋</p>
@@ -88,7 +88,7 @@ export default function MobileHome() {
                 </p>
               </div>
             </div>
-            <span className="btn-primary btn-lg mt-4 w-full">
+            <span className="home-cta btn-primary btn-lg mt-4 w-full">
               <span className="i-ph:article-bold" aria-hidden="true" />
               Open Quick View
             </span>
@@ -97,7 +97,7 @@ export default function MobileHome() {
           <button
             type="button"
             onClick={() => openApp("projects", { id: featured.id })}
-            className="material-menubar mt-3 block w-full rounded-panel border border-hairline p-4 text-left shadow-raised transition-transform active:scale-[.98]"
+            className="home-widget home-featured material-menubar mt-3 block w-full rounded-panel border border-hairline p-4 text-left shadow-raised transition-transform active:scale-[.98]"
           >
             <p className="app-h2">Featured project</p>
             <p className="mt-1.5 text-callout font-bold">{featured.title}</p>
@@ -107,7 +107,7 @@ export default function MobileHome() {
             </p>
           </button>
 
-          <nav aria-label="Apps" className="mt-6 grid grid-cols-4 gap-x-2 gap-y-5">
+          <nav aria-label="Apps" className="home-grid mt-6 grid grid-cols-4 gap-x-2 gap-y-5">
             {gridApps.map((app) => (
               <HomeIcon key={app.id} app={app} onOpen={() => openApp(app.id)} />
             ))}
