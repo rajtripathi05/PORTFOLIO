@@ -33,9 +33,13 @@ export interface AppDef {
   minWidth?: number;
   minHeight?: number;
   component: LazyExoticComponent<ComponentType>;
+  /** Loads the code chunk (used for preloading during boot and prefetch on hover). */
+  load: () => Promise<{ default: ComponentType }>;
   /** Rendered as a Siri-style floating panel instead of a normal window. */
   floating?: boolean;
 }
+
+const lazyApp = (load: () => Promise<{ default: ComponentType }>) => ({ load, component: lazy(load) });
 
 // Each app is code-split, so the first load only ships the desktop shell.
 export const apps: AppDef[] = [
@@ -49,7 +53,7 @@ export const apps: AppDef[] = [
     },
     width: 780,
     height: 600,
-    component: lazy(() => import("~/apps/AboutMe"))
+    ...lazyApp(() => import("~/apps/AboutMe"))
   },
   {
     id: "projects",
@@ -62,7 +66,7 @@ export const apps: AppDef[] = [
     width: 960,
     height: 620,
     minWidth: 360,
-    component: lazy(() => import("~/apps/Projects"))
+    ...lazyApp(() => import("~/apps/Projects"))
   },
   {
     id: "experience",
@@ -74,7 +78,7 @@ export const apps: AppDef[] = [
     },
     width: 780,
     height: 640,
-    component: lazy(() => import("~/apps/Experience"))
+    ...lazyApp(() => import("~/apps/Experience"))
   },
   {
     id: "achievements",
@@ -86,7 +90,7 @@ export const apps: AppDef[] = [
     },
     width: 1000,
     height: 700,
-    component: lazy(() => import("~/apps/Achievements"))
+    ...lazyApp(() => import("~/apps/Achievements"))
   },
   {
     id: "skills",
@@ -98,7 +102,7 @@ export const apps: AppDef[] = [
     },
     width: 760,
     height: 580,
-    component: lazy(() => import("~/apps/Skills"))
+    ...lazyApp(() => import("~/apps/Skills"))
   },
   {
     id: "resume",
@@ -111,7 +115,7 @@ export const apps: AppDef[] = [
     },
     width: 840,
     height: 760,
-    component: lazy(() => import("~/apps/Resume"))
+    ...lazyApp(() => import("~/apps/Resume"))
   },
   {
     id: "contact",
@@ -123,7 +127,7 @@ export const apps: AppDef[] = [
     },
     width: 640,
     height: 680,
-    component: lazy(() => import("~/apps/Contact"))
+    ...lazyApp(() => import("~/apps/Contact"))
   },
   {
     id: "safari",
@@ -137,7 +141,7 @@ export const apps: AppDef[] = [
     width: 1120,
     height: 760,
     minWidth: 380,
-    component: lazy(() => import("~/apps/Safari"))
+    ...lazyApp(() => import("~/apps/Safari"))
   },
   {
     id: "assistant",
@@ -150,7 +154,7 @@ export const apps: AppDef[] = [
     width: 420,
     height: 640,
     floating: true,
-    component: lazy(() => import("~/apps/Assistant"))
+    ...lazyApp(() => import("~/apps/Assistant"))
   },
   {
     id: "terminal",
@@ -162,7 +166,7 @@ export const apps: AppDef[] = [
     },
     width: 760,
     height: 480,
-    component: lazy(() => import("~/apps/Terminal"))
+    ...lazyApp(() => import("~/apps/Terminal"))
   }
 ];
 
@@ -175,4 +179,17 @@ export const getApp = (id: AppId): AppDef => {
 export const launchpadIcon: IconSpec = {
   glyph: "i-ph:squares-four-fill",
   tile: "tile-launchpad"
+};
+
+/** Preloads every app chunk; resolves with progress callbacks (0–1). */
+export const preloadApps = (onProgress?: (p: number) => void): Promise<void> => {
+  let done = 0;
+  return Promise.all(
+    apps.map((a) =>
+      a.load().then(
+        () => onProgress?.(++done / apps.length),
+        () => onProgress?.(++done / apps.length)
+      )
+    )
+  ).then(() => undefined);
 };

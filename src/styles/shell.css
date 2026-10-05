@@ -312,7 +312,7 @@
   border-radius: var(--radius-panel);
   border: 3px solid var(--accent);
   pointer-events: none;
-  animation: hint-pulse 1.3s var(--ease-standard) 2;
+  animation: hint-pulse 1.3s var(--ease-standard) 1;
   opacity: 0;
 }
 @keyframes hint-pulse {

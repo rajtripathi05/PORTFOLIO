@@ -2,6 +2,7 @@ import type React from "react";
 import { portfolio, type Achievement } from "~/data/portfolio";
 import { coverFor, mediaFor, mediaSummary, otherHighlights, type MediaItem } from "~/data/media";
 import { useWindow } from "~/components/window/WindowContext";
+import { deepLinkUrl } from "~/utils";
 
 interface Album {
   id: string;
@@ -75,8 +76,14 @@ const AlbumView = ({ album, onBack, wide }: { album: Album; onBack: () => void; 
       <h1 className="app-h1 mt-2">{a ? [a.name, a.result].filter(Boolean).join(" — ") : album.title}</h1>
       {a && (
         <>
-          <div className="mt-3">
+          <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
             <AchievementBadges a={a} />
+            <CopyButton
+              text={deepLinkUrl("achievements", a.id)}
+              label="Copy link"
+              copiedLabel="Link to this achievement copied"
+              className="btn-ghost btn-sm"
+            />
           </div>
           <p className="mt-3 max-w-[68ch] text-body text-ink-1">{a.description}</p>
           {a.links?.length ? (

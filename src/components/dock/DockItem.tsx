@@ -52,11 +52,15 @@ interface DockItemProps {
   size: number;
   mag: number;
   hint?: boolean;
+  /** Position in the dock, for the staggered reveal. */
+  index: number;
+  revealed: boolean;
+  reduced: boolean;
   onOpen: () => void;
 }
 
 export default function DockItem(props: DockItemProps) {
-  const { id, title, icon, isOpen, launches, mouseX, magnify, bounce, size, mag, hint, onOpen } =
+  const { id, title, icon, isOpen, launches, mouseX, magnify, bounce, size, mag, hint, index, revealed, reduced, onOpen } =
     props;
   const ref = useRef<HTMLDivElement>(null);
   const width = useDockHoverAnimation(mouseX, ref, size, mag);
@@ -74,7 +78,12 @@ export default function DockItem(props: DockItemProps) {
   }, [launches]);
 
   return (
-    <li className="relative flex">
+    <motion.li
+      className="relative flex"
+      initial={reduced ? false : { y: 14, opacity: 0 }}
+      animate={revealed ? { y: 0, opacity: 1 } : undefined}
+      transition={{ duration: duration.standard * 1.2, ease: ease.standard, delay: 0.26 + index * 0.015 }}
+    >
       {hint && (
         <>
           <span className="dock-hint-tip" role="status">
@@ -104,6 +113,6 @@ export default function DockItem(props: DockItemProps) {
         <span className={`dock-dot ${isOpen ? "" : "invisible"}`} aria-hidden="true" />
         {isOpen && <span className="sr-only">(open)</span>}
       </button>
-    </li>
+    </motion.li>
   );
 }

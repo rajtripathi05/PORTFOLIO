@@ -18,19 +18,27 @@ const Styleguide = lazy(() => import("~/pages/Styleguide"));
 export default function App() {
   // Returning visitors skip the intro entirely.
   const [booted, setBooted] = useState(() => storage.get("seenIntro") === "1");
+  const setRevealed = useStore((s) => s.setRevealed);
   const { winWidth } = useWindowSize();
 
-  if (!booted)
-    return (
-      <Boot
-        onDone={() => {
-          storage.set("seenIntro", "1");
-          setBooted(true);
-        }}
-      />
-    );
+  useEffect(() => {
+    if (booted) setRevealed(true);
+  }, [booted]);
 
-  return winWidth < MOBILE_BREAKPOINT ? <MobileHome /> : <Desktop />;
+  // The shell mounts underneath the boot screen, so it is fully ready when boot fades out.
+  return (
+    <>
+      {winWidth < MOBILE_BREAKPOINT ? <MobileHome /> : <Desktop />}
+      {!booted && (
+        <Boot
+          onDone={() => {
+            storage.set("seenIntro", "1");
+            setBooted(true);
+          }}
+        />
+      )}
+    </>
+  );
 }
 
 const rootElement = document.getElementById("root") as HTMLElement;

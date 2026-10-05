@@ -1,4 +1,6 @@
 import { format } from "date-fns";
+import { motion } from "framer-motion";
+import { duration, ease } from "~/styles/motion";
 import { portfolio } from "~/data/portfolio";
 import { wallpapers } from "~/configs/wallpapers";
 import { shortcutLabel } from "~/utils";
@@ -24,6 +26,8 @@ export default function MenuBar() {
   const wallpaper = useStore((s) => s.wallpaper);
   const setWallpaper = useStore((s) => s.setWallpaper);
   const { winWidth } = useWindowSize();
+  const revealed = useStore((s) => s.revealed);
+  const reduced = useReducedMotion();
 
   const [now, setNow] = useState(new Date());
   useInterval(() => setNow(new Date()), 15 * 1000);
@@ -84,7 +88,12 @@ export default function MenuBar() {
   ];
 
   return (
-    <header className="menubar material-menubar fixed inset-x-0 top-0 z-40 h-8 px-1.5 flex items-center justify-between">
+    <motion.header
+      className="menubar material-menubar fixed inset-x-0 top-0 z-40 h-8 px-1.5 flex items-center justify-between"
+      initial={reduced ? { opacity: 0 } : { y: -32 }}
+      animate={revealed ? { y: 0, opacity: 1 } : undefined}
+      transition={{ duration: duration.emphasis, ease: ease.standard, delay: 0.1 }}
+    >
       <nav aria-label="Menu bar" className="hstack gap-0.5 min-w-0">
         <button
           type="button"
@@ -136,6 +145,6 @@ export default function MenuBar() {
           <span>{format(now, "h:mm a")}</span>
         </time>
       </div>
-    </header>
+    </motion.header>
   );
 }

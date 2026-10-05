@@ -1,4 +1,5 @@
-import { useMotionValue } from "framer-motion";
+import { motion, useMotionValue } from "framer-motion";
+import { duration, ease } from "~/styles/motion";
 import { apps, launchpadIcon } from "~/configs/apps";
 import { isTouchDevice } from "~/utils";
 
@@ -11,6 +12,7 @@ export default function Dock() {
   const dockHint = useStore((s) => s.dockHint);
   const { winWidth } = useWindowSize();
   const reduced = useReducedMotion();
+  const revealed = useStore((s) => s.revealed);
 
   const mouseX = useMotionValue<number | null>(null);
   const magnify = !reduced && !isTouchDevice();
@@ -19,7 +21,13 @@ export default function Dock() {
   const mag = 1.55;
 
   return (
-    <nav aria-label="Dock" className="fixed inset-x-0 bottom-2 z-30 flex justify-center px-2">
+    <motion.nav
+      aria-label="Dock"
+      className="fixed inset-x-0 bottom-2 z-30 flex justify-center px-2"
+      initial={reduced ? { opacity: 0 } : { y: 110 }}
+      animate={revealed ? { y: 0, opacity: 1 } : undefined}
+      transition={{ duration: duration.emphasis, ease: ease.standard, delay: 0.2 }}
+    >
       <ul
         className="dock-bar material-menubar max-w-full"
         onMouseMove={(e) => magnify && mouseX.set(e.nativeEvent.x)}
@@ -37,9 +45,12 @@ export default function Dock() {
           size={size}
           mag={mag}
           onOpen={() => toggleOverlay("launchpad")}
+          index={0}
+          revealed={revealed}
+          reduced={reduced}
         />
         <li className="dock-sep" aria-hidden="true" />
-        {apps.map((app) => (
+        {apps.map((app, i) => (
           <DockItem
             key={app.id}
             id={app.id}
@@ -53,6 +64,9 @@ export default function Dock() {
             size={size}
             mag={mag}
             hint={dockHint === app.id}
+            index={i + 1}
+            revealed={revealed}
+            reduced={reduced}
             onOpen={() => {
               setOverlay(null);
               openApp(app.id);
@@ -60,6 +74,6 @@ export default function Dock() {
           />
         ))}
       </ul>
-    </nav>
+    </motion.nav>
   );
 }

@@ -9,6 +9,7 @@ declare global {
   const AppIcon: typeof import('./components/AppIcon')['default']
   const AppSkeleton: typeof import('./components/ui/AppSkeleton')['default']
   const AppWindow: typeof import('./components/window/AppWindow')['default']
+  const CopyButton: typeof import('./components/ui/CopyButton')['default']
   const Credits: typeof import('./components/overlays/Credits')['default']
   const DesktopIcons: typeof import('./components/DesktopIcons')['default']
   const Dialog: typeof import('./components/ui/Dialog')['default']

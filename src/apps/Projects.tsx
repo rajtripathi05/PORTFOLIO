@@ -1,6 +1,7 @@
 import type React from "react";
 import { portfolio } from "~/data/portfolio";
 import { useWindow } from "~/components/window/WindowContext";
+import { deepLinkUrl } from "~/utils";
 
 const projects = portfolio.projects;
 
@@ -86,9 +87,17 @@ export default function Projects() {
 
       <article ref={articleRef} className="app-scroll min-w-0 flex-1" aria-labelledby="project-title">
         <div className="max-w-[700px] px-7 py-7">
-          <p className="text-footnote font-semibold text-ink-3">
-            Project {index + 1} of {projects.length}
-          </p>
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-footnote font-semibold text-ink-3">
+              Project {index + 1} of {projects.length}
+            </p>
+            <CopyButton
+              text={deepLinkUrl("projects", project.id)}
+              label="Copy link"
+              copiedLabel="Link to this project copied"
+              className="btn-ghost btn-sm"
+            />
+          </div>
           <h1 id="project-title" className="app-h1 mt-1">
             {project.title}
           </h1>

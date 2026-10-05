@@ -1,4 +1,5 @@
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { duration, ease } from "~/styles/motion";
 import { apps } from "~/configs/apps";
 import { getWallpaper } from "~/configs/wallpapers";
 import { DOCK_RESERVE, MENU_BAR_HEIGHT, storage } from "~/utils";
@@ -18,20 +19,21 @@ export default function Desktop() {
   const minimizeApp = useStore((s) => s.minimizeApp);
   const openApp = useStore((s) => s.openApp);
   const setDockHint = useStore((s) => s.setDockHint);
+  const revealed = useStore((s) => s.revealed);
 
   const deepLinked = useShellSetup();
   const wallpaper = getWallpaper(wallpaperId);
 
-  // First visit: welcome card shortly after the desktop appears (not for deep links).
+  // First visit: welcome card 300ms after the desktop reveal finishes (not for deep links).
   useEffect(() => {
-    if (storage.get("welcomed") === "1") return;
+    if (!revealed || storage.get("welcomed") === "1") return;
     if (deepLinked) {
       storage.set("welcomed", "1");
       return;
     }
-    const t = setTimeout(() => setOverlay("welcome"), 450);
+    const t = setTimeout(() => setOverlay("welcome"), 700 + 300);
     return () => clearTimeout(t);
-  }, []);
+  }, [revealed]);
 
   const finishWelcome = () => {
     storage.set("welcomed", "1");
@@ -58,6 +60,7 @@ export default function Desktop() {
   // viewer) has claimed it. ⌘W / Ctrl+W can't be intercepted by web pages, so it isn't used.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      if (!useStore.getState().revealed) return; // boot screen handles keys itself
       const mod = e.metaKey || e.ctrlKey;
       if (mod && e.key.toLowerCase() === "k") {
         e.preventDefault();
@@ -82,7 +85,13 @@ export default function Desktop() {
   const closeOverlay = () => setOverlay(null);
 
   return (
-    <div className="fixed inset-0 overflow-hidden" style={{ background: wallpaper.background }}>
+    <motion.div
+      className="fixed inset-0 overflow-hidden"
+      style={{ background: wallpaper.background }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: revealed ? 1 : 0 }}
+      transition={{ duration: duration.emphasis, ease: ease.standard }}
+    >
       <a
         href="/quick"
         className="sr-only z-[300] rounded-button bg-accent px-4 py-2 font-semibold text-on-accent focus:not-sr-only focus:fixed focus:left-3 focus:top-10"
@@ -127,6 +136,6 @@ export default function Desktop() {
       </AnimatePresence>
 
       <Toast />
-    </div>
+    </motion.div>
   );
 }

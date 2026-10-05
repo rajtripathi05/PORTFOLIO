@@ -8,11 +8,14 @@ export interface UISlice {
   toast: { id: number; text: string } | null;
   /** Dock icon that shows the one-time "Start here" hint. */
   dockHint: string | null;
+  /** True once the desktop reveal may play (after boot, or immediately for returning visitors). */
+  revealed: boolean;
   setOverlay: (o: Overlay) => void;
   toggleOverlay: (o: Exclude<Overlay, null>) => void;
   setOpenMenu: (m: string | null) => void;
   showToast: (text: string) => void;
   setDockHint: (id: string | null) => void;
+  setRevealed: (v: boolean) => void;
 }
 
 export const createUISlice: StateCreator<UISlice> = (set, get) => ({
@@ -20,6 +23,7 @@ export const createUISlice: StateCreator<UISlice> = (set, get) => ({
   openMenu: null,
   toast: null,
   dockHint: null,
+  revealed: false,
   setOverlay: (overlay) => set({ overlay, openMenu: null }),
   toggleOverlay: (o) => set({ overlay: get().overlay === o ? null : o, openMenu: null }),
   setOpenMenu: (openMenu) => set({ openMenu }),
@@ -30,5 +34,6 @@ export const createUISlice: StateCreator<UISlice> = (set, get) => ({
       if (get().toast?.id === id) set({ toast: null });
     }, 2200);
   },
-  setDockHint: (dockHint) => set({ dockHint })
+  setDockHint: (dockHint) => set({ dockHint }),
+  setRevealed: (revealed) => set({ revealed })
 });
