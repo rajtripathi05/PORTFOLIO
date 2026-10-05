@@ -75,6 +75,18 @@ export const apps: AppDef[] = [
     component: lazy(() => import("~/apps/Experience"))
   },
   {
+    id: "achievements",
+    title: "Achievements",
+    description: "Hackathon wins and awards, with photos",
+    icon: {
+      glyph: "i-ph:trophy-fill",
+      tile: "bg-gradient-to-b from-[#ffcf5c] to-[#e59a12]"
+    },
+    width: 1000,
+    height: 700,
+    component: lazy(() => import("~/apps/Achievements"))
+  },
+  {
     id: "skills",
     title: "Skills",
     description: "Technical skills by category",

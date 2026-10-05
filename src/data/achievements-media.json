@@ -1,0 +1,138 @@
+{
+  "folders": {
+    "Allianz (SOLO)": {
+      "slug": "allianz-solo",
+      "items": [
+        {
+          "type": "image",
+          "width": 1446,
+          "height": 1920,
+          "color": "#d8c898",
+          "name": "Prize 2",
+          "src": "/achievements/allianz-solo/prize-2.webp",
+          "thumb": "/achievements/allianz-solo/prize-2-thumb.webp"
+        },
+        {
+          "type": "image",
+          "width": 1920,
+          "height": 1446,
+          "color": "#284868",
+          "name": "Prize",
+          "src": "/achievements/allianz-solo/prize.webp",
+          "thumb": "/achievements/allianz-solo/prize-thumb.webp"
+        },
+        {
+          "type": "image",
+          "width": 1920,
+          "height": 1146,
+          "color": "#383838",
+          "name": "Unity screenshot",
+          "src": "/achievements/allianz-solo/unity-screenshot.webp",
+          "thumb": "/achievements/allianz-solo/unity-screenshot-thumb.webp"
+        }
+      ]
+    },
+    "Gen Ai Mumbai (Team of 2)": {
+      "slug": "gen-ai-mumbai-team-of-2",
+      "items": [
+        {
+          "type": "image",
+          "width": 1600,
+          "height": 1200,
+          "color": "#e8e8d8",
+          "name": "Prize",
+          "src": "/achievements/gen-ai-mumbai-team-of-2/prize.webp",
+          "thumb": "/achievements/gen-ai-mumbai-team-of-2/prize-thumb.webp"
+        },
+        {
+          "type": "image",
+          "width": 1200,
+          "height": 1600,
+          "color": "#182828",
+          "name": "Competitor Statistics",
+          "src": "/achievements/gen-ai-mumbai-team-of-2/competitor-statistics.webp",
+          "thumb": "/achievements/gen-ai-mumbai-team-of-2/competitor-statistics-thumb.webp"
+        },
+        {
+          "type": "video",
+          "duration": 188,
+          "width": 960,
+          "height": 720,
+          "color": "#080808",
+          "name": "Explanation of Project",
+          "src": "/achievements/gen-ai-mumbai-team-of-2/explanation-of-project.mp4",
+          "poster": "/achievements/gen-ai-mumbai-team-of-2/explanation-of-project-poster.webp"
+        }
+      ]
+    },
+    "ISRO X GMRT (Team of 4)": {
+      "slug": "isro-x-gmrt-team-of-4",
+      "items": [
+        {
+          "type": "image",
+          "width": 1920,
+          "height": 1280,
+          "color": "#b8e8f8",
+          "name": "Award",
+          "src": "/achievements/isro-x-gmrt-team-of-4/award.webp",
+          "thumb": "/achievements/isro-x-gmrt-team-of-4/award-thumb.webp"
+        },
+        {
+          "type": "image",
+          "width": 1446,
+          "height": 1920,
+          "color": "#181818",
+          "name": "Trophy",
+          "src": "/achievements/isro-x-gmrt-team-of-4/trophy.webp",
+          "thumb": "/achievements/isro-x-gmrt-team-of-4/trophy-thumb.webp"
+        }
+      ]
+    },
+    "Periscope (Team of 3)": {
+      "slug": "periscope-team-of-3",
+      "items": [
+        {
+          "type": "image",
+          "width": 1080,
+          "height": 1920,
+          "color": "#989888",
+          "name": "Prize",
+          "src": "/achievements/periscope-team-of-3/prize.webp",
+          "thumb": "/achievements/periscope-team-of-3/prize-thumb.webp"
+        }
+      ]
+    },
+    "Somaiya Innovator SOLO": {
+      "slug": "somaiya-innovator-solo",
+      "items": [
+        {
+          "type": "image",
+          "width": 1280,
+          "height": 854,
+          "color": "#a8a8a8",
+          "name": "Award",
+          "src": "/achievements/somaiya-innovator-solo/award.webp",
+          "thumb": "/achievements/somaiya-innovator-solo/award-thumb.webp"
+        },
+        {
+          "type": "image",
+          "width": 523,
+          "height": 473,
+          "color": "#f8f8f8",
+          "name": "Award",
+          "src": "/achievements/somaiya-innovator-solo/award-2.webp",
+          "thumb": "/achievements/somaiya-innovator-solo/award-2-thumb.webp"
+        },
+        {
+          "type": "image",
+          "width": 470,
+          "height": 357,
+          "color": "#f8f8f8",
+          "name": "Certificate",
+          "src": "/achievements/somaiya-innovator-solo/certificate.webp",
+          "thumb": "/achievements/somaiya-innovator-solo/certificate-thumb.webp"
+        }
+      ]
+    }
+  }
+}

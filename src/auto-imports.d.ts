@@ -11,6 +11,8 @@ declare global {
   const Dock: typeof import('./components/dock/Dock')['default']
   const DockItem: typeof import('./components/dock/DockItem')['default']
   const ExternalLink: typeof import('./components/ui/ExternalLink')['default']
+  const LazyImage: typeof import('./components/gallery/LazyImage')['default']
+  const Lightbox: typeof import('./components/gallery/Lightbox')['default']
   const Menu: typeof import('./components/menus/Menu')['default']
   const MenuBar: typeof import('./components/menus/MenuBar')['default']
   const Monogram: typeof import('./components/Monogram')['default']
