@@ -1,0 +1,149 @@
+/* Global element styles and materials. Values come from tokens.css only. */
+
+/* Metric-matched fallback so text doesn't jump when Inter loads (Windows/Android). */
+@font-face {
+  font-family: "Inter Fallback";
+  src: local("Arial"), local("Helvetica"), local("Roboto");
+  ascent-override: 90.44%;
+  descent-override: 22.52%;
+  line-gap-override: 0%;
+  size-adjust: 107.12%;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: var(--lh-body);
+  letter-spacing: var(--ls-body);
+  color: var(--text-1);
+  background: var(--surface-2);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+}
+
+/* Visible keyboard focus everywhere (accent ring); no ring for mouse clicks. */
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+button,
+[role="button"],
+a {
+  cursor: pointer;
+}
+button:disabled {
+  cursor: not-allowed;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* ---------------- materials ----------------
+   Solid by default; translucent only where backdrop-filter is supported and the
+   visitor hasn't asked for reduced transparency. */
+.material-menubar {
+  background: var(--material-menubar-solid);
+}
+.material-sidebar {
+  background: var(--material-sidebar-solid);
+}
+.material-popover {
+  background: var(--material-popover-solid);
+}
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  @media (prefers-reduced-transparency: no-preference) {
+    .material-menubar {
+      background: var(--material-menubar);
+      backdrop-filter: var(--material-blur);
+      -webkit-backdrop-filter: var(--material-blur);
+    }
+    .material-sidebar {
+      background: var(--material-sidebar);
+      backdrop-filter: var(--material-blur);
+      -webkit-backdrop-filter: var(--material-blur);
+    }
+    .material-popover {
+      background: var(--material-popover);
+      backdrop-filter: var(--material-blur);
+      -webkit-backdrop-filter: var(--material-blur);
+    }
+  }
+}
+
+/* App icon tiles (gradient + glyph colour) */
+.tile-about {
+  background: linear-gradient(180deg, var(--icon-about-1), var(--icon-about-2));
+}
+.tile-projects {
+  background: linear-gradient(180deg, var(--icon-projects-1), var(--icon-projects-2));
+}
+.tile-experience {
+  background: linear-gradient(180deg, var(--icon-experience-1), var(--icon-experience-2));
+}
+.tile-achievements {
+  background: linear-gradient(180deg, var(--icon-achievements-1), var(--icon-achievements-2));
+}
+.tile-skills {
+  background: linear-gradient(180deg, var(--icon-skills-1), var(--icon-skills-2));
+}
+.tile-resume {
+  background: linear-gradient(180deg, var(--icon-resume-1), var(--icon-resume-2));
+}
+.tile-contact {
+  background: linear-gradient(180deg, var(--icon-contact-1), var(--icon-contact-2));
+}
+.tile-safari {
+  background: linear-gradient(180deg, var(--icon-safari-1), var(--icon-safari-2));
+}
+.tile-ai {
+  background: linear-gradient(135deg, var(--icon-ai-1), var(--icon-ai-2) 55%, var(--icon-ai-3));
+}
+.tile-terminal {
+  background: linear-gradient(180deg, var(--icon-terminal-1), var(--icon-terminal-2));
+}
+.tile-launchpad {
+  background: linear-gradient(180deg, var(--icon-launchpad-1), var(--icon-launchpad-2));
+}
+
+/* Labels drawn directly on media (Launchpad over a blurred scrim). */
+.label-on-media {
+  color: var(--on-media);
+  text-shadow: var(--label-shadow);
+}
+.icon-drop {
+  filter: var(--icon-drop);
+}

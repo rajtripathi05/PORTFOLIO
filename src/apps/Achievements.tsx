@@ -34,8 +34,8 @@ const Thumb = ({ item, alt }: { item: MediaItem; alt: string }) => {
   if (item.type === "pdf")
     return (
       <span className="flex-center size-full flex-col gap-1 bg-panel-3 text-ink-2">
-        <span className="i-ph:file-pdf-duotone text-[40px] text-[#d9412b]" aria-hidden="true" />
-        <span className="text-[12px] font-semibold">PDF</span>
+        <span className="i-ph:file-pdf-duotone text-[40px] text-file-pdf" aria-hidden="true" />
+        <span className="text-footnote font-semibold">PDF</span>
       </span>
     );
   return (
@@ -48,11 +48,11 @@ const Thumb = ({ item, alt }: { item: MediaItem; alt: string }) => {
       />
       {item.type === "video" && (
         <>
-          <span className="absolute inset-0 m-auto grid size-12 place-items-center rounded-full bg-black/55 text-white backdrop-blur-sm">
+          <span className="absolute inset-0 m-auto grid size-12 place-items-center rounded-full bg-media-chip text-on-media backdrop-blur-sm">
             <span className="i-ph:play-fill ml-0.5 text-[22px]" aria-hidden="true" />
           </span>
           {item.duration !== undefined && (
-            <span className="absolute bottom-2 right-2 rounded bg-black/65 px-1.5 py-0.5 text-[11.5px] font-semibold tabular-nums text-white">
+            <span className="absolute bottom-2 right-2 rounded-sm bg-media-chip px-1.5 py-0.5 text-caption font-semibold tabular-nums text-on-media">
               {formatDuration(item.duration)}
             </span>
           )}
@@ -78,7 +78,7 @@ const AlbumView = ({ album, onBack, wide }: { album: Album; onBack: () => void; 
           <div className="mt-3">
             <AchievementBadges a={a} />
           </div>
-          <p className="mt-3 max-w-[68ch] text-[15px] text-ink-1">{a.description}</p>
+          <p className="mt-3 max-w-[68ch] text-body text-ink-1">{a.description}</p>
           {a.links?.length ? (
             <div className="mt-3 flex flex-wrap gap-2">
               {a.links.map((l) => (
@@ -99,7 +99,7 @@ const AlbumView = ({ album, onBack, wide }: { album: Album; onBack: () => void; 
               <button
                 type="button"
                 onClick={() => setOpen(i)}
-                className="relative block aspect-square w-full overflow-hidden rounded-[10px] ring-accent focus-visible:ring-2"
+                className="relative block aspect-square w-full overflow-hidden rounded-card ring-accent focus-visible:ring-2"
                 aria-label={`Open ${item.type === "video" ? "video" : item.type === "pdf" ? "document" : "photo"}: ${item.name}`}
               >
                 <Thumb item={item} alt="" />
@@ -135,7 +135,7 @@ const AlbumCard = ({ album, onOpen }: { album: Album; onOpen: () => void }) => {
     <button
       type="button"
       onClick={onOpen}
-      className="app-card group flex h-full w-full flex-col overflow-hidden bg-panel text-left transition-shadow hover:shadow-lg"
+      className="app-card group flex h-full w-full flex-col overflow-hidden bg-panel text-left transition-shadow hover:shadow-raised"
     >
       <span className="relative block aspect-[4/3] w-full overflow-hidden bg-panel-3">
         {cover ? (
@@ -143,7 +143,7 @@ const AlbumCard = ({ album, onOpen }: { album: Album; onOpen: () => void }) => {
             src={(cover.thumb ?? cover.poster)!}
             alt=""
             color={cover.color}
-            className="size-full transition-transform duration-300 group-hover:scale-[1.03]"
+            className="size-full transition-transform duration-standard group-hover:scale-[1.03]"
           />
         ) : (
           <span className="flex-center size-full">
@@ -152,11 +152,11 @@ const AlbumCard = ({ album, onOpen }: { album: Album; onOpen: () => void }) => {
         )}
       </span>
       <span className="flex flex-1 flex-col gap-2 p-4">
-        <span className="text-[16px] font-bold leading-snug">{album.title}</span>
+        <span className="text-callout font-bold leading-snug">{album.title}</span>
         {a && <AchievementBadges a={a} />}
-        {a && <span className="text-[14px] leading-relaxed text-ink-2">{a.description}</span>}
+        {a && <span className="text-body leading-relaxed text-ink-2">{a.description}</span>}
         {album.items.length > 0 && (
-          <span className="mt-auto pt-1 text-[12.5px] font-semibold text-ink-3">
+          <span className="mt-auto pt-1 text-footnote font-semibold text-ink-3">
             {mediaSummary(album.items)}
           </span>
         )}

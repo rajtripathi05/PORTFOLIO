@@ -14,7 +14,7 @@ export default function LazyImage({ src, alt, width, height, color, contain, cla
   return (
     <span
       className={`relative block overflow-hidden ${className}`}
-      style={{ backgroundColor: color ?? "var(--panel-3)" }}
+      style={{ backgroundColor: color ?? "var(--surface-3)" }}
     >
       {!loaded && <span className="skeleton absolute inset-0 rounded-none opacity-50" aria-hidden="true" />}
       <img
@@ -25,7 +25,7 @@ export default function LazyImage({ src, alt, width, height, color, contain, cla
         loading="lazy"
         decoding="async"
         onLoad={() => setLoaded(true)}
-        className={`size-full transition-opacity duration-300 ${contain ? "object-contain" : "object-cover"} ${
+        className={`size-full transition-opacity duration-standard ${contain ? "object-contain" : "object-cover"} ${
           loaded ? "opacity-100" : "opacity-0"
         }`}
       />

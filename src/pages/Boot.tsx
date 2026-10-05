@@ -25,19 +25,19 @@ export default function Boot({ onDone }: { onDone: () => void }) {
   }, []);
 
   return (
-    <div className="fixed inset-0 bg-black text-white flex-center flex-col" role="status">
+    <div className="fixed inset-0 bg-[var(--boot-bg)] text-on-media flex-center flex-col" role="status">
       <span className="sr-only">Loading Raj Tripathi's portfolio</span>
       <Monogram size={84} framed />
-      <div className="mt-10 h-1.5 w-52 overflow-hidden rounded-full bg-white/20" aria-hidden="true">
+      <div className="mt-10 h-1.5 w-52 overflow-hidden rounded-full bg-media-control" aria-hidden="true">
         <div
-          className="h-full rounded-full bg-white boot-progress"
+          className="h-full rounded-full bg-[var(--on-media)] boot-progress"
           style={{ animationDuration: `${duration}ms` }}
         />
       </div>
       <button
         type="button"
         onClick={finish}
-        className="absolute bottom-8 right-8 btn btn-sm bg-white/15 text-white hover:bg-white/25 border border-white/25"
+        className="absolute bottom-8 right-8 btn btn-sm bg-media-control text-on-media hover:bg-media-control-hover border border-media-control-hover"
       >
         Skip
         <span className="i-ph:arrow-right-bold" aria-hidden="true" />

@@ -1,0 +1,309 @@
+/* =============================================================================
+   Design tokens — the only place raw colours, radii, shadows, materials and
+   durations are defined. Everything else references these custom properties
+   (directly in CSS, or through the UnoCSS theme in unocss.config.ts).
+   Framer Motion values mirror the motion tokens in src/styles/motion.ts.
+   Contrast of every text/background pair: `node scripts/check-contrast.mjs`.
+   ========================================================================== */
+
+:root {
+  color-scheme: light;
+
+  /* ---- Neutral grey scale (light) ---- */
+  --gray-0: #ffffff;
+  --gray-1: #f6f6f8;
+  --gray-2: #ededf1;
+  --gray-3: #e0e0e6;
+  --gray-4: #c9c9d1;
+  --gray-5: #9d9da7;
+  --gray-6: #62626c;
+  --gray-7: #45454d;
+  --gray-8: #2b2b30;
+  --gray-9: #1b1b1e;
+
+  /* ---- Accent (refined blue) ---- */
+  --accent: #2f62e0;
+  --accent-hover: #2554c7;
+  --accent-active: #1e47ad;
+  --accent-subtle: rgba(47, 98, 224, 0.12);
+  --accent-text: #2353c9;
+  --on-accent: #ffffff;
+  --ring: #2f62e0;
+
+  /* ---- Semantic ---- */
+  --success: #1c7f45;
+  --success-subtle: rgba(28, 127, 69, 0.12);
+  --warning-text: #7a4d00;
+  --warning-subtle: #fff4d6;
+  --danger: #c4312b;
+  --danger-subtle: rgba(196, 49, 43, 0.1);
+
+  /* ---- Surfaces & text (semantic aliases of the grey scale) ---- */
+  --surface: var(--gray-0);
+  --surface-2: var(--gray-1);
+  --surface-3: var(--gray-2);
+  --surface-4: var(--gray-3);
+  --text-1: var(--gray-9);
+  --text-2: var(--gray-7);
+  --text-3: var(--gray-6);
+  --hairline: rgba(0, 0, 0, 0.12);
+  --hairline-strong: rgba(0, 0, 0, 0.2);
+
+  /* ---- Category tints (skills, Safari tiles) — from the accent family ---- */
+  --cat-1: #2453c4;
+  --cat-2: #0c6e61;
+  --cat-3: #4c41c4;
+  --cat-4: #06618f;
+  --cat-5: #7533b3;
+  --cat-6: #4f6077;
+  --cat-1-subtle: rgba(47, 98, 224, 0.1);
+  --cat-2-subtle: rgba(19, 137, 122, 0.1);
+  --cat-3-subtle: rgba(91, 79, 214, 0.1);
+  --cat-4-subtle: rgba(11, 120, 184, 0.1);
+  --cat-5-subtle: rgba(138, 68, 200, 0.1);
+  --cat-6-subtle: rgba(79, 96, 119, 0.1);
+
+  /* ---- Fixed-colour objects (same in both themes) ---- */
+  --traffic-close: #ff5f57;
+  --traffic-min: #febc2e;
+  --traffic-max: #28c840;
+  --traffic-idle: var(--gray-4);
+  --traffic-glyph: rgba(0, 0, 0, 0.62);
+  --file-pdf: #d9412b;
+  --folder: #3b9be8;
+  --folder-star: #e8a419;
+  --boot-bg: #000000;
+  --media-bg: #000000;
+  --web-bg: #ffffff;
+  --label-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  --icon-drop: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  --on-media: #ffffff;
+  --media-control: rgba(255, 255, 255, 0.16);
+  --media-control-hover: rgba(255, 255, 255, 0.28);
+  --media-chip: rgba(0, 0, 0, 0.62);
+  --scrim: rgba(0, 0, 0, 0.25);
+  --scrim-light: rgba(0, 0, 0, 0.08);
+  --scrim-strong: rgba(10, 10, 12, 0.86);
+  --toast-bg: rgba(28, 28, 30, 0.94);
+  --label-chip: rgba(255, 255, 255, 0.78);
+  --photo-ring: rgba(255, 255, 255, 0.75);
+  --selection-tint: rgba(0, 0, 0, 0.1);
+  --hover-tint: rgba(127, 127, 127, 0.16);
+
+  /* Print */
+  --print-bg: #ffffff;
+  --print-ink: #000000;
+  --print-muted: #333333;
+  --print-rule: #999999;
+
+  /* App icon gradients */
+  --icon-about-1: #5b8def;
+  --icon-about-2: #2f5fd0;
+  --icon-projects-1: #6cc4f5;
+  --icon-projects-2: #2e8fd8;
+  --icon-experience-1: #f2b45a;
+  --icon-experience-2: #d27d1e;
+  --icon-achievements-1: #ffcf5c;
+  --icon-achievements-2: #e59a12;
+  --icon-skills-1: #4fd1b5;
+  --icon-skills-2: #1c9c86;
+  --icon-resume-1: #ffffff;
+  --icon-resume-2: #e4e6eb;
+  --icon-resume-ink: #2f5fd0;
+  --icon-contact-1: #59a6ff;
+  --icon-contact-2: #1f6fe5;
+  --icon-safari-1: #ffffff;
+  --icon-safari-2: #dce8f8;
+  --icon-safari-ink: #1f7ae0;
+  --icon-ai-1: #5b8def;
+  --icon-ai-2: #8a4fd8;
+  --icon-ai-3: #e05a9c;
+  --icon-terminal-1: #4a4a50;
+  --icon-terminal-2: #1f1f23;
+  --icon-launchpad-1: #9aa3b2;
+  --icon-launchpad-2: #5f6878;
+  --icon-ink: #ffffff;
+
+  /* Terminal palette */
+  --term-bg: #1c1c1e;
+  --term-fg: #e6e6ea;
+  --term-dim: #a3a3ad;
+  --term-green: #7ee2a8;
+  --term-blue: #7cc4ff;
+  --term-yellow: #ffd479;
+  --term-red: #ff8a80;
+
+  /* ---- Wallpapers (pure CSS mesh gradients) ---- */
+  --wallpaper-dusk: radial-gradient(at 18% 22%, #c9d8ff 0, transparent 50%),
+    radial-gradient(at 82% 12%, #ffd9ea 0, transparent 45%), radial-gradient(at 72% 82%, #c4efe6 0, transparent 50%),
+    radial-gradient(at 20% 88%, #e6dcff 0, transparent 45%), linear-gradient(135deg, #eef2fc, #f7eef4);
+  --wallpaper-ocean: radial-gradient(at 12% 18%, #bfe6ff 0, transparent 50%),
+    radial-gradient(at 88% 24%, #b8f1e3 0, transparent 45%), radial-gradient(at 50% 92%, #c9d3ff 0, transparent 55%),
+    linear-gradient(160deg, #eaf6fb, #e7eefc);
+  --wallpaper-sunrise: radial-gradient(at 15% 15%, #ffe0bf 0, transparent 50%),
+    radial-gradient(at 85% 20%, #ffd0d6 0, transparent 45%), radial-gradient(at 60% 90%, #fff0c2 0, transparent 50%),
+    linear-gradient(140deg, #fff6ee, #fdeef0);
+
+  /* ---- Typography ---- */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Inter Variable", "Inter", "Inter Fallback", "Segoe UI", Roboto,
+    sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", Consolas, "Liberation Mono", monospace;
+  --text-caption: 11.5px;
+  --lh-caption: 15px;
+  --ls-caption: 0.01em;
+  --text-footnote: 13px;
+  --lh-footnote: 18px;
+  --ls-footnote: 0;
+  --text-body: 14.5px;
+  --lh-body: 22px;
+  --ls-body: -0.003em;
+  --text-callout: 16px;
+  --lh-callout: 24px;
+  --ls-callout: -0.006em;
+  --text-headline: 18px;
+  --lh-headline: 24px;
+  --ls-headline: -0.01em;
+  --text-title: 24px;
+  --lh-title: 30px;
+  --ls-title: -0.016em;
+  --text-large: 34px;
+  --lh-large: 40px;
+  --ls-large: -0.024em;
+  --ls-caps: 0.06em;
+
+  /* ---- Spacing: 4px base (UnoCSS p-1 = 4px, p-2 = 8px …) ---- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* ---- Radius ---- */
+  --radius-window: 12px;
+  --radius-card: 10px;
+  --radius-button: 8px;
+  --radius-chip: 999px;
+  --radius-sm: 6px;
+  --radius-panel: 14px;
+  --radius-icon: 22.5%;
+
+  /* ---- Elevation ---- */
+  --shadow-resting: 0 0 0 0.5px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-raised: 0 0 0 0.5px rgba(0, 0, 0, 0.05), 0 2px 4px rgba(0, 0, 0, 0.05), 0 8px 22px -6px rgba(0, 0, 0, 0.18);
+  --shadow-window: 0 0 0 0.5px rgba(0, 0, 0, 0.08), 0 6px 16px -6px rgba(0, 0, 0, 0.16),
+    0 22px 56px -14px rgba(0, 0, 0, 0.26);
+  --shadow-window-focus: 0 0 0 0.5px rgba(0, 0, 0, 0.12), 0 12px 28px -8px rgba(0, 0, 0, 0.26),
+    0 36px 96px -16px rgba(0, 0, 0, 0.42);
+
+  /* ---- Materials: menu bar, sidebar (window chrome), popover ---- */
+  --material-menubar: rgba(255, 255, 255, 0.6);
+  --material-menubar-solid: #eef0f4;
+  --material-sidebar: rgba(244, 244, 247, 0.84);
+  --material-sidebar-solid: #f1f1f4;
+  --material-popover: rgba(248, 248, 250, 0.96);
+  --material-popover-solid: #f8f8fa;
+  --material-blur: blur(28px) saturate(180%);
+
+  /* ---- Motion (mirrored in src/styles/motion.ts) ---- */
+  --duration-micro: 120ms;
+  --duration-standard: 200ms;
+  --duration-emphasis: 320ms;
+  --ease-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.36, 0.64, 1);
+}
+
+.dark {
+  color-scheme: dark;
+
+  --gray-0: #18181b;
+  --gray-1: #1f1f23;
+  --gray-2: #27272c;
+  --gray-3: #313137;
+  --gray-4: #45454d;
+  --gray-5: #6b6b75;
+  --gray-6: #a1a1ab;
+  --gray-7: #c9c9d1;
+  --gray-8: #e4e4ea;
+  --gray-9: #f5f5f7;
+
+  --accent: #2f62e0;
+  --accent-hover: #2758d4;
+  --accent-active: #1f4bb8;
+  --accent-subtle: rgba(110, 150, 255, 0.18);
+  --accent-text: #8fb0ff;
+  --ring: #8fb0ff;
+
+  --success: #4cd27f;
+  --success-subtle: rgba(76, 210, 127, 0.14);
+  --warning-text: #ffd88a;
+  --warning-subtle: #3a2e12;
+  --danger: #ff7b72;
+  --danger-subtle: rgba(255, 123, 114, 0.14);
+
+  --surface: var(--gray-1);
+  --surface-2: var(--gray-2);
+  --surface-3: var(--gray-3);
+  --surface-4: var(--gray-4);
+  --hairline: rgba(255, 255, 255, 0.12);
+  --hairline-strong: rgba(255, 255, 255, 0.2);
+
+  --cat-1: #8fb0ff;
+  --cat-2: #5fd4c3;
+  --cat-3: #a8a0ff;
+  --cat-4: #6cc3f5;
+  --cat-5: #cf9cff;
+  --cat-6: #a9b6c9;
+  --cat-1-subtle: rgba(143, 176, 255, 0.14);
+  --cat-2-subtle: rgba(95, 212, 195, 0.14);
+  --cat-3-subtle: rgba(168, 160, 255, 0.14);
+  --cat-4-subtle: rgba(108, 195, 245, 0.14);
+  --cat-5-subtle: rgba(207, 156, 255, 0.14);
+  --cat-6-subtle: rgba(169, 182, 201, 0.14);
+
+  --traffic-idle: var(--gray-4);
+  --scrim: rgba(0, 0, 0, 0.45);
+  --scrim-light: rgba(0, 0, 0, 0.3);
+  --label-chip: rgba(0, 0, 0, 0.5);
+  --photo-ring: rgba(255, 255, 255, 0.12);
+  --selection-tint: rgba(255, 255, 255, 0.16);
+
+  --wallpaper-dusk: radial-gradient(at 18% 22%, #273a86 0, transparent 50%),
+    radial-gradient(at 82% 12%, #5b2453 0, transparent 45%), radial-gradient(at 72% 82%, #134a4a 0, transparent 50%),
+    radial-gradient(at 20% 88%, #33215f 0, transparent 45%), linear-gradient(135deg, #0e1222, #170f1f);
+  --wallpaper-ocean: radial-gradient(at 12% 18%, #0f4c75 0, transparent 50%),
+    radial-gradient(at 88% 24%, #0c5e55 0, transparent 45%), radial-gradient(at 50% 92%, #1f2f7a 0, transparent 55%),
+    linear-gradient(160deg, #07141f, #0a1024);
+  --wallpaper-sunrise: radial-gradient(at 15% 15%, #6a3412 0, transparent 50%),
+    radial-gradient(at 85% 20%, #6b1f33 0, transparent 45%), radial-gradient(at 60% 90%, #5a4410 0, transparent 50%),
+    linear-gradient(140deg, #1a100a, #1c0d12);
+
+  /* Shadows are slightly stronger in dark mode so elevation still reads. */
+  --shadow-resting: 0 0 0 0.5px rgba(255, 255, 255, 0.05), 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-raised: 0 0 0 0.5px rgba(255, 255, 255, 0.06), 0 2px 6px rgba(0, 0, 0, 0.35),
+    0 10px 26px -6px rgba(0, 0, 0, 0.55);
+  --shadow-window: 0 0 0 0.5px rgba(255, 255, 255, 0.07), 0 8px 20px -6px rgba(0, 0, 0, 0.5),
+    0 26px 64px -14px rgba(0, 0, 0, 0.66);
+  --shadow-window-focus: 0 0 0 0.5px rgba(255, 255, 255, 0.1), 0 14px 32px -8px rgba(0, 0, 0, 0.62),
+    0 40px 100px -16px rgba(0, 0, 0, 0.78);
+
+  --material-menubar: rgba(26, 26, 30, 0.55);
+  --material-menubar-solid: #1c1c1f;
+  --material-sidebar: rgba(36, 36, 40, 0.84);
+  --material-sidebar-solid: #26262a;
+  --material-popover: rgba(40, 40, 45, 0.96);
+  --material-popover-solid: #29292e;
+}
+
+/* Reduced motion: near-zero durations (components also swap transforms for fades). */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-micro: 1ms;
+    --duration-standard: 1ms;
+    --duration-emphasis: 1ms;
+  }
+}

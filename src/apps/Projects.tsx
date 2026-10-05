@@ -45,17 +45,17 @@ export default function Projects() {
           onClick={() => select(i)}
           className={
             narrow
-              ? `whitespace-nowrap rounded-full px-3.5 py-1.5 text-[13.5px] font-semibold ${
-                  active ? "bg-accent text-white" : "bg-panel border border-hairline text-ink-1"
+              ? `whitespace-nowrap rounded-full px-3.5 py-1.5 text-footnote font-semibold ${
+                  active ? "bg-accent text-on-accent" : "bg-panel border border-hairline text-ink-1"
                 }`
-              : `flex w-full items-start gap-2.5 rounded-lg px-2.5 py-2 text-left text-[14px] leading-snug ${
-                  active ? "bg-accent text-white" : "text-ink-1 hover:bg-panel-3"
+              : `flex w-full items-start gap-2.5 rounded-button px-2.5 py-2 text-left text-body leading-snug ${
+                  active ? "bg-accent text-on-accent" : "text-ink-1 hover:bg-panel-3"
                 }`
           }
         >
           {!narrow && (
             <span
-              className={`i-ph:folder-simple-fill mt-0.5 text-[16px] ${active ? "text-white" : "text-[#3b9be8]"}`}
+              className={`i-ph:folder-simple-fill mt-0.5 text-[16px] ${active ? "text-on-accent" : "text-file-folder"}`}
               aria-hidden="true"
             />
           )}
@@ -86,13 +86,13 @@ export default function Projects() {
 
       <article ref={articleRef} className="app-scroll min-w-0 flex-1" aria-labelledby="project-title">
         <div className="max-w-[700px] px-7 py-7">
-          <p className="text-[13px] font-semibold text-ink-3">
+          <p className="text-footnote font-semibold text-ink-3">
             Project {index + 1} of {projects.length}
           </p>
           <h1 id="project-title" className="app-h1 mt-1">
             {project.title}
           </h1>
-          {project.descriptor && <p className="mt-1.5 text-[15.5px] text-ink-2">{project.descriptor}</p>}
+          {project.descriptor && <p className="mt-1.5 text-body text-ink-2">{project.descriptor}</p>}
 
           <div className="mt-5">
             <ProjectLinks
@@ -102,7 +102,7 @@ export default function Projects() {
           </div>
 
           <h2 className="app-h2 mt-8">Overview</h2>
-          <ul className="bullets mt-2.5 text-[15px]">
+          <ul className="bullets mt-2.5 text-body">
             {project.bullets.map((b) => (
               <li key={b}>{b}</li>
             ))}

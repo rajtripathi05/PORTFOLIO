@@ -82,10 +82,10 @@ export default function Desktop() {
   const closeOverlay = () => setOverlay(null);
 
   return (
-    <div className="fixed inset-0 overflow-hidden" style={{ background: dark ? wallpaper.dark : wallpaper.light }}>
+    <div className="fixed inset-0 overflow-hidden" style={{ background: wallpaper.background }}>
       <a
         href="/quick"
-        className="sr-only z-[300] rounded-lg bg-accent px-4 py-2 font-semibold text-white focus:not-sr-only focus:fixed focus:left-3 focus:top-10"
+        className="sr-only z-[300] rounded-button bg-accent px-4 py-2 font-semibold text-on-accent focus:not-sr-only focus:fixed focus:left-3 focus:top-10"
       >
         Skip to Quick View
       </a>

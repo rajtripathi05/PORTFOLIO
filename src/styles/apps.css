@@ -1,33 +1,37 @@
-/* Shared building blocks for app content. */
+/* Shared building blocks for app content. Raw values live in tokens.css. */
 .app-scroll {
   height: 100%;
   overflow-y: auto;
   overscroll-behavior: contain;
-  font-size: 14.5px;
-  line-height: 1.55;
+  font-size: var(--text-body);
+  line-height: var(--lh-body);
   color: var(--text-1);
 }
 .app-h1 {
-  font-size: 26px;
-  line-height: 1.2;
+  font-size: var(--text-title);
+  line-height: var(--lh-title);
   font-weight: 700;
-  letter-spacing: -0.01em;
+  letter-spacing: var(--ls-title);
 }
 .app-h2 {
-  font-size: 12.5px;
+  font-size: var(--text-caption);
+  line-height: var(--lh-caption);
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   color: var(--text-3);
 }
 .app-card {
-  border-radius: 12px;
+  border-radius: var(--radius-card);
   border: 1px solid var(--hairline);
-  background: var(--panel-2);
+  background: var(--surface-2);
+}
+.measure {
+  max-width: 70ch;
 }
 .bullets {
   display: grid;
-  gap: 6px;
+  gap: var(--space-2);
   padding-left: 1.1em;
   list-style: disc;
 }
@@ -46,13 +50,19 @@
 .chip {
   display: inline-flex;
   align-items: center;
-  padding: 4px 11px;
-  border-radius: 999px;
-  font-size: 13.5px;
-  line-height: 1.35;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-chip);
+  font-size: var(--text-footnote);
+  line-height: var(--lh-footnote);
   color: var(--text-1);
-  background: var(--panel);
+  background: var(--surface);
   border: 1px solid var(--hairline);
+}
+.pressable {
+  transition: transform var(--duration-micro) var(--ease-standard);
+}
+.pressable:active {
+  transform: scale(0.96);
 }
 
 /* ---------------- assistant ---------------- */
@@ -61,8 +71,15 @@
   width: 26px;
   height: 26px;
   border-radius: 50%;
-  background: conic-gradient(from 200deg, #5b8def, #8a4fd8, #e05a9c, #4fd1b5, #5b8def);
-  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.35);
+  background: conic-gradient(
+    from 200deg,
+    var(--icon-ai-1),
+    var(--icon-ai-2),
+    var(--icon-ai-3),
+    var(--icon-skills-1),
+    var(--icon-ai-1)
+  );
+  box-shadow: inset 0 0 0 2px var(--media-control-hover);
 }
 .assistant-orb.is-thinking {
   animation: orb-spin 2.4s linear infinite;
@@ -90,8 +107,8 @@
 }
 .typing {
   display: inline-flex;
-  gap: 4px;
-  padding: 4px 0;
+  gap: var(--space-1);
+  padding: var(--space-1) 0;
 }
 .typing span {
   width: 7px;
@@ -117,4 +134,37 @@
     opacity: 1;
     transform: translateY(-3px);
   }
+}
+@media (prefers-reduced-motion: reduce) {
+  .assistant-orb.is-thinking,
+  .typing span {
+    animation: none;
+  }
+}
+
+/* ---------------- terminal ---------------- */
+.terminal {
+  background: var(--term-bg);
+  color: var(--term-fg);
+}
+.term-head {
+  color: var(--term-blue);
+  font-weight: 700;
+}
+.term-key {
+  color: var(--term-yellow);
+}
+.term-dim {
+  color: var(--term-dim);
+}
+.term-ok {
+  color: var(--term-green);
+}
+.term-err {
+  color: var(--term-red);
+}
+.term-link {
+  color: var(--term-blue);
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }

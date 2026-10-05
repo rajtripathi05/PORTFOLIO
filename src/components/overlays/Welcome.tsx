@@ -16,10 +16,10 @@ export default function Welcome({ onStart }: WelcomeProps) {
           alt={`Photo of ${identity.name}`}
           width={96}
           height={96}
-          className="size-24 rounded-full object-cover shadow-md ring-4 ring-white/70 dark:ring-white/10"
+          className="size-24 rounded-full object-cover shadow-raised ring-4 ring-[var(--photo-ring)]"
         />
-        <h1 className="mt-4 text-[24px] font-bold tracking-tight">Hi, I'm {identity.firstName} 👋</h1>
-        <p className="mt-2 text-[15.5px] leading-relaxed text-ink-2">
+        <h1 className="mt-4 text-title font-bold tracking-tight">Hi, I'm {identity.firstName} 👋</h1>
+        <p className="mt-2 text-body leading-relaxed text-ink-2">
           This is my portfolio, designed like a Mac desktop. Click any icon in the dock below to explore — or
           use <strong className="text-ink-1">Quick View</strong> for a simple scrollable version.
         </p>
@@ -31,7 +31,7 @@ export default function Welcome({ onStart }: WelcomeProps) {
             Quick View
           </a>
         </div>
-        <p className="mt-4 text-[13px] text-ink-3">Tip: click any icon in the dock.</p>
+        <p className="mt-4 text-footnote text-ink-3">Tip: click any icon in the dock.</p>
       </div>
     </Dialog>
   );

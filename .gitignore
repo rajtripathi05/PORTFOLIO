@@ -17,3 +17,6 @@ media-src/
 
 # Build-time SSR output
 .ssr/
+
+# Screenshot / a11y review output
+review/

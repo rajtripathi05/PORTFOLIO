@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import type { AppDef } from "~/configs/apps";
 import { DOCK_RESERVE, MENU_BAR_HEIGHT } from "~/utils";
 import { WindowContext } from "./WindowContext";
+import { fadeFast, spring } from "~/styles/motion";
 
 // Siri-style panel pinned under the menu bar (used by "Ask Raj's AI").
 export default function FloatingPanel({ app }: { app: AppDef }) {
@@ -31,7 +32,7 @@ export default function FloatingPanel({ app }: { app: AppDef }) {
       id={`window-${app.id}`}
       role="dialog"
       aria-labelledby={`window-title-${app.id}`}
-      className={`window glass-window fixed right-3 ${focused ? "is-focused" : ""}`}
+      className={`window material-sidebar fixed right-3 ${focused ? "is-focused" : ""}`}
       style={{
         top: MENU_BAR_HEIGHT + 8,
         width,
@@ -43,10 +44,10 @@ export default function FloatingPanel({ app }: { app: AppDef }) {
       onPointerDownCapture={() => focusApp(app.id)}
       initial={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.6, y: -24 }}
       animate={hidden ? { opacity: 0, scale: reduced ? 1 : 0.6, y: reduced ? 0 : -24 } : { opacity: 1, scale: 1, y: 0 }}
-      exit={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.7, y: -16, transition: { duration: 0.16 } }}
-      transition={{ type: "spring", stiffness: 380, damping: 30, mass: 0.8 }}
+      exit={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.7, y: -16, transition: fadeFast }}
+      transition={spring.panel}
     >
-      <header className="titlebar glass-titlebar" style={{ cursor: "default" }}>
+      <header className="titlebar" style={{ cursor: "default" }}>
         <div className="traffic">
           <button type="button" aria-label={`Close ${app.title}`} title="Close (Esc)" onClick={() => closeApp(app.id)}>
             <span className="light is-close">

@@ -11,10 +11,10 @@ const HomeIcon = ({ app, onOpen, dock = false }: { app: AppDef; onOpen: () => vo
   <button
     type="button"
     onClick={onOpen}
-    className="flex min-h-[44px] flex-col items-center gap-1.5 rounded-2xl p-1 transition-transform active:scale-[.92]"
+    className="flex min-h-[44px] flex-col items-center gap-1.5 rounded-panel p-1 transition-transform active:scale-[.92]"
   >
     <AppIcon icon={app.icon} size={dock ? 58 : 62} />
-    <span className="max-w-[96px] truncate text-[12.5px] font-medium tracking-[-0.01em] text-ink-1">{app.title}</span>
+    <span className="max-w-[96px] truncate text-footnote font-medium tracking-[-0.01em] text-ink-1">{app.title}</span>
   </button>
 );
 
@@ -42,7 +42,7 @@ export default function MobileHome() {
   }, []);
 
   return (
-    <div className="fixed inset-0 overflow-hidden" style={{ background: dark ? wallpaper.dark : wallpaper.light }}>
+    <div className="fixed inset-0 overflow-hidden" style={{ background: wallpaper.background }}>
       <div
         className="h-full overflow-y-auto"
         style={{
@@ -54,13 +54,13 @@ export default function MobileHome() {
         aria-hidden={top ? true : undefined}
       >
         <header className="mx-auto flex max-w-[560px] items-center justify-between">
-          <p className="hstack gap-2 text-[17px] font-bold">
+          <p className="hstack gap-2 text-callout font-bold">
             <Monogram size={22} />
             {portfolio.identity.name}
           </p>
           <button
             type="button"
-            className="grid size-11 place-items-center rounded-full glass-dock active:scale-[.96]"
+            className="grid size-11 place-items-center rounded-full material-menubar active:scale-[.96]"
             onClick={toggleDark}
             aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
           >
@@ -71,7 +71,7 @@ export default function MobileHome() {
         <main className="mx-auto mt-4 max-w-[560px]">
           <a
             href="/quick"
-            className="glass-dock block rounded-[22px] border border-hairline p-5 shadow-lg transition-transform active:scale-[.98]"
+            className="material-menubar block rounded-panel border border-hairline p-5 shadow-raised transition-transform active:scale-[.98]"
           >
             <div className="flex items-center gap-4">
               <img
@@ -79,11 +79,11 @@ export default function MobileHome() {
                 alt=""
                 width={64}
                 height={64}
-                className="size-16 flex-none rounded-full object-cover ring-2 ring-white/70"
+                className="size-16 flex-none rounded-full object-cover ring-2 ring-[var(--photo-ring)]"
               />
               <div className="min-w-0">
-                <p className="text-[19px] font-bold leading-tight">Hi, I'm {portfolio.identity.firstName} 👋</p>
-                <p className="mt-1 text-[14.5px] leading-snug text-ink-2">
+                <p className="text-headline font-bold leading-tight">Hi, I'm {portfolio.identity.firstName} 👋</p>
+                <p className="mt-1 text-body leading-snug text-ink-2">
                   Read my whole portfolio as one simple page.
                 </p>
               </div>
@@ -97,12 +97,12 @@ export default function MobileHome() {
           <button
             type="button"
             onClick={() => openApp("projects", { id: featured.id })}
-            className="glass-dock mt-3 block w-full rounded-[22px] border border-hairline p-4 text-left shadow-md transition-transform active:scale-[.98]"
+            className="material-menubar mt-3 block w-full rounded-panel border border-hairline p-4 text-left shadow-raised transition-transform active:scale-[.98]"
           >
             <p className="app-h2">Featured project</p>
-            <p className="mt-1.5 text-[17px] font-bold">{featured.title}</p>
-            {featured.descriptor && <p className="text-[14.5px] text-ink-2">{featured.descriptor}</p>}
-            <p className="mt-2 hstack gap-1 text-[14px] font-semibold text-accent-text">
+            <p className="mt-1.5 text-callout font-bold">{featured.title}</p>
+            {featured.descriptor && <p className="text-body text-ink-2">{featured.descriptor}</p>}
+            <p className="mt-2 hstack gap-1 text-body font-semibold text-accent-text">
               See all projects <span className="i-ph:arrow-right-bold" aria-hidden="true" />
             </p>
           </button>
@@ -117,7 +117,7 @@ export default function MobileHome() {
 
       <nav
         aria-label="Dock"
-        className="glass-dock fixed inset-x-3 mx-auto flex max-w-[560px] justify-around rounded-[28px] border border-hairline px-2 py-2.5 shadow-xl"
+        className="material-menubar fixed inset-x-3 mx-auto flex max-w-[560px] justify-around rounded-panel border border-hairline px-2 py-2.5 shadow-overlay"
         style={{ bottom: "calc(env(safe-area-inset-bottom) + 10px)" }}
         aria-hidden={top ? true : undefined}
       >

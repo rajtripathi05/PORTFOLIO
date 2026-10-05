@@ -61,5 +61,5 @@ export default function ProjectLinks({ project, onOpenInSafari }: ProjectLinksPr
       </ul>
     );
 
-  return <p className="text-[14px] text-ink-3">No live link for this project.</p>;
+  return <p className="text-body text-ink-3">No live link for this project.</p>;
 }

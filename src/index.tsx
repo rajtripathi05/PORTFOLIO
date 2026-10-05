@@ -1,4 +1,4 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import { createRoot, hydrateRoot } from "react-dom/client";
 import Desktop from "~/pages/Desktop";
 import Boot from "~/pages/Boot";
@@ -11,7 +11,9 @@ import "@unocss/reset/tailwind.css";
 import "uno.css";
 import "~/styles/index.css";
 
-const isQuickView = window.location.pathname.replace(/\/+$/, "") === "/quick";
+const route = window.location.pathname.replace(/\/+$/, "") || "/";
+const isQuickView = route === "/quick";
+const Styleguide = lazy(() => import("~/pages/Styleguide"));
 
 export default function App() {
   // Returning visitors skip the intro entirely.
@@ -43,6 +45,12 @@ if (isQuickView) {
   // The build pre-renders Quick View into the HTML; hydrate it when present.
   if (rootElement.hasChildNodes()) hydrateRoot(rootElement, app);
   else createRoot(rootElement).render(app);
+} else if (route === "/styleguide") {
+  createRoot(rootElement).render(
+    <Suspense fallback={null}>
+      <Styleguide />
+    </Suspense>
+  );
 } else {
   createRoot(rootElement).render(
     <React.StrictMode>

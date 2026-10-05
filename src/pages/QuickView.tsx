@@ -66,12 +66,12 @@ export default function QuickView() {
     <div className="qv">
       <a
         href="#main"
-        className="sr-only z-50 rounded-lg bg-accent px-4 py-2 font-semibold text-white focus:not-sr-only focus:fixed focus:left-3 focus:top-3"
+        className="sr-only z-50 rounded-button bg-accent px-4 py-2 font-semibold text-on-media focus:not-sr-only focus:fixed focus:left-3 focus:top-3"
       >
         Skip to content
       </a>
 
-      <header className="qv-header glass-menubar">
+      <header className="qv-header material-menubar">
         <div className="qv-wrap flex h-14 items-center gap-4">
           <a href="#top" className="hstack gap-2 font-bold text-ink-1">
             <Monogram size={20} />
@@ -88,7 +88,7 @@ export default function QuickView() {
             {mounted && (
               <button
                 type="button"
-                className="grid size-9 place-items-center rounded-lg text-ink-2 hover:bg-panel-3"
+                className="grid size-9 place-items-center rounded-button text-ink-2 hover:bg-panel-3"
                 onClick={() => {
                   toggleDark();
                   setDark((d) => !d);
@@ -113,11 +113,11 @@ export default function QuickView() {
             alt={`Photo of ${identity.name}`}
             width={132}
             height={132}
-            className="size-[132px] flex-none rounded-full object-cover shadow-md ring-4 ring-white/80 dark:ring-white/10"
+            className="size-[132px] flex-none rounded-full object-cover shadow-raised ring-4 ring-[var(--photo-ring)]"
           />
           <div>
             <h1 className="qv-h1">{identity.name}</h1>
-            <p className="mt-2 text-[17px] text-ink-2">{identity.headline}</p>
+            <p className="mt-2 text-callout text-ink-2">{identity.headline}</p>
             <div className="qv-actions mt-5 flex flex-wrap gap-2">
               <a className="btn-primary" href={identity.resumePdf} download="Raj_Tripathi_Resume.pdf">
                 <span className="i-ph:download-simple-bold" aria-hidden="true" />
@@ -162,7 +162,7 @@ export default function QuickView() {
             <ol className="qv-timeline">
               {experience.map((job) => (
                 <li key={job.id}>
-                  <h3 className="text-[18px] font-bold leading-snug">
+                  <h3 className="text-headline font-bold leading-snug">
                     {job.role} <span className="font-normal text-ink-3">|</span>{" "}
                     {job.orgUrl ? (
                       <a className="text-link" href={job.orgUrl} target="_blank" rel="noopener noreferrer">
@@ -172,7 +172,7 @@ export default function QuickView() {
                       job.org
                     )}
                   </h3>
-                  <p className="mt-0.5 text-[14.5px] font-medium tabular-nums text-ink-3">
+                  <p className="mt-0.5 text-body font-medium tabular-nums text-ink-3">
                     {job.dates}
                     {job.location && ` · ${job.location}`}
                   </p>
@@ -193,7 +193,7 @@ export default function QuickView() {
             <div className="grid gap-4">
               {projects.map((pr) => (
                 <article key={pr.id} className="qv-card" aria-labelledby={`qv-${pr.id}`}>
-                  <h3 id={`qv-${pr.id}`} className="text-[19px] font-bold leading-snug">
+                  <h3 id={`qv-${pr.id}`} className="text-headline font-bold leading-snug">
                     {pr.title}
                   </h3>
                   {pr.descriptor && <p className="mt-0.5 text-ink-2">{pr.descriptor}</p>}
@@ -226,17 +226,17 @@ export default function QuickView() {
                         aria-label={`View photos for ${a.name} (${mediaSummary(items)})`}
                       >
                         <LazyImage src={(cover.thumb ?? cover.poster)!} alt="" color={cover.color} className="size-full" />
-                        <span className="absolute bottom-2 right-2 rounded-full bg-black/60 px-2.5 py-1 text-[12px] font-semibold text-white">
+                        <span className="absolute bottom-2 right-2 rounded-full bg-media-chip px-2.5 py-1 text-footnote font-semibold text-on-media">
                           {mediaSummary(items)}
                         </span>
                       </button>
                     )}
                     <div className="flex flex-col gap-2 px-5 pb-5 pt-2">
-                      <h3 id={`qv-${a.id}`} className="text-[17.5px] font-bold leading-snug">
+                      <h3 id={`qv-${a.id}`} className="text-callout font-bold leading-snug">
                         {achievementTitle(a)}
                       </h3>
                       <AchievementBadges a={a} />
-                      <p className="text-[15.5px] leading-relaxed text-ink-2">{a.description}</p>
+                      <p className="text-body leading-relaxed text-ink-2">{a.description}</p>
                       {a.links?.map((l) => (
                         <ExternalLink key={l.url} href={l.url} className="text-link w-max font-semibold">
                           {l.label}
@@ -272,27 +272,27 @@ export default function QuickView() {
           </Section>
 
           <Section id="contact" title="Contact">
-            <ul className="qv-card grid gap-3 text-[16px] sm:grid-cols-2">
+            <ul className="qv-card grid gap-3 text-callout sm:grid-cols-2">
               <li>
-                <span className="block text-[13px] font-semibold uppercase tracking-wide text-ink-3">Email</span>
+                <span className="block text-footnote font-semibold uppercase tracking-wide text-ink-3">Email</span>
                 <a className="text-link" href={`mailto:${identity.email}`}>
                   {identity.email}
                 </a>
               </li>
               <li>
-                <span className="block text-[13px] font-semibold uppercase tracking-wide text-ink-3">Phone</span>
+                <span className="block text-footnote font-semibold uppercase tracking-wide text-ink-3">Phone</span>
                 <a className="text-link tabular-nums" href={`tel:${identity.phone.replace(/\s+/g, "")}`}>
                   {identity.phone}
                 </a>
               </li>
               <li>
-                <span className="block text-[13px] font-semibold uppercase tracking-wide text-ink-3">LinkedIn</span>
+                <span className="block text-footnote font-semibold uppercase tracking-wide text-ink-3">LinkedIn</span>
                 <a className="text-link" href={identity.linkedin} target="_blank" rel="noopener noreferrer">
                   {identity.linkedin.replace("https://", "")}
                 </a>
               </li>
               <li>
-                <span className="block text-[13px] font-semibold uppercase tracking-wide text-ink-3">GitHub</span>
+                <span className="block text-footnote font-semibold uppercase tracking-wide text-ink-3">GitHub</span>
                 <a className="text-link" href={identity.github} target="_blank" rel="noopener noreferrer">
                   {identity.github.replace("https://", "")}
                 </a>

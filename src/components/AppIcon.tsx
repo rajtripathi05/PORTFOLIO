@@ -15,7 +15,7 @@ export default function AppIcon({ icon, size = 48, className = "" }: AppIconProp
       className={`app-icon ${icon.tile} ${className}`}
       style={{ width: dim, height: dim }}
     >
-      <span className={`${icon.glyph} ${icon.ink ?? "text-white"} w-[56%] h-[56%]`} />
+      <span className={`${icon.glyph} ${icon.ink ?? "text-on-accent"} w-[56%] h-[56%]`} />
     </span>
   );
 }

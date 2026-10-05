@@ -122,7 +122,7 @@ export default function Assistant() {
   return (
     <div className="flex h-full flex-col bg-panel">
       <div className="flex flex-none items-center justify-between gap-2 border-b border-hairline px-4 py-2">
-        <p className="text-[12.5px] text-ink-3">Answers come only from Raj's portfolio.</p>
+        <p className="text-footnote text-ink-3">Answers come only from Raj's portfolio.</p>
         <button type="button" className="btn-ghost btn-sm" onClick={newChat} disabled={!messages.length && !busy}>
           <span className="i-ph:note-pencil-bold" aria-hidden="true" />
           New chat
@@ -138,7 +138,7 @@ export default function Assistant() {
       >
         <div className="flex gap-2.5">
           <span className="assistant-orb mt-0.5" aria-hidden="true" />
-          <div className="rounded-2xl rounded-tl-md bg-panel-2 px-3.5 py-2.5 text-[14.5px] leading-relaxed">
+          <div className="rounded-panel rounded-tl-sm bg-panel-2 px-3.5 py-2.5 text-body leading-relaxed">
             Hi! I can answer questions about Raj's experience, projects, achievements, skills and how to
             contact him.
           </div>
@@ -147,7 +147,7 @@ export default function Assistant() {
         {messages.map((m, i) =>
           m.role === "user" ? (
             <div key={i} className="flex justify-end">
-              <div className="max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-tr-md bg-accent px-3.5 py-2.5 text-[14.5px] leading-relaxed text-white">
+              <div className="max-w-[85%] whitespace-pre-wrap rounded-panel rounded-tr-sm bg-accent px-3.5 py-2.5 text-body leading-relaxed text-on-accent">
                 {m.content}
               </div>
             </div>
@@ -156,7 +156,7 @@ export default function Assistant() {
               <span className="assistant-orb mt-0.5" aria-hidden="true" />
               <div className="min-w-0 max-w-[88%]">
                 {m.note && (
-                  <div className="mb-1.5 flex flex-wrap items-center gap-2 rounded-lg bg-[var(--warning-bg)] px-3 py-1.5 text-[12.5px] text-[var(--warning-text)]">
+                  <div className="mb-1.5 flex flex-wrap items-center gap-2 rounded-button bg-[var(--warning-subtle)] px-3 py-1.5 text-footnote text-[var(--warning-text)]">
                     <span className="i-ph:info-bold" aria-hidden="true" />
                     <span className="flex-1">{m.note}</span>
                     {i === messages.length - 1 && (
@@ -166,7 +166,7 @@ export default function Assistant() {
                     )}
                   </div>
                 )}
-                <div className="rounded-2xl rounded-tl-md bg-panel-2 px-3.5 py-2.5 text-[14.5px] leading-relaxed">
+                <div className="rounded-panel rounded-tl-sm bg-panel-2 px-3.5 py-2.5 text-body leading-relaxed">
                   <Markdown text={m.content} />
                 </div>
                 {m.actions && m.actions.length > 0 && (
@@ -192,7 +192,7 @@ export default function Assistant() {
         {streaming !== null && (
           <div className="flex gap-2.5">
             <span className="assistant-orb is-thinking mt-0.5" aria-hidden="true" />
-            <div className="min-w-0 max-w-[88%] rounded-2xl rounded-tl-md bg-panel-2 px-3.5 py-2.5 text-[14.5px] leading-relaxed">
+            <div className="min-w-0 max-w-[88%] rounded-panel rounded-tl-sm bg-panel-2 px-3.5 py-2.5 text-body leading-relaxed">
               {streaming ? (
                 <>
                   <Markdown text={streaming} />
@@ -218,7 +218,7 @@ export default function Assistant() {
                 key={s}
                 type="button"
                 onClick={() => send(s)}
-                className="rounded-full border border-hairline bg-panel-2 px-3 py-1.5 text-[13px] font-medium text-ink-1 hover:bg-panel-3"
+                className="rounded-full border border-hairline bg-panel-2 px-3 py-1.5 text-footnote font-medium text-ink-1 hover:bg-panel-3"
               >
                 {s}
               </button>
@@ -244,18 +244,18 @@ export default function Assistant() {
             rows={1}
             maxLength={MAX_USER_CHARS}
             placeholder="Ask about Raj's work…"
-            className="max-h-28 min-h-10 flex-1 resize-none rounded-xl border border-hairline bg-panel-2 px-3.5 py-2.5 text-[14.5px] text-ink-1 outline-none focus:border-accent"
+            className="max-h-28 min-h-10 flex-1 resize-none rounded-card border border-hairline bg-panel-2 px-3.5 py-2.5 text-body text-ink-1 outline-none focus:border-accent"
           />
           <button
             type="submit"
-            className="grid size-10 flex-none place-items-center rounded-full bg-accent text-white hover:bg-accent-hover disabled:opacity-40"
+            className="grid size-10 flex-none place-items-center rounded-full bg-accent text-on-accent hover:bg-accent-hover disabled:opacity-40"
             disabled={!input.trim() || busy}
             aria-label="Send question"
           >
             <span className="i-ph:arrow-up-bold text-[18px]" />
           </button>
         </form>
-        <div className="mt-1.5 flex justify-between gap-3 text-[11.5px] text-ink-3">
+        <div className="mt-1.5 flex justify-between gap-3 text-caption text-ink-3">
           <span>AI answers are generated from Raj's resume and may be imperfect.</span>
           {input.length > MAX_USER_CHARS - 100 && (
             <span className="tabular-nums">

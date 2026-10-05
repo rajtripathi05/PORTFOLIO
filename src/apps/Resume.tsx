@@ -16,8 +16,8 @@ export default function Resume() {
   return (
     <div className="flex h-full flex-col">
       <div className="flex flex-none flex-wrap items-center justify-between gap-2 border-b border-hairline bg-panel-2 px-3 py-2">
-        <p className="hstack min-w-0 gap-2 text-[13.5px] font-semibold text-ink-2">
-          <span className="i-ph:file-pdf-fill text-[18px] text-[#d9412b]" aria-hidden="true" />
+        <p className="hstack min-w-0 gap-2 text-footnote font-semibold text-ink-2">
+          <span className="i-ph:file-pdf-fill text-[18px] text-file-pdf" aria-hidden="true" />
           <span className="truncate">{FILE_NAME}</span>
         </p>
         <div className="flex gap-2">
@@ -41,8 +41,8 @@ export default function Resume() {
       ) : (
         <div className="app-scroll flex-1">
           <div className="mx-auto flex max-w-[420px] flex-col items-center px-6 py-10 text-center">
-            <span className="i-ph:file-pdf-duotone text-[72px] text-[#d9412b]" aria-hidden="true" />
-            <h1 className="mt-3 text-[20px] font-bold">{name} — Resume</h1>
+            <span className="i-ph:file-pdf-duotone text-[72px] text-file-pdf" aria-hidden="true" />
+            <h1 className="mt-3 text-headline font-bold">{name} — Resume</h1>
             <p className="mt-1 text-ink-2">PDF · 2 pages</p>
             <div className="mt-6 grid w-full gap-2">
               <a className="btn-primary btn-lg" href={resumePdf} download={FILE_NAME}>

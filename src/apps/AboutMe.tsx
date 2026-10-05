@@ -25,11 +25,11 @@ export default function AboutMe() {
             alt={`Photo of ${identity.name}`}
             width={128}
             height={128}
-            className="size-32 flex-none rounded-full object-cover shadow-md ring-4 ring-white/70 dark:ring-white/10"
+            className="size-32 flex-none rounded-full object-cover shadow-raised ring-4 ring-[var(--photo-ring)]"
           />
           <div className="min-w-0">
             <h1 className="app-h1">{identity.name}</h1>
-            <p className="mt-1.5 text-[15px] text-ink-2">{identity.headline}</p>
+            <p className="mt-1.5 text-body text-ink-2">{identity.headline}</p>
             <div className={`mt-4 flex flex-wrap gap-2 ${narrow ? "justify-center" : ""}`}>
               <a className="btn-primary" href={identity.resumePdf} download="Raj_Tripathi_Resume.pdf">
                 <span className="i-ph:download-simple-bold" aria-hidden="true" />
@@ -55,7 +55,7 @@ export default function AboutMe() {
           <h2 id="about-summary" className="app-h2">
             Profile Summary
           </h2>
-          <p className="mt-2 text-[15px] leading-relaxed text-ink-1">{summary}</p>
+          <p className="mt-2 text-body leading-relaxed text-ink-1">{summary}</p>
         </section>
 
         <section className="mt-7" aria-labelledby="about-education">
@@ -90,7 +90,7 @@ export default function AboutMe() {
                 className="app-card flex items-center gap-2.5 px-3.5 py-3 text-left font-semibold hover:bg-panel-3 transition-colors"
                 onClick={() => openApp(e.id)}
               >
-                <span className={`${e.icon} text-[18px] text-accent-text`} aria-hidden="true" />
+                <span className={`${e.icon} text-headline text-accent-text`} aria-hidden="true" />
                 {e.label}
               </button>
             ))}

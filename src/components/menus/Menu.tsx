@@ -79,7 +79,7 @@ export default function Menu({ id, label, ariaLabel, entries, buttonClassName = 
           ref={listRef}
           role="menu"
           aria-label={ariaLabel}
-          className="menu-panel glass-menu"
+          className="menu-panel material-popover"
           onKeyDown={onListKeyDown}
         >
           {entries.map((entry, i) => {

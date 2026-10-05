@@ -84,7 +84,7 @@ export default function MenuBar() {
   ];
 
   return (
-    <header className="menubar glass-menubar fixed inset-x-0 top-0 z-40 h-8 px-1.5 flex items-center justify-between">
+    <header className="menubar material-menubar fixed inset-x-0 top-0 z-40 h-8 px-1.5 flex items-center justify-between">
       <nav aria-label="Menu bar" className="hstack gap-0.5 min-w-0">
         <button
           type="button"
@@ -118,7 +118,7 @@ export default function MenuBar() {
           <span className="i-ph:sparkle-fill text-accent-text" aria-hidden="true" />
           Ask AI
         </button>
-        <a className="menubar-pill bg-accent text-white hover:bg-accent-hover" href="/quick">
+        <a className="menubar-pill bg-accent text-on-accent hover:bg-accent-hover" href="/quick">
           <span className="i-ph:article-bold" aria-hidden="true" />
           Quick View
         </a>

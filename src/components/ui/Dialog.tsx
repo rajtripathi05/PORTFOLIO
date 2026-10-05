@@ -1,5 +1,6 @@
 import type React from "react";
 import { motion } from "framer-motion";
+import { fade, spring } from "~/styles/motion";
 
 interface DialogProps {
   label: string;
@@ -45,12 +46,12 @@ export default function Dialog({ label, onClose, children, width = 480, initialF
 
   return (
     <motion.div
-      className="fixed inset-0 z-[150] flex items-center justify-center bg-black/25 p-4 dark:bg-black/45"
+      className="fixed inset-0 z-[150] flex items-center justify-center bg-scrim p-4"
       onMouseDown={(e) => e.target === e.currentTarget && onClose()}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0, pointerEvents: "none" }}
-      transition={{ duration: 0.18 }}
+      transition={fade}
     >
       <motion.div
         ref={ref}
@@ -59,12 +60,12 @@ export default function Dialog({ label, onClose, children, width = 480, initialF
         aria-label={label}
         tabIndex={-1}
         onKeyDown={onKeyDown}
-        className={`glass-menu max-h-[calc(100vh-32px)] w-full overflow-y-auto rounded-2xl border border-hairline shadow-2xl ${className}`}
+        className={`material-popover max-h-[calc(100vh-32px)] w-full overflow-y-auto rounded-panel border border-hairline shadow-overlay ${className}`}
         style={{ maxWidth: width }}
         initial={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.94, y: 12 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.96, y: 8 }}
-        transition={{ type: "spring", stiffness: 420, damping: 32 }}
+        transition={spring.window}
       >
         {children}
       </motion.div>

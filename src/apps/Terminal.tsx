@@ -20,12 +20,12 @@ const COMMANDS: Record<string, string> = {
 };
 
 const C = {
-  head: "text-[#7cc4ff] font-bold",
-  key: "text-[#ffd479]",
-  dim: "text-[#9a9aa3]",
-  ok: "text-[#7ee2a8]",
-  link: "text-[#7cc4ff] underline underline-offset-2",
-  err: "text-[#ff8a80]"
+  head: "term-head",
+  key: "term-key",
+  dim: "term-dim",
+  ok: "term-ok",
+  link: "term-link",
+  err: "term-err"
 };
 
 const A = ({ href, children }: { href: string; children: React.ReactNode }) => (
@@ -270,7 +270,7 @@ export default function Terminal() {
   return (
     <div
       ref={scrollRef}
-      className="h-full overflow-y-auto bg-[#1c1c1e] px-4 py-3 font-mono text-[13.5px] leading-[1.6] text-[#e6e6ea]"
+      className="h-full overflow-y-auto terminal px-4 py-3 font-mono text-footnote leading-[1.6]"
       onClick={() => window.getSelection()?.isCollapsed && inputRef.current?.focus()}
     >
       {entries.map((e) => (
@@ -299,7 +299,7 @@ export default function Terminal() {
           autoCapitalize="off"
           spellCheck={false}
           disabled={busy}
-          className="min-w-0 flex-1 bg-transparent text-[#e6e6ea] caret-[#7ee2a8] outline-none"
+          className="min-w-0 flex-1 bg-transparent text-[var(--term-fg)] caret-[var(--term-green)] outline-none"
         />
       </div>
     </div>

@@ -9,6 +9,7 @@ import {
   type MotionValue
 } from "framer-motion";
 import type { IconSpec } from "~/configs/apps";
+import { duration, ease, spring } from "~/styles/motion";
 
 // Magnification curve adapted from https://github.com/PuruVJ/macos-web (via Renovamen/playground-macos).
 const useDockHoverAnimation = (
@@ -23,10 +24,7 @@ const useDockHoverAnimation = (
   const beyond = limit + 1;
 
   const distance = useMotionValue(beyond);
-  const width = useSpring(useTransform(distance, input, output), {
-    stiffness: 1700,
-    damping: 90
-  });
+  const width = useSpring(useTransform(distance, input, output), spring.dock);
 
   useRaf(() => {
     const el = ref.current;
@@ -72,7 +70,7 @@ export default function DockItem(props: DockItemProps) {
       return;
     }
     if (bounce && launches > 0)
-      controls.start({ y: [0, -18, 0, -7, 0], transition: { duration: 0.75, ease: "easeOut" } });
+      controls.start({ y: [0, -18, 0, -7, 0], transition: { duration: duration.bounce, ease: ease.standard } });
   }, [launches]);
 
   return (

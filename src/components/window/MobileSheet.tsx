@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { motion, useDragControls } from "framer-motion";
 import type { AppDef } from "~/configs/apps";
 import { WindowContext } from "./WindowContext";
+import { spring } from "~/styles/motion";
 
 // Full-screen iOS-style sheet. Drag the top bar down (or tap Done / press Esc) to close.
 export default function MobileSheet({ app }: { app: AppDef }) {
@@ -23,12 +24,12 @@ export default function MobileSheet({ app }: { app: AppDef }) {
       role="dialog"
       aria-modal="true"
       aria-labelledby={`sheet-title-${app.id}`}
-      className="fixed inset-0 z-50 flex flex-col overflow-hidden bg-panel shadow-2xl"
+      className="fixed inset-0 z-50 flex flex-col overflow-hidden bg-panel shadow-overlay"
       style={{ paddingTop: "env(safe-area-inset-top)", zIndex: 50 + win.z }}
       initial={reduced ? { opacity: 0 } : { y: "100%" }}
       animate={reduced ? { opacity: 1 } : { y: 0 }}
       exit={reduced ? { opacity: 0 } : { y: "100%" }}
-      transition={{ type: "spring", stiffness: 380, damping: 38, mass: 0.9 }}
+      transition={spring.sheet}
       drag={reduced ? false : "y"}
       dragControls={drag}
       dragListener={false}
@@ -45,14 +46,14 @@ export default function MobileSheet({ app }: { app: AppDef }) {
         <div className="mx-auto mt-1.5 h-1.5 w-10 rounded-full" style={{ background: "var(--text-3)", opacity: 0.35 }} aria-hidden="true" />
         <div className="flex h-12 items-center justify-between px-2">
           <span className="w-[72px]" aria-hidden="true" />
-          <h2 id={`sheet-title-${app.id}`} className="hstack gap-2 text-[16px] font-semibold">
+          <h2 id={`sheet-title-${app.id}`} className="hstack gap-2 text-callout font-semibold">
             <AppIcon icon={app.icon} size={22} />
             {app.title}
           </h2>
           <button
             ref={doneRef}
             type="button"
-            className="h-11 w-[72px] rounded-lg text-[16px] font-semibold text-accent-text active:scale-[.96]"
+            className="h-11 w-[72px] rounded-button text-callout font-semibold text-accent-text active:scale-[.96]"
             onClick={() => closeApp(app.id)}
           >
             Done

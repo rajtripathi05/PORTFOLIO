@@ -15,8 +15,8 @@ export default function HelpPanel({ onClose }: { onClose: () => void }) {
   return (
     <Dialog label="How to use this site" onClose={onClose} width={520}>
       <div className="px-7 pb-6 pt-6">
-        <h1 className="text-[20px] font-bold">How to use this site</h1>
-        <ul className="mt-4 space-y-3 text-[14.5px] leading-relaxed">
+        <h1 className="text-headline font-bold">How to use this site</h1>
+        <ul className="mt-4 space-y-3 text-body leading-relaxed">
           <li className="flex gap-3">
             <span className="i-ph:cursor-click-bold mt-0.5 text-[18px] text-accent-text" aria-hidden="true" />
             <span>
@@ -46,12 +46,12 @@ export default function HelpPanel({ onClose }: { onClose: () => void }) {
         </ul>
 
         <h2 className="app-h2 mt-6">Keyboard shortcuts</h2>
-        <dl className="mt-2 divide-y divide-[var(--hairline)] rounded-xl border border-hairline">
+        <dl className="mt-2 divide-y divide-[var(--hairline)] rounded-card border border-hairline">
           {shortcuts.map(([keys, what]) => (
-            <div key={keys} className="flex items-center justify-between gap-4 px-4 py-2 text-[14px]">
+            <div key={keys} className="flex items-center justify-between gap-4 px-4 py-2 text-body">
               <dt className="text-ink-2">{what}</dt>
               <dd>
-                <kbd className="rounded-md border border-hairline bg-panel px-2 py-0.5 font-mono text-[12.5px]">
+                <kbd className="rounded-sm border border-hairline bg-panel px-2 py-0.5 font-mono text-footnote">
                   {keys}
                 </kbd>
               </dd>

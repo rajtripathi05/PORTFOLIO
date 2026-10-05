@@ -13,17 +13,17 @@ html.is-quick {
 }
 .qv {
   min-height: 100%;
-  font-size: 16px;
+  font-size: var(--text-callout);
   line-height: 1.6;
   color: var(--text-1);
-  background: var(--panel-2);
+  background: var(--surface-2);
 }
 .qv-wrap {
   width: 100%;
   max-width: 920px;
   margin: 0 auto;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: var(--space-5);
+  padding-right: var(--space-5);
 }
 .qv-header {
   position: sticky;
@@ -32,67 +32,67 @@ html.is-quick {
   border-bottom: 1px solid var(--hairline);
 }
 .qv-nav {
-  gap: 4px;
+  gap: var(--space-1);
 }
 .qv-nav a {
-  padding: 6px 10px;
-  border-radius: 8px;
-  font-size: 14.5px;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-button);
+  font-size: var(--text-body);
   font-weight: 500;
   color: var(--text-2);
 }
 .qv-nav a:hover {
   color: var(--text-1);
-  background: rgba(127, 127, 127, 0.14);
+  background: var(--hover-tint);
 }
 .qv-hero {
   display: flex;
   align-items: center;
-  gap: 28px;
-  padding-top: 56px;
-  padding-bottom: 24px;
+  gap: var(--space-8);
+  padding-top: var(--space-16);
+  padding-bottom: var(--space-6);
 }
 @media (max-width: 640px) {
   .qv-hero {
     flex-direction: column;
     text-align: center;
-    padding-top: 36px;
+    padding-top: var(--space-10);
   }
   .qv-hero .qv-actions {
     justify-content: center;
   }
 }
 .qv-h1 {
-  font-size: clamp(32px, 6vw, 44px);
+  font-size: clamp(var(--text-large), 6vw, 46px);
   line-height: 1.08;
   font-weight: 800;
-  letter-spacing: -0.025em;
+  letter-spacing: var(--ls-large);
 }
 .qv-h2 {
-  margin-bottom: 18px;
-  font-size: 26px;
-  line-height: 1.2;
+  margin-bottom: var(--space-5);
+  font-size: var(--text-title);
+  line-height: var(--lh-title);
   font-weight: 750;
-  letter-spacing: -0.015em;
+  letter-spacing: var(--ls-title);
 }
 .qv-section {
-  padding-top: 44px;
-  scroll-margin-top: 64px;
+  padding-top: var(--space-12);
+  scroll-margin-top: var(--space-16);
 }
 .qv-prose {
   max-width: 70ch;
 }
 .qv-card {
-  padding: 20px;
-  border-radius: 12px;
+  padding: var(--space-5);
+  border-radius: var(--radius-card);
   border: 1px solid var(--hairline);
-  background: var(--panel);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  background: var(--surface);
+  box-shadow: var(--shadow-resting);
 }
 .qv-timeline {
   display: grid;
-  gap: 28px;
-  padding-left: 22px;
+  gap: var(--space-8);
+  padding-left: var(--space-6);
   border-left: 2px solid var(--hairline);
 }
 .qv-timeline > li {
@@ -101,18 +101,18 @@ html.is-quick {
 .qv-timeline > li::before {
   content: "";
   position: absolute;
-  left: -31px;
+  left: -33px;
   top: 7px;
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  border: 3px solid var(--panel-2);
+  border: 3px solid var(--surface-2);
   background: var(--accent);
 }
 .qv-footer {
-  padding-top: 56px;
-  padding-bottom: 48px;
-  font-size: 14px;
+  padding-top: var(--space-16);
+  padding-bottom: var(--space-12);
+  font-size: var(--text-footnote);
   color: var(--text-3);
 }
 .qv-print-url {
@@ -122,8 +122,9 @@ html.is-quick {
 /* Reveal once on scroll — only when JS added .js-reveal, so content is never hidden otherwise. */
 .js-reveal .reveal {
   opacity: 0;
-  transform: translateY(14px);
-  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+  transform: translateY(var(--space-3));
+  transition: opacity calc(var(--duration-emphasis) * 1.6) var(--ease-standard),
+    transform calc(var(--duration-emphasis) * 1.6) var(--ease-standard);
 }
 .js-reveal .reveal.is-visible {
   opacity: 1;
@@ -140,11 +141,11 @@ html.is-quick {
   #root {
     height: auto !important;
     overflow: visible !important;
-    background: #fff !important;
+    background: var(--print-bg) !important;
   }
   .qv {
-    background: #fff;
-    color: #000;
+    background: var(--print-bg);
+    color: var(--print-ink);
     font-size: 11pt;
     line-height: 1.45;
   }
@@ -174,13 +175,13 @@ html.is-quick {
   }
   .qv-h2 {
     font-size: 15pt;
-    border-bottom: 1px solid #999;
+    border-bottom: 1px solid var(--print-rule);
     padding-bottom: 3pt;
   }
   .qv-print-url {
     display: block;
     font-size: 9.5pt;
-    color: #333;
+    color: var(--print-muted);
   }
   .chip {
     border: 0;
@@ -195,7 +196,7 @@ html.is-quick {
     transform: none !important;
   }
   a {
-    color: #000 !important;
+    color: var(--print-ink) !important;
     text-decoration: none !important;
   }
 }

@@ -43,7 +43,7 @@ export default function Skills() {
               onChange={(e) => setFilter(e.target.value)}
               placeholder="Filter skills"
               aria-label="Filter skills"
-              className="h-9 w-full rounded-lg border border-hairline bg-panel-2 pl-9 pr-3 text-[14px] text-ink-1 outline-none focus:border-accent"
+              className="h-9 w-full rounded-button border border-hairline bg-panel-2 pl-9 pr-3 text-body text-ink-1 outline-none focus:border-accent"
             />
           </div>
         </div>
@@ -59,7 +59,7 @@ export default function Skills() {
           <div className={`mt-6 grid gap-3 ${width < 640 ? "grid-cols-1" : "grid-cols-2"}`}>
             {groups.map((group) => (
               <section key={group.name} className="app-card p-4" aria-labelledby={`skills-${group.name}`}>
-                <h2 id={`skills-${group.name}`} className="hstack gap-2 text-[15px] font-bold">
+                <h2 id={`skills-${group.name}`} className="hstack gap-2 text-body font-bold">
                   <span
                     className={`${groupIcons[group.name] ?? "i-ph:circle-bold"} text-accent-text`}
                     aria-hidden="true"

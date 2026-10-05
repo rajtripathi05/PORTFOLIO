@@ -13,10 +13,10 @@ interface RowProps {
 
 const Row = ({ icon, label, value, children }: RowProps) => (
   <li className="flex flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3.5">
-    <span className={`${icon} text-[22px] text-accent-text`} aria-hidden="true" />
+    <span className={`${icon} text-title text-accent-text`} aria-hidden="true" />
     <div className="min-w-0 flex-1">
-      <p className="text-[12.5px] font-semibold uppercase tracking-wide text-ink-3">{label}</p>
-      <p className="break-all text-[15px] font-medium">{value}</p>
+      <p className="text-footnote font-semibold uppercase tracking-wide text-ink-3">{label}</p>
+      <p className="break-all text-body font-medium">{value}</p>
     </div>
     <div className="flex flex-wrap gap-2">{children}</div>
   </li>
@@ -34,7 +34,7 @@ export default function Contact() {
     <div className="app-scroll">
       <div className="mx-auto max-w-[620px] px-6 py-7">
         <div className="app-card overflow-hidden">
-          <div className="border-b border-hairline bg-panel px-4 py-3 text-[14px]">
+          <div className="border-b border-hairline bg-panel px-4 py-3 text-body">
             <p>
               <span className="text-ink-3">To: </span>
               <span className="font-semibold">{identity.name}</span>{" "}
@@ -42,7 +42,7 @@ export default function Contact() {
             </p>
           </div>
           <div className="px-4 py-5">
-            <h1 className="text-[20px] font-bold">Get in touch</h1>
+            <h1 className="text-headline font-bold">Get in touch</h1>
             <p className="mt-1 text-ink-2">Pick whichever way is easiest for you.</p>
             <div className="mt-4 flex flex-wrap gap-2">
               <a className="btn-primary" href={`mailto:${identity.email}`}>

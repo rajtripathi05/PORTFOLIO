@@ -31,7 +31,7 @@ export default function Experience() {
             <li
               key={job.id}
               id={`exp-item-${job.id}`}
-              className={`relative -mx-3 mb-4 scroll-mt-4 rounded-xl px-3 py-2 transition-colors duration-500 last:mb-0 ${
+              className={`relative -mx-3 mb-4 scroll-mt-4 rounded-card px-3 py-2 transition-colors duration-emphasis last:mb-0 ${
                 highlight === job.id ? "bg-accent-soft" : ""
               }`}
             >
@@ -41,7 +41,7 @@ export default function Experience() {
               />
               <article aria-labelledby={`exp-${job.id}`}>
                 <div className={`flex gap-x-4 gap-y-1 ${narrow ? "flex-col" : "items-baseline justify-between"}`}>
-                  <h2 id={`exp-${job.id}`} className="text-[16.5px] font-bold leading-snug">
+                  <h2 id={`exp-${job.id}`} className="text-callout font-bold leading-snug">
                     {job.role}
                     <span className="font-normal text-ink-3"> | </span>
                     {job.orgUrl ? (
@@ -53,7 +53,7 @@ export default function Experience() {
                       job.org
                     )}
                   </h2>
-                  <p className="flex-none text-[13.5px] font-medium text-ink-3 whitespace-nowrap">
+                  <p className="flex-none text-footnote font-medium text-ink-3 whitespace-nowrap">
                     {job.dates}
                     {job.location && <> · {job.location}</>}
                   </p>

@@ -19,7 +19,15 @@ const normaliseUrl = (input: string): string | null => {
   }
 };
 
-const tileColors = ["#2f62e0", "#1c9c86", "#d27d1e", "#8a4fd8", "#d9412b", "#2e8fd8"];
+// Solid tile colours from the icon palette (white initials stay readable in both themes).
+const tileColors = [
+  "var(--icon-about-2)",
+  "var(--icon-skills-2)",
+  "var(--icon-experience-2)",
+  "var(--icon-ai-2)",
+  "var(--file-pdf)",
+  "var(--icon-projects-2)"
+];
 
 const Favorites = ({ onOpen }: { onOpen: (url: string) => void }) => {
   const links = liveProjectLinks();
@@ -32,7 +40,7 @@ const Favorites = ({ onOpen }: { onOpen: (url: string) => void }) => {
   return (
     <div className="app-scroll bg-panel-2">
       <div className="mx-auto max-w-[820px] px-6 py-8">
-        <h1 className="text-[22px] font-bold">Favorites</h1>
+        <h1 className="text-title font-bold">Favorites</h1>
         <p className="mt-1 text-ink-2">Raj's live projects. Click one to open it.</p>
         <ul className="mt-5 grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-3">
           {links.map((l, i) => {
@@ -43,10 +51,10 @@ const Favorites = ({ onOpen }: { onOpen: (url: string) => void }) => {
                 type="button"
                 onClick={() => (newTab ? openInNewTab(l.url) : onOpen(l.url))}
                 aria-label={newTab ? `${l.label} (opens in a new tab)` : undefined}
-                className="app-card flex h-full w-full flex-col items-center gap-2 bg-panel p-4 text-center transition-transform hover:-translate-y-0.5 hover:shadow-md"
+                className="app-card flex h-full w-full flex-col items-center gap-2 bg-panel p-4 text-center transition-transform hover:-translate-y-0.5 hover:shadow-raised"
               >
                 <span
-                  className="grid size-14 place-items-center rounded-2xl text-[20px] font-bold text-white shadow"
+                  className="grid size-14 place-items-center rounded-panel text-headline font-bold text-on-accent shadow-resting"
                   style={{ background: tileColors[i % tileColors.length] }}
                   aria-hidden="true"
                 >
@@ -59,8 +67,8 @@ const Favorites = ({ onOpen }: { onOpen: (url: string) => void }) => {
                     .join("")
                     .toUpperCase()}
                 </span>
-                <span className="text-[13.5px] font-semibold leading-snug">{l.label}</span>
-                <span className="text-[12px] text-ink-3">
+                <span className="text-footnote font-semibold leading-snug">{l.label}</span>
+                <span className="text-footnote text-ink-3">
                   {safeHost(l.url)}
                   {newTab && " ↗"}
                 </span>
@@ -90,7 +98,7 @@ const NewTabOnly = ({ url }: { url: string }) => (
   <div className="flex-center h-full bg-panel-2 p-6">
     <div className="max-w-[420px] text-center">
       <span className="i-ph:arrow-square-out-duotone text-[56px] text-accent-text" aria-hidden="true" />
-      <h2 className="mt-2 text-[19px] font-bold">{safeHost(url)} opens in its own tab</h2>
+      <h2 className="mt-2 text-headline font-bold">{safeHost(url)} opens in its own tab</h2>
       <p className="mt-1.5 text-ink-2">This site can't be shown inside another page.</p>
       <div className="mt-5">
         <ExternalLink href={url} className="btn-primary btn-lg">
@@ -157,7 +165,7 @@ export default function Safari() {
   };
 
   const iconBtn =
-    "grid size-8 place-items-center rounded-md text-ink-2 hover:bg-panel-3 disabled:opacity-40 disabled:hover:bg-transparent";
+    "grid size-8 place-items-center rounded-sm text-ink-2 hover:bg-panel-3 disabled:opacity-40 disabled:hover:bg-transparent";
 
   return (
     <div className="flex h-full flex-col">
@@ -213,14 +221,14 @@ export default function Safari() {
             aria-label="Address"
             aria-invalid={invalid}
             spellCheck={false}
-            className={`h-8 w-full rounded-lg border bg-panel pl-7 pr-8 text-center text-[13.5px] text-ink-1 outline-none focus:text-left focus:border-accent ${
-              invalid ? "border-[#d9412b]" : "border-hairline"
+            className={`h-8 w-full rounded-button border bg-panel pl-7 pr-8 text-center text-footnote text-ink-1 outline-none focus:text-left focus:border-accent ${
+              invalid ? "border-danger" : "border-hairline"
             }`}
           />
           {url && !newTabOnly && (
             <button
               type="button"
-              className="absolute right-1 top-1/2 grid size-6 -translate-y-1/2 place-items-center rounded text-ink-2 hover:bg-panel-3"
+              className="absolute right-1 top-1/2 grid size-6 -translate-y-1/2 place-items-center rounded-sm text-ink-2 hover:bg-panel-3"
               onClick={() => setReloadKey((k) => k + 1)}
               aria-label="Reload page"
               title="Reload"
@@ -242,7 +250,7 @@ export default function Safari() {
         </button>
       </div>
 
-      <div className="relative min-h-0 flex-1 bg-white">
+      <div className="relative min-h-0 flex-1 bg-[var(--web-bg)]">
         {!url ? (
           <Favorites onOpen={navigate} />
         ) : newTabOnly ? (
@@ -254,7 +262,7 @@ export default function Safari() {
               title={`Website preview: ${safeHost(url)}`}
               src={url}
               onLoad={onLoad}
-              className="size-full border-0 bg-white"
+              className="size-full border-0 bg-[var(--web-bg)]"
               sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-downloads"
               referrerPolicy="no-referrer-when-downgrade"
               allow="fullscreen; clipboard-write"
@@ -272,7 +280,7 @@ export default function Safari() {
               <div className="absolute inset-0 flex-center bg-panel-2 p-6" role="alert">
                 <div className="max-w-[440px] text-center">
                   <span className="i-ph:browser-duotone text-[56px] text-accent-text" aria-hidden="true" />
-                  <h2 className="mt-2 text-[19px] font-bold">This site prefers to open in its own tab</h2>
+                  <h2 className="mt-2 text-headline font-bold">This site prefers to open in its own tab</h2>
                   <p className="mt-1.5 text-ink-2">
                     It's taking a while to load here — it may not allow being shown inside another page.
                   </p>

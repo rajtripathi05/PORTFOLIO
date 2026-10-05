@@ -149,7 +149,7 @@ export default function AppWindow({ app }: { app: AppDef }) {
         tabIndex={-1}
         role="dialog"
         aria-labelledby={`window-title-${app.id}`}
-        className={`window glass-window ${focused ? "is-focused" : ""} ${
+        className={`window material-sidebar ${focused ? "is-focused" : ""} ${
           win.max ? "is-max" : ""
         }`}
         onPointerDownCapture={() => focusApp(app.id)}
@@ -173,7 +173,7 @@ export default function AppWindow({ app }: { app: AppDef }) {
         }}
       >
         <header
-          className="titlebar glass-titlebar"
+          className="titlebar"
           onDoubleClick={() => toggleMaxApp(app.id)}
         >
           <TrafficLights

@@ -15,7 +15,7 @@ export type AppId =
 export interface IconSpec {
   /** UnoCSS icon class for the glyph (Phosphor set). */
   glyph: string;
-  /** Tile background classes. */
+  /** Tile background class (gradients are defined from tokens in base.css). */
   tile: string;
   /** Glyph colour classes. */
   ink?: string;
@@ -45,7 +45,7 @@ export const apps: AppDef[] = [
     description: "Summary, education and contact",
     icon: {
       glyph: "i-ph:user-fill",
-      tile: "bg-gradient-to-b from-[#5b8def] to-[#2f5fd0]"
+      tile: "tile-about"
     },
     width: 780,
     height: 600,
@@ -57,7 +57,7 @@ export const apps: AppDef[] = [
     description: "Live sites and case studies",
     icon: {
       glyph: "i-ph:folder-simple-fill",
-      tile: "bg-gradient-to-b from-[#6cc4f5] to-[#2e8fd8]"
+      tile: "tile-projects"
     },
     width: 960,
     height: 620,
@@ -70,7 +70,7 @@ export const apps: AppDef[] = [
     description: "Roles, dates and responsibilities",
     icon: {
       glyph: "i-ph:briefcase-fill",
-      tile: "bg-gradient-to-b from-[#f2b45a] to-[#d27d1e]"
+      tile: "tile-experience"
     },
     width: 780,
     height: 640,
@@ -82,7 +82,7 @@ export const apps: AppDef[] = [
     description: "Hackathon wins and awards, with photos",
     icon: {
       glyph: "i-ph:trophy-fill",
-      tile: "bg-gradient-to-b from-[#ffcf5c] to-[#e59a12]"
+      tile: "tile-achievements"
     },
     width: 1000,
     height: 700,
@@ -94,7 +94,7 @@ export const apps: AppDef[] = [
     description: "Technical skills by category",
     icon: {
       glyph: "i-ph:stack-fill",
-      tile: "bg-gradient-to-b from-[#4fd1b5] to-[#1c9c86]"
+      tile: "tile-skills"
     },
     width: 760,
     height: 580,
@@ -106,8 +106,8 @@ export const apps: AppDef[] = [
     description: "View or download the PDF",
     icon: {
       glyph: "i-ph:file-text-fill",
-      tile: "bg-gradient-to-b from-white to-[#e4e6eb]",
-      ink: "text-[#2f5fd0]"
+      tile: "tile-resume",
+      ink: "text-[var(--icon-resume-ink)]"
     },
     width: 840,
     height: 760,
@@ -119,7 +119,7 @@ export const apps: AppDef[] = [
     description: "Email, phone, LinkedIn and GitHub",
     icon: {
       glyph: "i-ph:envelope-simple-fill",
-      tile: "bg-gradient-to-b from-[#59a6ff] to-[#1f6fe5]"
+      tile: "tile-contact"
     },
     width: 640,
     height: 680,
@@ -131,8 +131,8 @@ export const apps: AppDef[] = [
     description: "Browse Raj's live project sites",
     icon: {
       glyph: "i-ph:compass-fill",
-      tile: "bg-gradient-to-b from-white to-[#dce8f8]",
-      ink: "text-[#1f7ae0]"
+      tile: "tile-safari",
+      ink: "text-[var(--icon-safari-ink)]"
     },
     width: 1120,
     height: 760,
@@ -145,7 +145,7 @@ export const apps: AppDef[] = [
     description: "Ask questions about Raj's work",
     icon: {
       glyph: "i-ph:sparkle-fill",
-      tile: "bg-gradient-to-br from-[#5b8def] via-[#8a4fd8] to-[#e05a9c]"
+      tile: "tile-ai"
     },
     width: 420,
     height: 640,
@@ -158,7 +158,7 @@ export const apps: AppDef[] = [
     description: "Explore the portfolio from a command line",
     icon: {
       glyph: "i-ph:terminal-window-fill",
-      tile: "bg-gradient-to-b from-[#4a4a50] to-[#1f1f23]"
+      tile: "tile-terminal"
     },
     width: 760,
     height: 480,
@@ -174,5 +174,5 @@ export const getApp = (id: AppId): AppDef => {
 
 export const launchpadIcon: IconSpec = {
   glyph: "i-ph:squares-four-fill",
-  tile: "bg-gradient-to-b from-[#9aa3b2] to-[#5f6878]"
+  tile: "tile-launchpad"
 };

@@ -21,7 +21,7 @@ export default function Dock() {
   return (
     <nav aria-label="Dock" className="fixed inset-x-0 bottom-2 z-30 flex justify-center px-2">
       <ul
-        className="dock-bar glass-dock max-w-full"
+        className="dock-bar material-menubar max-w-full"
         onMouseMove={(e) => magnify && mouseX.set(e.nativeEvent.x)}
         onMouseLeave={() => mouseX.set(null)}
       >

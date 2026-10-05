@@ -9,7 +9,8 @@
     "build": "vite build && vite build --ssr src/entries/quick-server.tsx --outDir .ssr && node scripts/prerender-quick.mjs && tsc --noEmit",
     "serve": "vite preview --host",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "review": "node scripts/screenshot-review.mjs"
   },
   "prettier": "@renovamen/prettier-config",
   "dependencies": {
@@ -23,6 +24,7 @@
     "zustand": "^4.5.2"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@iconify-json/ph": "^1.1.13",
     "@netlify/functions": "^2.8.1",
     "@renovamen/eslint-config": "^0.1.7",
@@ -34,6 +36,7 @@
     "@vitejs/plugin-react": "^4.2.1",
     "eslint": "^8.57.0",
     "ffmpeg-static": "^5.2.0",
+    "playwright": "^1.63.0",
     "sharp": "^0.33.4",
     "typescript": "^5.4.5",
     "unocss": "^0.59.4",

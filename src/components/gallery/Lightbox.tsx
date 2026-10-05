@@ -52,22 +52,22 @@ export default function Lightbox({ title, items, index, onIndex, onClose }: Ligh
   };
 
   const arrow =
-    "absolute top-1/2 z-10 grid size-12 -translate-y-1/2 place-items-center rounded-full bg-white/15 text-white backdrop-blur hover:bg-white/25";
+    "absolute top-1/2 z-10 grid size-12 -translate-y-1/2 place-items-center rounded-full bg-media-control text-on-media backdrop-blur hover:bg-media-control-hover";
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[200] flex flex-col bg-black/85 text-white backdrop-blur-xl"
+      className="fixed inset-0 z-[200] flex flex-col bg-scrim-strong text-on-media backdrop-blur-xl"
       role="dialog"
       aria-modal="true"
       aria-label={`${title} — media viewer`}
     >
       <div className="flex flex-none items-center gap-3 px-4 py-3">
-        <p className="min-w-0 flex-1 truncate text-[14px]">
+        <p className="min-w-0 flex-1 truncate text-body">
           <span className="font-semibold">{title}</span>
-          <span className="text-white/70"> — {item.name}</span>
+          <span className="text-on-media opacity-80"> — {item.name}</span>
         </p>
         {many && (
-          <span className="text-[13px] tabular-nums text-white/75" aria-live="polite">
+          <span className="text-footnote tabular-nums text-on-media opacity-80" aria-live="polite">
             {index + 1} of {items.length}
           </span>
         )}
@@ -75,7 +75,7 @@ export default function Lightbox({ title, items, index, onIndex, onClose }: Ligh
           href={item.src}
           target="_blank"
           rel="noopener noreferrer"
-          className="btn btn-sm bg-white/15 text-white hover:bg-white/25"
+          className="btn btn-sm bg-media-control text-on-media hover:bg-media-control-hover"
         >
           Open original <span aria-hidden="true">↗</span>
           <span className="sr-only"> (opens in a new tab)</span>
@@ -84,7 +84,7 @@ export default function Lightbox({ title, items, index, onIndex, onClose }: Ligh
           ref={closeRef}
           type="button"
           onClick={onClose}
-          className="grid size-9 place-items-center rounded-full bg-white/15 hover:bg-white/25"
+          className="grid size-9 place-items-center rounded-full bg-media-control hover:bg-media-control-hover"
           aria-label="Close viewer (Esc)"
         >
           <span className="i-ph:x-bold text-[18px]" />
@@ -110,7 +110,7 @@ export default function Lightbox({ title, items, index, onIndex, onClose }: Ligh
             alt={`${title} — ${item.name}`}
             width={item.width}
             height={item.height}
-            className="max-h-full max-w-full select-none rounded-md object-contain"
+            className="max-h-full max-w-full select-none rounded-sm object-contain"
             draggable={false}
           />
         )}
@@ -122,7 +122,7 @@ export default function Lightbox({ title, items, index, onIndex, onClose }: Ligh
             controls
             playsInline
             preload="metadata"
-            className="max-h-full max-w-full rounded-md bg-black"
+            className="max-h-full max-w-full rounded-sm bg-[var(--media-bg)]"
             aria-label={`${title} — ${item.name} (${formatDuration(item.duration)})`}
           />
         )}
@@ -140,7 +140,7 @@ export default function Lightbox({ title, items, index, onIndex, onClose }: Ligh
               key={item.src}
               title={`${title} — ${item.name} (PDF)`}
               src={`${item.src}#view=FitH`}
-              className="h-full w-full max-w-[900px] rounded-md bg-white"
+              className="h-full w-full max-w-[900px] rounded-sm bg-[var(--web-bg)]"
             />
           ))}
 
@@ -160,8 +160,8 @@ export default function Lightbox({ title, items, index, onIndex, onClose }: Ligh
               onClick={() => onIndex(i)}
               aria-label={`Show ${it.name}`}
               aria-current={i === index ? "true" : undefined}
-              className={`relative size-14 flex-none overflow-hidden rounded-md ring-2 ${
-                i === index ? "ring-white" : "ring-transparent opacity-60 hover:opacity-100"
+              className={`relative size-14 flex-none overflow-hidden rounded-sm ring-2 ${
+                i === index ? "ring-[var(--on-media)]" : "ring-transparent opacity-60 hover:opacity-100"
               }`}
             >
               {it.thumb || it.poster ? (
