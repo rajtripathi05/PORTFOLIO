@@ -1,11 +1,17 @@
 import type React from "react";
 import { achievementTitle, portfolio } from "~/data/portfolio";
 import { coverFor, mediaFor, mediaSummary, type MediaItem } from "~/data/media";
+import { previewFor } from "~/data/previews";
 
 // Plain, scrollable, crawlable version of the portfolio. Pre-rendered to static HTML at
 // build time (scripts/prerender-quick.mjs), then hydrated. Everything reads portfolio.ts.
 
-const { identity, summary, education, experience, projects, achievements, skills } = portfolio;
+const { identity, summary, education, experience, projects, achievements, skills, stats } = portfolio;
+
+const statRow = [stats[0], { value: String(achievements.length), label: "awards & hackathon wins" }, ...stats.slice(1)];
+
+// Every photo/video across achievements, for the gallery strip.
+const gallery = achievements.flatMap((a) => mediaFor(a).map((item, index) => ({ a, item, index })));
 
 const sections = [
   { id: "experience", label: "Experience" },
@@ -37,6 +43,21 @@ export default function QuickView() {
   const [mounted, setMounted] = useState(false);
   const [dark, setDark] = useState(false);
   const [viewer, setViewer] = useState<{ title: string; items: MediaItem[]; index: number } | null>(null);
+  const [active, setActive] = useState<string | null>(null);
+
+  // Highlight the section currently being read in the header nav.
+  useEffect(() => {
+    if (!("IntersectionObserver" in window)) return;
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => e.isIntersecting && setActive(e.target.id)),
+      { rootMargin: "-45% 0px -50% 0px" }
+    );
+    sections.forEach((s) => {
+      const el = document.getElementById(s.id);
+      if (el) io.observe(el);
+    });
+    return () => io.disconnect();
+  }, []);
 
   useEffect(() => {
     setMounted(true);
@@ -79,7 +100,7 @@ export default function QuickView() {
           </a>
           <nav aria-label="Sections" className="qv-nav ml-auto hidden md:flex">
             {sections.map((s) => (
-              <a key={s.id} href={`#${s.id}`}>
+              <a key={s.id} href={`#${s.id}`} aria-current={active === s.id ? "location" : undefined}>
                 {s.label}
               </a>
             ))}
@@ -140,6 +161,17 @@ export default function QuickView() {
         </div>
 
         <div className="qv-wrap">
+          <ul className="grid grid-cols-2 gap-3 sm:grid-cols-5" aria-label="Highlights in numbers">
+            {statRow.map((s) => (
+              <li key={s.label} className="qv-card !p-4">
+                <p className="text-title font-bold tabular text-accent-text">{s.value}</p>
+                <p className="mt-0.5 text-footnote leading-snug text-ink-2">{s.label}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="qv-wrap">
           <Section id="summary" title="Profile Summary">
             <p className="qv-prose">{summary}</p>
             <div className="qv-card mt-5">
@@ -192,11 +224,39 @@ export default function QuickView() {
           <Section id="projects" title="Projects">
             <div className="grid gap-4">
               {projects.map((pr) => (
-                <article key={pr.id} className="qv-card" aria-labelledby={`qv-${pr.id}`}>
+                <article
+                  key={pr.id}
+                  className={`qv-card qv-project ${previewFor(pr.id) ? "has-preview" : ""}`}
+                  aria-labelledby={`qv-${pr.id}`}
+                >
+                  {previewFor(pr.id) && (
+                    <img
+                      className="qv-media qv-project-preview"
+                      src={previewFor(pr.id)!.srcSm}
+                      srcSet={`${previewFor(pr.id)!.srcSm} 480w, ${previewFor(pr.id)!.src} 960w`}
+                      sizes="(max-width: 700px) 100vw, 300px"
+                      alt={`Screenshot of the ${pr.title} live site`}
+                      width={480}
+                      height={300}
+                      loading="lazy"
+                      decoding="async"
+                      style={{ backgroundColor: previewFor(pr.id)!.color }}
+                    />
+                  )}
+                  <div className="min-w-0">
                   <h3 id={`qv-${pr.id}`} className="text-headline font-bold leading-snug">
                     {pr.title}
                   </h3>
                   {pr.descriptor && <p className="mt-0.5 text-ink-2">{pr.descriptor}</p>}
+                  {pr.tags?.length ? (
+                    <p className="mt-2 flex flex-wrap gap-1.5">
+                      {pr.tags.map((t) => (
+                        <span key={t} className="rounded-chip bg-accent-soft px-2.5 py-0.5 text-footnote font-semibold text-accent-text">
+                          {t}
+                        </span>
+                      ))}
+                    </p>
+                  ) : null}
                   <ul className="bullets qv-prose mt-3">
                     {pr.bullets.map((b) => (
                       <li key={b}>{b}</li>
@@ -206,13 +266,34 @@ export default function QuickView() {
                     <ProjectLinks project={pr} />
                   </div>
                   {pr.url && <p className="qv-print-url">{pr.url}</p>}
+                  </div>
                 </article>
               ))}
             </div>
           </Section>
 
           <Section id="achievements" title="Achievements">
-            <div className="grid gap-4 sm:grid-cols-2">
+            <ul className="qv-media qv-strip" aria-label="Photos and videos from the achievements">
+              {gallery.map(({ a, item, index }) => (
+                <li key={item.src}>
+                  <button
+                    type="button"
+                    className="relative block h-32 overflow-hidden rounded-card"
+                    style={{ aspectRatio: item.width && item.height ? `${item.width} / ${item.height}` : "4 / 3" }}
+                    onClick={() => setViewer({ title: a.name, items: mediaFor(a), index })}
+                    aria-label={`${a.name}: ${item.type === "video" ? "play video" : "view photo"} ${item.name}`}
+                  >
+                    <LazyImage src={(item.thumb ?? item.poster)!} alt="" color={item.color} blur={item.blur} className="size-full" />
+                    {item.type === "video" && (
+                      <span className="absolute inset-0 m-auto grid size-10 place-items-center rounded-full bg-media-chip text-on-media">
+                        <span className="i-ph:play-fill ml-0.5 text-[18px]" aria-hidden="true" />
+                      </span>
+                    )}
+                  </button>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-5 grid gap-4 sm:grid-cols-2">
               {achievements.map((a) => {
                 const items = mediaFor(a);
                 const cover = coverFor(items);

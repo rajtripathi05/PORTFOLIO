@@ -200,3 +200,60 @@ html.is-quick {
     text-decoration: none !important;
   }
 }
+
+/* ---------------- Quick View additions ---------------- */
+.qv-nav a[aria-current="location"] {
+  color: var(--accent-text);
+  background: var(--accent-subtle);
+}
+.qv-project.has-preview {
+  display: grid;
+  gap: var(--space-5);
+}
+@media (min-width: 720px) {
+  .qv-project.has-preview {
+    grid-template-columns: 300px minmax(0, 1fr);
+    align-items: start;
+  }
+}
+.qv-project-preview {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  object-position: top;
+  border-radius: var(--radius-button);
+  border: 1px solid var(--hairline);
+}
+.qv-strip {
+  display: flex;
+  gap: var(--space-3);
+  overflow-x: auto;
+  padding-bottom: var(--space-2);
+  scroll-snap-type: x proximity;
+}
+.qv-strip > li {
+  flex: none;
+  scroll-snap-align: start;
+}
+
+@media print {
+  .qv-project.has-preview {
+    display: block;
+  }
+  /* Keep headings with the content that follows them. */
+  .qv-h2,
+  .qv h3 {
+    break-after: avoid;
+  }
+  /* Badges lose their backgrounds in print, so give them ink and an outline instead. */
+  .qv .text-on-accent,
+  .qv .text-accent-text {
+    color: var(--print-ink) !important;
+  }
+  .qv .bg-accent,
+  .qv .bg-accent-soft,
+  .qv .bg-panel-3 {
+    background: none !important;
+    border: 1px solid var(--print-rule);
+  }
+}
