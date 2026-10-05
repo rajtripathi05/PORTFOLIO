@@ -45,6 +45,15 @@ export default function MenuBar() {
     { type: "sep" },
     { type: "item", label: "Download Resume (PDF)", onSelect: downloadResume },
     { type: "sep" },
+    {
+      type: "item",
+      label: "Minimize Window",
+      hint: "⌘M / Ctrl+M",
+      onSelect: () => {
+        const id = useStore.getState().focusedId;
+        if (id) useStore.getState().minimizeApp(id);
+      }
+    },
     { type: "item", label: "Close Window", hint: "Esc", onSelect: () => closeFocused() }
   ];
 
@@ -74,7 +83,7 @@ export default function MenuBar() {
   ];
 
   const helpMenu: MenuEntry[] = [
-    { type: "item", label: "How to use this site", onSelect: () => setOverlay("help") },
+    { type: "item", label: "How to use this site", hint: "?", onSelect: () => setOverlay("help") },
     { type: "item", label: "Quick View (simple page)", onSelect: goQuickView },
     {
       type: "item",

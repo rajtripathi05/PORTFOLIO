@@ -66,6 +66,14 @@ export default function DockItem(props: DockItemProps) {
   const width = useDockHoverAnimation(mouseX, ref, size, mag);
   const controls = useAnimationControls();
   const first = useRef(true);
+  const setContextMenu = useStore((s) => s.setContextMenu);
+  const press = useRef<{ timer?: ReturnType<typeof setTimeout>; fired: boolean }>({ fired: false });
+
+  const openMenu = (x: number, y: number) => setContextMenu({ kind: "dock", app: id, x, y });
+  const openMenuAtButton = (el: HTMLElement) => {
+    const r = el.getBoundingClientRect();
+    openMenu(r.left, r.top - 8 - 140);
+  };
 
   // Bounce once each time the app is launched from closed.
   useEffect(() => {
@@ -96,7 +104,34 @@ export default function DockItem(props: DockItemProps) {
         type="button"
         id={`dock-${id}`}
         className="dock-btn"
-        onClick={onOpen}
+        onClick={() => {
+          // A long-press already opened the menu; don't also launch.
+          if (press.current.fired) {
+            press.current.fired = false;
+            return;
+          }
+          onOpen();
+        }}
+        onContextMenu={(e) => {
+          e.preventDefault();
+          openMenu(e.clientX, e.clientY - 150);
+        }}
+        onPointerDown={(e) => {
+          if (e.pointerType !== "touch") return;
+          const el = e.currentTarget;
+          press.current.timer = setTimeout(() => {
+            press.current.fired = true;
+            openMenuAtButton(el);
+          }, 500);
+        }}
+        onPointerUp={() => clearTimeout(press.current.timer)}
+        onPointerLeave={() => clearTimeout(press.current.timer)}
+        onKeyDown={(e) => {
+          if ((e.shiftKey && e.key === "F10") || e.key === "ContextMenu") {
+            e.preventDefault();
+            openMenuAtButton(e.currentTarget);
+          }
+        }}
         aria-label={`Open ${title}`}
         title={title}
       >

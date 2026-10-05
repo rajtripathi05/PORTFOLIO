@@ -28,7 +28,7 @@ export default function DesktopIcons() {
   return (
     <nav
       aria-label="Desktop shortcuts"
-      className="fixed right-3 z-[5] flex flex-col gap-2"
+      className="fixed right-3 z-[5] flex select-none flex-col gap-2"
       style={{ top: MENU_BAR_HEIGHT + 14 }}
     >
       {icons.map((icon, i) => {

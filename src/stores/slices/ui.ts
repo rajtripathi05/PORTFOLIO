@@ -2,6 +2,13 @@ import type { StateCreator } from "zustand";
 
 export type Overlay = "spotlight" | "launchpad" | "help" | "credits" | "welcome" | null;
 
+export interface ContextMenuState {
+  x: number;
+  y: number;
+  kind: "desktop" | "dock";
+  app?: string;
+}
+
 export interface UISlice {
   overlay: Overlay;
   openMenu: string | null;
@@ -10,12 +17,14 @@ export interface UISlice {
   dockHint: string | null;
   /** True once the desktop reveal may play (after boot, or immediately for returning visitors). */
   revealed: boolean;
+  contextMenu: ContextMenuState | null;
   setOverlay: (o: Overlay) => void;
   toggleOverlay: (o: Exclude<Overlay, null>) => void;
   setOpenMenu: (m: string | null) => void;
   showToast: (text: string) => void;
   setDockHint: (id: string | null) => void;
   setRevealed: (v: boolean) => void;
+  setContextMenu: (m: ContextMenuState | null) => void;
 }
 
 export const createUISlice: StateCreator<UISlice> = (set, get) => ({
@@ -24,6 +33,7 @@ export const createUISlice: StateCreator<UISlice> = (set, get) => ({
   toast: null,
   dockHint: null,
   revealed: false,
+  contextMenu: null,
   setOverlay: (overlay) => set({ overlay, openMenu: null }),
   toggleOverlay: (o) => set({ overlay: get().overlay === o ? null : o, openMenu: null }),
   setOpenMenu: (openMenu) => set({ openMenu }),
@@ -35,5 +45,6 @@ export const createUISlice: StateCreator<UISlice> = (set, get) => ({
     }, 2200);
   },
   setDockHint: (dockHint) => set({ dockHint }),
-  setRevealed: (revealed) => set({ revealed })
+  setRevealed: (revealed) => set({ revealed }),
+  setContextMenu: (contextMenu) => set({ contextMenu, openMenu: null })
 });

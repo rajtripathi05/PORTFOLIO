@@ -20,6 +20,7 @@ export default function Desktop() {
   const openApp = useStore((s) => s.openApp);
   const setDockHint = useStore((s) => s.setDockHint);
   const revealed = useStore((s) => s.revealed);
+  const setContextMenu = useStore((s) => s.setContextMenu);
 
   const deepLinked = useShellSetup();
   const wallpaper = getWallpaper(wallpaperId);
@@ -91,6 +92,12 @@ export default function Desktop() {
       initial={{ opacity: 0 }}
       animate={{ opacity: revealed ? 1 : 0 }}
       transition={{ duration: duration.emphasis, ease: ease.standard }}
+      onContextMenu={(e) => {
+        // Only the bare desktop: windows, menus and the dock keep their own behaviour.
+        if ((e.target as HTMLElement).closest(".window, header, nav, [role=dialog], [role=menu]")) return;
+        e.preventDefault();
+        setContextMenu({ kind: "desktop", x: e.clientX, y: e.clientY });
+      }}
     >
       <a
         href="/quick"
@@ -135,6 +142,7 @@ export default function Desktop() {
         {overlay === "launchpad" && <Launchpad key="launchpad" onClose={closeOverlay} />}
       </AnimatePresence>
 
+      <ShellContextMenu />
       <Toast />
     </motion.div>
   );
