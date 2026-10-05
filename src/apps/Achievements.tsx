@@ -45,6 +45,7 @@ const Thumb = ({ item, alt }: { item: MediaItem; alt: string }) => {
         src={(item.thumb ?? item.poster)!}
         alt={alt}
         color={item.color}
+        blur={item.blur}
         className="size-full"
       />
       {item.type === "video" && (
@@ -150,6 +151,7 @@ const AlbumCard = ({ album, onOpen }: { album: Album; onOpen: () => void }) => {
             src={(cover.thumb ?? cover.poster)!}
             alt=""
             color={cover.color}
+            blur={cover.blur}
             className="size-full transition-transform duration-standard group-hover:scale-[1.03]"
           />
         ) : (

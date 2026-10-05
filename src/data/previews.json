@@ -1,0 +1,42 @@
+{
+  "nsu": {
+    "src": "/previews/nsu.webp",
+    "srcSm": "/previews/nsu-sm.webp",
+    "width": 960,
+    "height": 600,
+    "color": "#e8f8f8",
+    "url": "https://indiaglycolsnsu.netlify.app/"
+  },
+  "tbdos": {
+    "src": "/previews/tbdos.webp",
+    "srcSm": "/previews/tbdos-sm.webp",
+    "width": 960,
+    "height": 600,
+    "color": "#080808",
+    "url": "https://iglturbine.netlify.app/"
+  },
+  "igl-safety": {
+    "src": "/previews/igl-safety.webp",
+    "srcSm": "/previews/igl-safety-sm.webp",
+    "width": 960,
+    "height": 600,
+    "color": "#f8f8f8",
+    "url": "https://igltraining.netlify.app/"
+  },
+  "acg": {
+    "src": "/previews/acg.webp",
+    "srcSm": "/previews/acg-sm.webp",
+    "width": 960,
+    "height": 600,
+    "color": "#f8f8f8",
+    "url": "https://rajpharma.netlify.app/"
+  },
+  "fmcg": {
+    "src": "/previews/fmcg.webp",
+    "srcSm": "/previews/fmcg-sm.webp",
+    "width": 960,
+    "height": 600,
+    "color": "#281818",
+    "url": "https://fmcgai.netlify.app/"
+  }
+}

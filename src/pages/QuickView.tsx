@@ -225,7 +225,7 @@ export default function QuickView() {
                         onClick={() => setViewer({ title: a.name, items, index: 0 })}
                         aria-label={`View photos for ${a.name} (${mediaSummary(items)})`}
                       >
-                        <LazyImage src={(cover.thumb ?? cover.poster)!} alt="" color={cover.color} className="size-full" />
+                        <LazyImage src={(cover.thumb ?? cover.poster)!} alt="" color={cover.color} blur={cover.blur} className="size-full" />
                         <span className="absolute bottom-2 right-2 rounded-full bg-media-chip px-2.5 py-1 text-footnote font-semibold text-on-media">
                           {mediaSummary(items)}
                         </span>

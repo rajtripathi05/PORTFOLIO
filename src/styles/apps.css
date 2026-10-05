@@ -168,3 +168,30 @@
   text-decoration: underline;
   text-underline-offset: 2px;
 }
+
+/* ---------------- safari ---------------- */
+.safari-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 40%;
+  border-radius: var(--radius-chip);
+  background: var(--accent);
+  animation: safari-progress 1.4s var(--ease-standard) infinite;
+}
+@keyframes safari-progress {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(260%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .safari-progress {
+    width: 100%;
+    animation: none;
+    opacity: 0.6;
+  }
+}

@@ -63,6 +63,11 @@ const isFresh = async (src, out) => {
   return o.mtimeMs >= s.mtimeMs;
 };
 
+// Tiny blurred preview embedded in the manifest for blur-up loading (~300 bytes each).
+const blurDataUrl = async (sharp, file) =>
+  "data:image/webp;base64," +
+  (await sharp(file).resize(20, 20, { fit: "inside" }).webp({ quality: 40 }).toBuffer()).toString("base64");
+
 const toHex = ({ r, g, b }) =>
   "#" + [r, g, b].map((v) => Math.round(v).toString(16).padStart(2, "0")).join("");
 
@@ -90,7 +95,8 @@ async function processImage(sharp, src, outDir, base) {
       thumb: `${base}-thumb.webp`,
       width: meta.width,
       height: meta.height,
-      color: toHex(dominant)
+      color: toHex(dominant),
+      blur: await blurDataUrl(sharp, thumb)
     };
   } catch (e) {
     if (/\.hei[cf]$/i.test(src))
@@ -156,7 +162,14 @@ async function processVideo(ffmpeg, sharp, src, outDir, base) {
   const { dominant } = await sharp(poster).stats();
   const mb = (await fs.stat(out)).size / 1e6;
   if (mb > BIG_FILE_MB) warn(`Compressed video ${base}.mp4 is still ${mb.toFixed(1)} MB.`);
-  return { type: "video", file: `${base}.mp4`, poster: `${base}-poster.webp`, ...info, color: toHex(dominant) };
+  return {
+    type: "video",
+    file: `${base}.mp4`,
+    poster: `${base}-poster.webp`,
+    ...info,
+    color: toHex(dominant),
+    blur: await blurDataUrl(sharp, poster)
+  };
 }
 
 async function main() {

@@ -28,7 +28,7 @@ const LinkRow = ({
       {onOpenInSafari && (
         <button type="button" className="btn-primary" onClick={() => onOpenInSafari(url, label)}>
           <span className="i-ph:compass-bold" aria-hidden="true" />
-          Open in Safari
+          Open live site
         </button>
       )}
       <ExternalLink href={url} className={onOpenInSafari ? "btn-secondary" : "btn-primary"}>

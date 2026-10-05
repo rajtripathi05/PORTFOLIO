@@ -51,8 +51,8 @@ export const apps: AppDef[] = [
       glyph: "i-ph:user-fill",
       tile: "tile-about"
     },
-    width: 780,
-    height: 600,
+    width: 800,
+    height: 720,
     ...lazyApp(() => import("~/apps/AboutMe"))
   },
   {

@@ -13,6 +13,8 @@ export interface MediaItem {
   height?: number;
   duration?: number;
   color?: string;
+  /** Tiny blurred data-URL preview for blur-up loading. */
+  blur?: string;
 }
 
 interface Manifest {

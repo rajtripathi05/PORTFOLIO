@@ -1,0 +1,46 @@
+#!/usr/bin/env node
+/**
+ * Guards the "content is locked" rule at build time:
+ *  - every project tag is a phrase that appears in that project's own text
+ *  - every About Me stat value appears somewhere in the content
+ *  - stale/forbidden facts never appear (old resume wording)
+ * Exits 1 with a list of problems if anything fails.
+ */
+import { transform } from "esbuild";
+import fs from "node:fs/promises";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const source = await fs.readFile(path.join(ROOT, "src/data/portfolio.ts"), "utf8");
+const { code } = await transform(source, { loader: "ts", format: "esm" });
+const { portfolio } = await import(`data:text/javascript;base64,${Buffer.from(code).toString("base64")}`);
+
+const norm = (s) => s.toLowerCase().replace(/[-–—]/g, " ").replace(/\s+/g, " ");
+const problems = [];
+
+for (const p of portfolio.projects) {
+  const text = norm([p.title, p.descriptor ?? "", ...p.bullets].join(" "));
+  for (const tag of p.tags ?? [])
+    if (!text.includes(norm(tag))) problems.push(`Project "${p.id}": tag "${tag}" is not in its text`);
+}
+
+const everything = norm(
+  JSON.stringify({ ...portfolio, stats: undefined }) // all content except the stats themselves
+);
+for (const s of portfolio.stats) {
+  const core = s.value.replace(/\+$/, "");
+  if (!everything.includes(norm(core))) problems.push(`Stat "${s.value} ${s.label}" is not in the content`);
+}
+
+const forbidden = ["₹50 Lakhs", "Jun 2026 – Present", "Currently working as"];
+for (const f of forbidden)
+  if (JSON.stringify(portfolio).includes(f)) problems.push(`Forbidden text found: "${f}"`);
+
+if (problems.length) {
+  console.error("[content] ✗ " + problems.join("\n[content] ✗ "));
+  process.exit(1);
+}
+console.log(
+  `[content] ✓ ${portfolio.projects.reduce((n, p) => n + (p.tags?.length ?? 0), 0)} tags and ${portfolio.stats.length} stats verified against the content`
+);

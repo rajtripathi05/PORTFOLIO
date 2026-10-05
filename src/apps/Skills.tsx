@@ -10,6 +10,12 @@ const groupIcons: Record<string, string> = {
   Tools: "i-ph:wrench-bold"
 };
 
+// Subtle category colour coding (tokens --cat-1…6, contrast-checked).
+const catStyle = (i: number) => ({
+  color: `var(--cat-${(i % 6) + 1})`,
+  background: `var(--cat-${(i % 6) + 1}-subtle)`
+});
+
 export default function Skills() {
   const { width, payload, nonce } = useWindow();
   const [filter, setFilter] = useState("");
@@ -21,8 +27,9 @@ export default function Skills() {
 
   const q = filter.trim().toLowerCase();
   const groups = portfolio.skills
-    .map((g) => ({
+    .map((g, i) => ({
       ...g,
+      cat: i,
       matches: q ? g.items.filter((i) => i.toLowerCase().includes(q) || g.name.toLowerCase().includes(q)) : g.items
     }))
     .filter((g) => g.matches.length > 0);
@@ -61,16 +68,22 @@ export default function Skills() {
               <section key={group.name} className="app-card p-4" aria-labelledby={`skills-${group.name}`}>
                 <h2 id={`skills-${group.name}`} className="hstack gap-2 text-body font-bold">
                   <span
-                    className={`${groupIcons[group.name] ?? "i-ph:circle-bold"} text-accent-text`}
+                    className="grid size-7 place-items-center rounded-button"
+                    style={catStyle(group.cat)}
                     aria-hidden="true"
-                  />
+                  >
+                    <span className={`${groupIcons[group.name] ?? "i-ph:circle-bold"} text-[15px]`} />
+                  </span>
                   {group.name}
                 </h2>
                 <ul className="mt-3 flex flex-wrap gap-1.5">
                   {group.matches.map((item) => (
                     <li
                       key={item}
-                      className={`chip ${q && item.toLowerCase().includes(q) ? "!border-accent !bg-accent-soft" : ""}`}
+                      className={`chip !border-transparent font-medium ${
+                        q && item.toLowerCase().includes(q) ? "ring-2 ring-[var(--ring)]" : ""
+                      }`}
+                      style={catStyle(group.cat)}
                     >
                       {item}
                     </li>

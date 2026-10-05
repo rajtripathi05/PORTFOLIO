@@ -8,6 +8,7 @@
           "width": 1446,
           "height": 1920,
           "color": "#d8c898",
+          "blur": "data:image/webp;base64,UklGRnoAAABXRUJQVlA4IG4AAADQAwCdASoPABQAPu1iqU2ppaOiMAgBMB2JQBgbgkgKt/v0oh41yAAA+8Sg0uU/THEdq/GEZXk6WI//sMfj37jUgxFEFS1nEQIO0MR4EjGVO0OCu9084NP2NvCm37PmdjDb644X+vdH4nsOHpAAAA==",
           "name": "Prize 2",
           "src": "/achievements/allianz-solo/prize-2.webp",
           "thumb": "/achievements/allianz-solo/prize-2-thumb.webp"
@@ -17,6 +18,7 @@
           "width": 1920,
           "height": 1446,
           "color": "#284868",
+          "blur": "data:image/webp;base64,UklGRqwAAABXRUJQVlA4IKAAAACwBACdASoUAA8APu1iqU2ppaOiMAgBMB2JZgCdIBmJ/i2Ik0xynsFRV0AUBjYAAP4f1REY+EdPIouOqy1FwXgUuABLdGgWVhd4rtQT4tOklX77L+ZNwgAjGE6kn5iLvBFDI0P2Z/YaufWHzocFSm7jQ4p5oxBXBrAx/JltzNLzEHVYE4I5pAOWD2ni0k0PHJC8ofYbsoOT8xSa8YklAAAA",
           "name": "Prize",
           "src": "/achievements/allianz-solo/prize.webp",
           "thumb": "/achievements/allianz-solo/prize-thumb.webp"
@@ -26,6 +28,7 @@
           "width": 1920,
           "height": 1146,
           "color": "#383838",
+          "blur": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAACQAwCdASoUAAwAPu1iqU2ppaOiMAgBMB2JQAAKVTLEboglewBAAP6jJ77M5XmYesQaVY6uM2AaKoIsCnulRnpqki9tbK9WEqiHh57pNrJdYyOAAAA=",
           "name": "Unity screenshot",
           "src": "/achievements/allianz-solo/unity-screenshot.webp",
           "thumb": "/achievements/allianz-solo/unity-screenshot-thumb.webp"
@@ -40,6 +43,7 @@
           "width": 1600,
           "height": 1200,
           "color": "#e8e8d8",
+          "blur": "data:image/webp;base64,UklGRpYAAABXRUJQVlA4IIoAAAAwBACdASoUAA8APu1iqU2ppaOiMAgBMB2JYgCdIIjCKmh/J4iv0JDKeQAA+6RnQ6qYfwbbOp10xOTlnSIXS6hUiGz9+YPaDXzWQY7h5MiUzixBKEM5jTDuBaCXjSY3RyX19NluD8KXsRPsp+Rw5TC12xtadYuACCCtExnq/1ORcr/7tw01uj2IAAA=",
           "name": "Prize",
           "src": "/achievements/gen-ai-mumbai-team-of-2/prize.webp",
           "thumb": "/achievements/gen-ai-mumbai-team-of-2/prize-thumb.webp"
@@ -49,6 +53,7 @@
           "width": 1200,
           "height": 1600,
           "color": "#182828",
+          "blur": "data:image/webp;base64,UklGRogAAABXRUJQVlA4IHwAAADQAwCdASoPABQAPu1iqU2ppaOiMAgBMB2JZwAAXBTxEklf32f0VwAA/uQ81chvaTnJFdyVrLo0rJK/xW1amJlFxAJQXpfdElBdr02gP/yNj/Fb/3JV5A/rB3R+xlZ/rm2EF6D4PLlyrNdAvuyldrgCt8RIkLuLXWN6ccAA",
           "name": "Competitor Statistics",
           "src": "/achievements/gen-ai-mumbai-team-of-2/competitor-statistics.webp",
           "thumb": "/achievements/gen-ai-mumbai-team-of-2/competitor-statistics-thumb.webp"
@@ -59,6 +64,7 @@
           "width": 960,
           "height": 720,
           "color": "#080808",
+          "blur": "data:image/webp;base64,UklGRkwAAABXRUJQVlA4IEAAAABQAwCdASoUAA8APu1iqU2ppaQiMAgBMB2JaQAAUtrf9nW8AAD+9DCjXwSEkPM88S20mKQ0SVsP9vq4wXwIAAAA",
           "name": "Explanation of Project",
           "src": "/achievements/gen-ai-mumbai-team-of-2/explanation-of-project.mp4",
           "poster": "/achievements/gen-ai-mumbai-team-of-2/explanation-of-project-poster.webp"
@@ -73,6 +79,7 @@
           "width": 1920,
           "height": 1280,
           "color": "#b8e8f8",
+          "blur": "data:image/webp;base64,UklGRqIAAABXRUJQVlA4IJYAAADQBACdASoUAA0APu1iqU2ppaQiMAgBMB2JZAC7L144AB9ov7XuxRsTYn0JEmd0AAD+5DKz3xxtrr6i182j4eoOA1Jzuo2M0yMnoon3NZOQetydPbTHVrW68ub2Cdduiv2Qm/Kl6MMmd3cP61fm3UVE9fkVW2oQA2DRrcEvUeNh82rYIbYbcz1Br+NcBTK6Q2nNBuNcgAA=",
           "name": "Award",
           "src": "/achievements/isro-x-gmrt-team-of-4/award.webp",
           "thumb": "/achievements/isro-x-gmrt-team-of-4/award-thumb.webp"
@@ -82,6 +89,7 @@
           "width": 1446,
           "height": 1920,
           "color": "#181818",
+          "blur": "data:image/webp;base64,UklGRpQAAABXRUJQVlA4IIgAAABQBACdASoPABQAPu1iqU2ppaOiMAgBMB2JZQC06CP0eTz4PN5v8CCOCviAAOJI+HTFiNu6Zf5gfguVYMS/qVmibO05hwOY7407H4jXS8Q/mX1EDKo31t4fWifK//E0OWN8w+VpTp7HLEWpI7jVvP41hKaRNByML++kh9TyVi2LhjYRxbZI40AA",
           "name": "Trophy",
           "src": "/achievements/isro-x-gmrt-team-of-4/trophy.webp",
           "thumb": "/achievements/isro-x-gmrt-team-of-4/trophy-thumb.webp"
@@ -96,6 +104,7 @@
           "width": 1080,
           "height": 1920,
           "color": "#989888",
+          "blur": "data:image/webp;base64,UklGRnYAAABXRUJQVlA4IGoAAADQAwCdASoLABQAPu1iqU2ppaQiMAgBMB2JZQDE2BVBPYKdJiWaJgAA/KHwdN9aAG5bSvXLSu/V9gKLromKvOKVDmNa0Ek9CLt5SAHJKu5mKl0JFUJGGiPOKy0x0oa9Chy2cf1ouY7UgAAA",
           "name": "Prize",
           "src": "/achievements/periscope-team-of-3/prize.webp",
           "thumb": "/achievements/periscope-team-of-3/prize-thumb.webp"
@@ -110,6 +119,7 @@
           "width": 1280,
           "height": 854,
           "color": "#a8a8a8",
+          "blur": "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAACwAwCdASoUAA0APu1iqk4ppaQiMAgBMB2JZwDE2BqyK49AyhPrwADKqNtEw8VCTAEyEllIEy87BW6m7fXSk3A/1LpSeavDzo+00+kC66ePDh7uMyhQfE5AZOstGzUAAAA=",
           "name": "Award",
           "src": "/achievements/somaiya-innovator-solo/award.webp",
           "thumb": "/achievements/somaiya-innovator-solo/award-thumb.webp"
@@ -119,6 +129,7 @@
           "width": 523,
           "height": 473,
           "color": "#f8f8f8",
+          "blur": "data:image/webp;base64,UklGRn4AAABXRUJQVlA4IHIAAADQBACdASoUABIAPu1srVCppiQiqAqpMB2JZwDKAA36suLPEZY/yeZYH//WgjMyAAD+8gkCExTHK4Z295XsSxet9japoopDzsi2zMlPhbzLcw6vSExweq0O//zNpXbJSqn4+M1IN7n/bMe1rnRKz/RdBAA=",
           "name": "Award",
           "src": "/achievements/somaiya-innovator-solo/award-2.webp",
           "thumb": "/achievements/somaiya-innovator-solo/award-2-thumb.webp"
@@ -128,6 +139,7 @@
           "width": 470,
           "height": 357,
           "color": "#f8f8f8",
+          "blur": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAACQAwCdASoUAA8APu1iqk4ppaQiMAgBMB2JZwAAUz5lX0QL9OAAAP7wGUmwBpqDi4bYHUa/We+zAj+ABfY8S0ua5cK5Y8tKi+woLJdk51vESm+mp9SHE9LVcQ6gAA==",
           "name": "Certificate",
           "src": "/achievements/somaiya-innovator-solo/certificate.webp",
           "thumb": "/achievements/somaiya-innovator-solo/certificate-thumb.webp"

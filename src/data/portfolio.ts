@@ -60,6 +60,11 @@ export interface Project {
   /** Separately clickable sub-links (e.g. the safety ecosystem portals). */
   subLinks?: NamedLink[];
   bullets: string[];
+  /**
+   * Short tag chips. Each must be a phrase that already appears in this project's
+   * text (checked at build time by scripts/check-content.mjs).
+   */
+  tags?: string[];
 }
 
 export type TeamSize = "Solo" | "Team of 2" | "Team of 3" | "Team of 4";
@@ -81,6 +86,12 @@ export interface SkillGroup {
   items: string[];
 }
 
+/** Headline numbers for the About Me stats row — `value` must appear in the content. */
+export interface Stat {
+  value: string;
+  label: string;
+}
+
 export interface Portfolio {
   identity: Identity;
   summary: string;
@@ -91,6 +102,7 @@ export interface Portfolio {
   /** Heading for media folders that don't match any achievement. */
   otherHighlightsTitle: string;
   skills: SkillGroup[];
+  stats: Stat[];
   driveArchiveUrl: string;
 }
 
@@ -189,6 +201,7 @@ export const portfolio: Portfolio = {
   projects: [
     {
       id: "nsu",
+      tags: ["Decision Support", "Scheduling", "3D", "AI-assisted"],
       title: "NSU Plant Cockpit",
       descriptor: "Plant Planning & Decision-Support Platform",
       url: "https://indiaglycolsnsu.netlify.app/",
@@ -199,6 +212,7 @@ export const portfolio: Portfolio = {
     },
     {
       id: "tbdos",
+      tags: ["Decision Support", "Optimization", "Day-ahead Planning"],
       title: "Turbine & Boiler Dispatch Optimisation System (TBDOS)",
       descriptor: "Utility Dispatch Decision Support",
       url: "https://iglturbine.netlify.app/",
@@ -208,6 +222,7 @@ export const portfolio: Portfolio = {
     },
     {
       id: "igl-safety",
+      tags: ["Workflow Digitization", "RCA/CAPA", "Dashboards", "AI-assisted"],
       title: "IGL Digital Safety & Compliance Ecosystem",
       descriptor: "HSE, RCA, BBS & Training",
       subLinks: [
@@ -222,6 +237,7 @@ export const portfolio: Portfolio = {
     },
     {
       id: "acg",
+      tags: ["Life Sciences", "Workflow Design", "Process Understanding"],
       title: "ACG Pharma",
       descriptor: "Pharma-Oriented Technology Exploration",
       url: "https://rajpharma.netlify.app/",
@@ -231,6 +247,7 @@ export const portfolio: Portfolio = {
     },
     {
       id: "fmcg",
+      tags: ["AI/Analytics", "Forecasting", "RAG", "Text-to-SQL"],
       title: "FMCG AI Transformation Blueprint",
       url: "https://fmcgai.netlify.app/",
       bullets: [
@@ -239,6 +256,7 @@ export const portfolio: Portfolio = {
     },
     {
       id: "financial",
+      tags: ["Sentiment", "RoBERTa", "LSTM"],
       title: "Financial Sentiment & Stock Prediction",
       bullets: [
         "Combined financial-text sentiment with historical market data using RoBERTa and LSTM to study sentiment-driven stock movement."
@@ -299,6 +317,14 @@ export const portfolio: Portfolio = {
   ],
 
   otherHighlightsTitle: "Other highlights",
+
+  // Numbers quoted from the content above (verified by scripts/check-content.mjs).
+  stats: [
+    { value: "12", label: "paid client projects in Year 1" },
+    { value: "1,370+", label: "real operating hours tested (TBDOS)" },
+    { value: "30", label: "AI/analytics use cases prioritized" },
+    { value: "9.06", label: "CGPA, with Honours" }
+  ],
 
   skills: [
     { name: "Programming", items: ["Python", "SQL"] },

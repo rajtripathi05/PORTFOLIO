@@ -1,5 +1,6 @@
 import type React from "react";
 import { liveProjectLinks, mustOpenInNewTab, portfolio, safeHost } from "~/data/portfolio";
+import { previewForUrl } from "~/data/previews";
 import { useWindow } from "~/components/window/WindowContext";
 import { openInNewTab } from "~/utils";
 
@@ -42,38 +43,49 @@ const Favorites = ({ onOpen }: { onOpen: (url: string) => void }) => {
       <div className="mx-auto max-w-[820px] px-6 py-8">
         <h1 className="text-title font-bold">Favorites</h1>
         <p className="mt-1 text-ink-2">Raj's live projects. Click one to open it.</p>
-        <ul className="mt-5 grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-3">
+        <ul className="mt-5 grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4">
           {links.map((l, i) => {
             const newTab = mustOpenInNewTab(l.url);
+            const preview = previewForUrl(l.url);
             return (
-            <li key={l.url}>
-              <button
-                type="button"
-                onClick={() => (newTab ? openInNewTab(l.url) : onOpen(l.url))}
-                aria-label={newTab ? `${l.label} (opens in a new tab)` : undefined}
-                className="app-card flex h-full w-full flex-col items-center gap-2 bg-panel p-4 text-center transition-transform hover:-translate-y-0.5 hover:shadow-raised"
-              >
-                <span
-                  className="grid size-14 place-items-center rounded-panel text-headline font-bold text-on-accent shadow-resting"
-                  style={{ background: tileColors[i % tileColors.length] }}
-                  aria-hidden="true"
+              <li key={l.url}>
+                <button
+                  type="button"
+                  onClick={() => (newTab ? openInNewTab(l.url) : onOpen(l.url))}
+                  aria-label={`${l.label}${newTab ? " (opens in a new tab)" : ""}`}
+                  className="app-card group flex h-full w-full flex-col overflow-hidden bg-panel text-left shadow-resting transition duration-standard ease-standard hover:-translate-y-0.5 hover:shadow-raised"
                 >
-                  {l.label
-                    .replace(/\(.*?\)/g, "")
-                    .split(/[\s—&-]+/)
-                    .filter(Boolean)
-                    .slice(0, 2)
-                    .map((w) => w[0])
-                    .join("")
-                    .toUpperCase()}
-                </span>
-                <span className="text-footnote font-semibold leading-snug">{l.label}</span>
-                <span className="text-footnote text-ink-3">
-                  {safeHost(l.url)}
-                  {newTab && " ↗"}
-                </span>
-              </button>
-            </li>
+                  <span className="relative block aspect-[16/10] w-full overflow-hidden border-b border-hairline">
+                    {preview ? (
+                      <img
+                        src={preview.srcSm}
+                        alt=""
+                        width={480}
+                        height={300}
+                        loading="lazy"
+                        decoding="async"
+                        className="size-full object-cover object-top"
+                        style={{ backgroundColor: preview.color }}
+                      />
+                    ) : (
+                      <span
+                        className="grid size-full place-items-center text-title font-bold text-on-media"
+                        style={{ background: tileColors[i % tileColors.length] }}
+                        aria-hidden="true"
+                      >
+                        {l.label.slice(0, 2).toUpperCase()}
+                      </span>
+                    )}
+                  </span>
+                  <span className="flex flex-1 flex-col gap-0.5 p-3">
+                    <span className="text-footnote font-semibold leading-snug">{l.label}</span>
+                    <span className="text-caption text-ink-3">
+                      {safeHost(l.url)}
+                      {newTab && " ↗"}
+                    </span>
+                  </span>
+                </button>
+              </li>
             );
           })}
         </ul>
@@ -122,6 +134,7 @@ export default function Safari() {
   const url = index >= 0 ? history[index] : null;
   const newTabOnly = !!url && mustOpenInNewTab(url);
   const narrow = width < 560;
+  const preview = url ? previewForUrl(url) : undefined;
 
   const navigate = (next: string) => {
     setHistory((h) => [...h.slice(0, index + 1), next]);
@@ -268,33 +281,59 @@ export default function Safari() {
               allow="fullscreen; clipboard-write"
             />
             {loading && !timedOut && (
-              <div
-                className="absolute inset-0 flex-center flex-col gap-3 bg-panel/90 text-ink-2"
-                role="status"
-              >
-                <span className="i-ph:circle-notch-bold animate-spin text-[30px] text-accent-text" />
-                Loading {safeHost(url)}…
+              <div className="absolute inset-0" role="status" aria-label={`Loading ${safeHost(url)}`}>
+                {/* Preview of the site behind a soft blur, so loading never shows a blank box. */}
+                {preview ? (
+                  <img
+                    src={preview.src}
+                    alt=""
+                    className="size-full scale-105 object-cover object-top opacity-70 blur-md"
+                    style={{ backgroundColor: preview.color }}
+                  />
+                ) : (
+                  <div className="size-full bg-panel-2" />
+                )}
+                <div className="safari-progress" aria-hidden="true" />
+                <span className="absolute left-1/2 top-5 -translate-x-1/2 rounded-chip bg-[var(--toast-bg)] px-3 py-1 text-footnote font-medium text-on-media shadow-raised">
+                  Loading {safeHost(url)}…
+                </span>
               </div>
             )}
             {timedOut && (
-              <div className="absolute inset-0 flex-center bg-panel-2 p-6" role="alert">
-                <div className="max-w-[440px] text-center">
-                  <span className="i-ph:browser-duotone text-[56px] text-accent-text" aria-hidden="true" />
-                  <h2 className="mt-2 text-headline font-bold">This site prefers to open in its own tab</h2>
-                  <p className="mt-1.5 text-ink-2">
-                    It's taking a while to load here — it may not allow being shown inside another page.
-                  </p>
-                  <div className="mt-5 flex flex-wrap justify-center gap-2">
-                    <ExternalLink href={url} className="btn-primary btn-lg">
-                      Open {safeHost(url)}
-                    </ExternalLink>
-                    <button
-                      type="button"
-                      className="btn-secondary btn-lg"
-                      onClick={() => setTimedOut(false)}
-                    >
-                      Keep waiting
-                    </button>
+              <div className="absolute inset-0 overflow-hidden" role="alert">
+                {preview && (
+                  <img
+                    src={preview.src}
+                    alt=""
+                    aria-hidden="true"
+                    className="absolute inset-0 size-full scale-110 object-cover object-top opacity-50 blur-lg"
+                  />
+                )}
+                <div className="absolute inset-0 flex-center p-6">
+                  <div className="material-popover w-full max-w-[440px] overflow-hidden rounded-panel border border-hairline text-center shadow-overlay">
+                    {preview && (
+                      <img
+                        src={preview.srcSm}
+                        alt={`Preview of ${safeHost(url)}`}
+                        width={480}
+                        height={300}
+                        className="aspect-[16/9] w-full border-b border-hairline object-cover object-top"
+                      />
+                    )}
+                    <div className="px-6 pb-6 pt-5">
+                      <h2 className="text-headline font-bold">This site prefers to open in its own tab</h2>
+                      <p className="mt-1.5 text-ink-2">
+                        Some sites don't allow being shown inside another page. It opens in one click.
+                      </p>
+                      <div className="mt-5 flex flex-wrap justify-center gap-2">
+                        <ExternalLink href={url} className="btn-primary btn-lg">
+                          Open {safeHost(url)}
+                        </ExternalLink>
+                        <button type="button" className="btn-secondary btn-lg" onClick={() => setTimedOut(false)}>
+                          Keep waiting
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
