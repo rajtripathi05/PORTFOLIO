@@ -1,4 +1,4 @@
-import { isTodoLink, type Project } from "~/data/portfolio";
+import { isTodoLink, mustOpenInNewTab, type Project } from "~/data/portfolio";
 
 interface ProjectLinksProps {
   project: Project;
@@ -16,6 +16,13 @@ const LinkRow = ({
   onOpenInSafari?: ProjectLinksProps["onOpenInSafari"];
 }) => {
   if (isTodoLink(url)) return <ExternalLink href={url}>{label}</ExternalLink>;
+  // Sites that block embedding only get the new-tab button.
+  if (mustOpenInNewTab(url))
+    return (
+      <ExternalLink href={url} className="btn-primary">
+        Open live site
+      </ExternalLink>
+    );
   return (
     <div className="flex flex-wrap gap-2">
       {onOpenInSafari && (

@@ -355,19 +355,31 @@ export const portfolio: Portfolio = {
     "https://drive.google.com/drive/u/1/folders/1ZLQGr7Orvfs_AkKx6zgbWS4Wwvx9KpuV"
 };
 
+/**
+ * Your own sites that currently refuse to be shown inside another page
+ * (they send `X-Frame-Options: SAMEORIGIN` / `frame-ancestors 'self'`).
+ * They always open in a new tab. Once you allow this portfolio's domain in their
+ * headers, delete the host here and they'll open inside Safari again.
+ */
+export const noEmbedHosts: string[] = ["igltraining.netlify.app", "fmcgai.netlify.app"];
+
 /* ---------------------------------------------------------------- helpers */
 
 /** True for placeholder links like "TODO_HSE_URL". */
 export const isTodoLink = (url?: string): boolean => !url || url.startsWith("TODO_");
 
 /**
- * Sites that must always open in a new tab, never in the Safari iframe
- * (LinkedIn and GitHub refuse embedding; the others are external sites, not projects).
+ * Sites that must always open in a new tab, never in the Safari iframe:
+ * LinkedIn and GitHub refuse embedding, external company sites aren't projects,
+ * and noEmbedHosts block framing.
  */
-export const mustOpenInNewTab = (url: string): boolean =>
-  /(^|\.)(linkedin\.com|github\.com|google\.com|meshcraftassets\.com|pashu\.ai)$/i.test(
-    safeHost(url)
+export const mustOpenInNewTab = (url: string): boolean => {
+  const host = safeHost(url);
+  return (
+    noEmbedHosts.includes(host) ||
+    /(^|\.)(linkedin\.com|github\.com|google\.com|meshcraftassets\.com|pashu\.ai)$/i.test(host)
   );
+};
 
 export const safeHost = (url: string): string => {
   try {

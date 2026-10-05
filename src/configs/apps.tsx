@@ -110,6 +110,20 @@ export const apps: AppDef[] = [
     width: 640,
     height: 680,
     component: lazy(() => import("~/apps/Contact"))
+  },
+  {
+    id: "safari",
+    title: "Safari",
+    description: "Browse Raj's live project sites",
+    icon: {
+      glyph: "i-ph:compass-fill",
+      tile: "bg-gradient-to-b from-white to-[#dce8f8]",
+      ink: "text-[#1f7ae0]"
+    },
+    width: 1120,
+    height: 760,
+    minWidth: 380,
+    component: lazy(() => import("~/apps/Safari"))
   }
 ];
 
