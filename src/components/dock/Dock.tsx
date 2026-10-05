@@ -8,6 +8,7 @@ export default function Dock() {
   const toggleOverlay = useStore((s) => s.toggleOverlay);
   const setOverlay = useStore((s) => s.setOverlay);
   const overlay = useStore((s) => s.overlay);
+  const dockHint = useStore((s) => s.dockHint);
   const { winWidth } = useWindowSize();
   const reduced = useReducedMotion();
 
@@ -51,6 +52,7 @@ export default function Dock() {
             bounce={!reduced}
             size={size}
             mag={mag}
+            hint={dockHint === app.id}
             onOpen={() => {
               setOverlay(null);
               openApp(app.id);

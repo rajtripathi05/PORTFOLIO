@@ -1,33 +1,76 @@
 import { AnimatePresence } from "framer-motion";
 import { apps } from "~/configs/apps";
 import { getWallpaper } from "~/configs/wallpapers";
-import { DOCK_RESERVE, MENU_BAR_HEIGHT } from "~/utils";
+import { DOCK_RESERVE, MENU_BAR_HEIGHT, storage } from "~/utils";
 import { hasEscapeHandlers } from "~/hooks/useEscape";
+
+const isTyping = (el: Element | null) =>
+  !!el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || (el as HTMLElement).isContentEditable);
 
 export default function Desktop() {
   const windows = useStore((s) => s.windows);
   const dark = useStore((s) => s.dark);
   const wallpaperId = useStore((s) => s.wallpaper);
+  const overlay = useStore((s) => s.overlay);
+  const setOverlay = useStore((s) => s.setOverlay);
   const toggleOverlay = useStore((s) => s.toggleOverlay);
   const closeFocused = useStore((s) => s.closeFocused);
-  const syncSystemTheme = useStore((s) => s.syncSystemTheme);
+  const minimizeApp = useStore((s) => s.minimizeApp);
+  const openApp = useStore((s) => s.openApp);
+  const setDockHint = useStore((s) => s.setDockHint);
 
+  const deepLinked = useShellSetup();
   const wallpaper = getWallpaper(wallpaperId);
 
-  // Follow the OS theme while the visitor hasn't picked one.
+  // First visit: welcome card shortly after the desktop appears (not for deep links).
   useEffect(() => {
-    const mq = window.matchMedia?.("(prefers-color-scheme: dark)");
-    mq?.addEventListener("change", syncSystemTheme);
-    return () => mq?.removeEventListener("change", syncSystemTheme);
+    if (storage.get("welcomed") === "1") return;
+    if (deepLinked) {
+      storage.set("welcomed", "1");
+      return;
+    }
+    const t = setTimeout(() => setOverlay("welcome"), 450);
+    return () => clearTimeout(t);
   }, []);
 
-  // Global shortcuts: ⌘K / Ctrl+K opens search; Escape closes the front window
-  // when no menu, dialog or lightbox is open (those handle Escape themselves).
+  const finishWelcome = () => {
+    storage.set("welcomed", "1");
+    setOverlay(null);
+    openApp("about");
+    if (storage.get("hintShown") === "1") return;
+    storage.set("hintShown", "1");
+    // One-time "Start here" ring on the Projects dock icon; cleared by the next app launch.
+    const startCount = useStore.getState().openCount;
+    setTimeout(() => setDockHint("projects"), 700);
+    const unsub = useStore.subscribe((s) => {
+      if (s.openCount > startCount) {
+        setDockHint(null);
+        unsub();
+      }
+    });
+    setTimeout(() => {
+      setDockHint(null);
+      unsub();
+    }, 7000);
+  };
+
+  // Global shortcuts. Escape closes the front window when nothing else (menu, dialog,
+  // viewer) has claimed it. ⌘W / Ctrl+W can't be intercepted by web pages, so it isn't used.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+      const mod = e.metaKey || e.ctrlKey;
+      if (mod && e.key.toLowerCase() === "k") {
         e.preventDefault();
         toggleOverlay("spotlight");
+      } else if (mod && e.key.toLowerCase() === "m") {
+        const id = useStore.getState().focusedId;
+        if (id) {
+          e.preventDefault();
+          minimizeApp(id);
+        }
+      } else if (e.key === "?" && !mod && !isTyping(document.activeElement) && !hasEscapeHandlers()) {
+        e.preventDefault();
+        setOverlay("help");
       } else if (e.key === "Escape" && !e.defaultPrevented && !hasEscapeHandlers()) {
         closeFocused();
       }
@@ -36,17 +79,24 @@ export default function Desktop() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
+  const closeOverlay = () => setOverlay(null);
+
   return (
-    <div
-      className="fixed inset-0 overflow-hidden"
-      style={{ background: dark ? wallpaper.dark : wallpaper.light }}
-    >
+    <div className="fixed inset-0 overflow-hidden" style={{ background: dark ? wallpaper.dark : wallpaper.light }}>
+      <a
+        href="/quick"
+        className="sr-only z-[300] rounded-lg bg-accent px-4 py-2 font-semibold text-white focus:not-sr-only focus:fixed focus:left-3 focus:top-10"
+      >
+        Skip to Quick View
+      </a>
+
       <MenuBar />
+      <DesktopIcons />
 
       <main
         id="window-area"
         aria-label="Desktop"
-        className="fixed inset-x-0 z-10 pointer-events-none"
+        className="pointer-events-none fixed inset-x-0 z-10"
         style={{ top: MENU_BAR_HEIGHT, bottom: DOCK_RESERVE }}
       >
         <AnimatePresence>
@@ -67,6 +117,15 @@ export default function Desktop() {
       </AnimatePresence>
 
       <Dock />
+
+      <AnimatePresence>
+        {overlay === "welcome" && <Welcome key="welcome" onStart={finishWelcome} />}
+        {overlay === "help" && <HelpPanel key="help" onClose={closeOverlay} />}
+        {overlay === "credits" && <Credits key="credits" onClose={closeOverlay} />}
+        {overlay === "spotlight" && <Spotlight key="spotlight" onClose={closeOverlay} />}
+        {overlay === "launchpad" && <Launchpad key="launchpad" onClose={closeOverlay} />}
+      </AnimatePresence>
+
       <Toast />
     </div>
   );

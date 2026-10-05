@@ -14,3 +14,6 @@ media-src/
 
 # Netlify
 .netlify/
+
+# Build-time SSR output
+.ssr/

@@ -23,32 +23,6 @@ const albums: Album[] = [
 const formatDuration = (s?: number) =>
   s === undefined ? "" : `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 
-export const Badges = ({ a }: { a: Achievement }) => (
-  <div className="flex flex-wrap items-center gap-1.5">
-    {a.result && (
-      <span
-        className={`rounded-full px-2.5 py-0.5 text-[12.5px] font-bold ${
-          a.result === "Winner" ? "bg-accent text-white" : "bg-accent-soft text-accent-text"
-        }`}
-      >
-        {a.result}
-      </span>
-    )}
-    {a.prize && (
-      <span className="rounded-full border border-hairline bg-panel px-2.5 py-0.5 text-[12.5px] font-bold tabular-nums">
-        {a.prize}
-      </span>
-    )}
-    <span className="hstack gap-1 rounded-full bg-panel-3 px-2.5 py-0.5 text-[12.5px] font-medium text-ink-2">
-      <span
-        className={`${a.teamSize === "Solo" ? "i-ph:user-bold" : "i-ph:users-three-bold"} text-[13px]`}
-        aria-hidden="true"
-      />
-      {a.teamSize}
-    </span>
-  </div>
-);
-
 const DriveLink = () => (
   <ExternalLink href={portfolio.driveArchiveUrl} className="btn-secondary btn-sm">
     <span className="i-ph:google-drive-logo-bold" aria-hidden="true" />
@@ -102,7 +76,7 @@ const AlbumView = ({ album, onBack, wide }: { album: Album; onBack: () => void; 
       {a && (
         <>
           <div className="mt-3">
-            <Badges a={a} />
+            <AchievementBadges a={a} />
           </div>
           <p className="mt-3 max-w-[68ch] text-[15px] text-ink-1">{a.description}</p>
           {a.links?.length ? (
@@ -179,7 +153,7 @@ const AlbumCard = ({ album, onOpen }: { album: Album; onOpen: () => void }) => {
       </span>
       <span className="flex flex-1 flex-col gap-2 p-4">
         <span className="text-[16px] font-bold leading-snug">{album.title}</span>
-        {a && <Badges a={a} />}
+        {a && <AchievementBadges a={a} />}
         {a && <span className="text-[14px] leading-relaxed text-ink-2">{a.description}</span>}
         {album.items.length > 0 && (
           <span className="mt-auto pt-1 text-[12.5px] font-semibold text-ink-3">

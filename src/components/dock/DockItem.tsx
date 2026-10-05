@@ -53,11 +53,12 @@ interface DockItemProps {
   bounce: boolean;
   size: number;
   mag: number;
+  hint?: boolean;
   onOpen: () => void;
 }
 
 export default function DockItem(props: DockItemProps) {
-  const { id, title, icon, isOpen, launches, mouseX, magnify, bounce, size, mag, onOpen } =
+  const { id, title, icon, isOpen, launches, mouseX, magnify, bounce, size, mag, hint, onOpen } =
     props;
   const ref = useRef<HTMLDivElement>(null);
   const width = useDockHoverAnimation(mouseX, ref, size, mag);
@@ -75,7 +76,15 @@ export default function DockItem(props: DockItemProps) {
   }, [launches]);
 
   return (
-    <li className="flex">
+    <li className="relative flex">
+      {hint && (
+        <>
+          <span className="dock-hint-tip" role="status">
+            Start here
+          </span>
+          <span className="dock-hint-ring" aria-hidden="true" />
+        </>
+      )}
       <button
         type="button"
         id={`dock-${id}`}

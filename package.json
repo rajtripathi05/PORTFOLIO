@@ -6,7 +6,7 @@
     "dev": "vite --host",
     "media": "node scripts/build-achievements.mjs",
     "prebuild": "node scripts/build-achievements.mjs",
-    "build": "vite build && tsc --noEmit",
+    "build": "vite build && vite build --ssr src/entries/quick-server.tsx --outDir .ssr && node scripts/prerender-quick.mjs && tsc --noEmit",
     "serve": "vite preview --host",
     "typecheck": "tsc --noEmit",
     "lint": "eslint ."

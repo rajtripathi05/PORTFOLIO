@@ -1,0 +1,201 @@
+/* ---------------- Quick View ---------------- */
+html.is-quick body {
+  overflow: auto;
+}
+html.is-quick,
+html.is-quick body,
+html.is-quick #root {
+  height: auto;
+  min-height: 100%;
+}
+html.is-quick {
+  scroll-behavior: smooth;
+}
+.qv {
+  min-height: 100%;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-1);
+  background: var(--panel-2);
+}
+.qv-wrap {
+  width: 100%;
+  max-width: 920px;
+  margin: 0 auto;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+.qv-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  border-bottom: 1px solid var(--hairline);
+}
+.qv-nav {
+  gap: 4px;
+}
+.qv-nav a {
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 14.5px;
+  font-weight: 500;
+  color: var(--text-2);
+}
+.qv-nav a:hover {
+  color: var(--text-1);
+  background: rgba(127, 127, 127, 0.14);
+}
+.qv-hero {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  padding-top: 56px;
+  padding-bottom: 24px;
+}
+@media (max-width: 640px) {
+  .qv-hero {
+    flex-direction: column;
+    text-align: center;
+    padding-top: 36px;
+  }
+  .qv-hero .qv-actions {
+    justify-content: center;
+  }
+}
+.qv-h1 {
+  font-size: clamp(32px, 6vw, 44px);
+  line-height: 1.08;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+}
+.qv-h2 {
+  margin-bottom: 18px;
+  font-size: 26px;
+  line-height: 1.2;
+  font-weight: 750;
+  letter-spacing: -0.015em;
+}
+.qv-section {
+  padding-top: 44px;
+  scroll-margin-top: 64px;
+}
+.qv-prose {
+  max-width: 70ch;
+}
+.qv-card {
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid var(--hairline);
+  background: var(--panel);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+.qv-timeline {
+  display: grid;
+  gap: 28px;
+  padding-left: 22px;
+  border-left: 2px solid var(--hairline);
+}
+.qv-timeline > li {
+  position: relative;
+}
+.qv-timeline > li::before {
+  content: "";
+  position: absolute;
+  left: -31px;
+  top: 7px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 3px solid var(--panel-2);
+  background: var(--accent);
+}
+.qv-footer {
+  padding-top: 56px;
+  padding-bottom: 48px;
+  font-size: 14px;
+  color: var(--text-3);
+}
+.qv-print-url {
+  display: none;
+}
+
+/* Reveal once on scroll — only when JS added .js-reveal, so content is never hidden otherwise. */
+.js-reveal .reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+.js-reveal .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------------- print ---------------- */
+@media print {
+  @page {
+    margin: 16mm 14mm;
+  }
+  html,
+  body,
+  #root {
+    height: auto !important;
+    overflow: visible !important;
+    background: #fff !important;
+  }
+  .qv {
+    background: #fff;
+    color: #000;
+    font-size: 11pt;
+    line-height: 1.45;
+  }
+  .qv-header,
+  .qv-actions,
+  .qv-media,
+  .qv-footer {
+    display: none !important;
+  }
+  .qv-hero {
+    padding-top: 0;
+  }
+  .qv-hero img {
+    width: 72px;
+    height: 72px;
+  }
+  .qv-card {
+    border: 0;
+    box-shadow: none;
+    padding: 0;
+    background: none;
+    break-inside: avoid;
+  }
+  .qv-section {
+    padding-top: 18pt;
+    break-inside: auto;
+  }
+  .qv-h2 {
+    font-size: 15pt;
+    border-bottom: 1px solid #999;
+    padding-bottom: 3pt;
+  }
+  .qv-print-url {
+    display: block;
+    font-size: 9.5pt;
+    color: #333;
+  }
+  .chip {
+    border: 0;
+    padding: 0;
+    background: none;
+  }
+  .chip:not(:last-child)::after {
+    content: ",";
+  }
+  .js-reveal .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  a {
+    color: #000 !important;
+    text-decoration: none !important;
+  }
+}
