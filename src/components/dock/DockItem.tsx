@@ -58,11 +58,13 @@ interface DockItemProps {
   reduced: boolean;
   tabIndex: number;
   onFocusItem: () => void;
+  /** Prefetch the app's code on hover/focus so the window opens instantly. */
+  prefetch?: () => void;
   onOpen: () => void;
 }
 
 export default function DockItem(props: DockItemProps) {
-  const { id, title, icon, isOpen, launches, mouseX, magnify, bounce, size, mag, hint, index, revealed, reduced, tabIndex, onFocusItem, onOpen } =
+  const { id, title, icon, isOpen, launches, mouseX, magnify, bounce, size, mag, hint, index, revealed, reduced, tabIndex, onFocusItem, prefetch, onOpen } =
     props;
   const ref = useRef<HTMLDivElement>(null);
   const width = useDockHoverAnimation(mouseX, ref, size, mag);
@@ -107,7 +109,11 @@ export default function DockItem(props: DockItemProps) {
         id={`dock-${id}`}
         data-dock-btn
         tabIndex={tabIndex}
-        onFocus={onFocusItem}
+        onFocus={() => {
+          onFocusItem();
+          prefetch?.();
+        }}
+        onMouseEnter={() => prefetch?.()}
         className="dock-btn"
         onClick={() => {
           // A long-press already opened the menu; don't also launch.

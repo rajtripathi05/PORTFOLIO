@@ -93,6 +93,7 @@ export default function Dock() {
             reduced={reduced}
             tabIndex={focusIndex === i + 1 ? 0 : -1}
             onFocusItem={() => setFocusIndex(i + 1)}
+            prefetch={() => void app.load()}
             onOpen={() => {
               setOverlay(null);
               openApp(app.id);

@@ -1,10 +1,6 @@
 import React, { lazy, Suspense } from "react";
 import { createRoot, hydrateRoot } from "react-dom/client";
-import Desktop from "~/pages/Desktop";
 import Boot from "~/pages/Boot";
-import MobileHome from "~/pages/MobileHome";
-import QuickView from "~/pages/QuickView";
-import NotFound from "~/pages/NotFound";
 import { MOBILE_BREAKPOINT, storage } from "~/utils";
 
 import "@fontsource-variable/inter";
@@ -14,7 +10,11 @@ import "~/styles/index.css";
 
 const route = window.location.pathname.replace(/\/+$/, "") || "/";
 const isQuickView = route === "/quick";
+// Route-level code splitting: each route downloads only what it needs.
+const Desktop = lazy(() => import("~/pages/Desktop"));
+const MobileHome = lazy(() => import("~/pages/MobileHome"));
 const Styleguide = lazy(() => import("~/pages/Styleguide"));
+const NotFound = lazy(() => import("~/pages/NotFound"));
 
 export default function App() {
   // Returning visitors skip the intro entirely.
@@ -29,7 +29,7 @@ export default function App() {
   // The shell mounts underneath the boot screen, so it is fully ready when boot fades out.
   return (
     <>
-      {winWidth < MOBILE_BREAKPOINT ? <MobileHome /> : <Desktop />}
+      <Suspense fallback={null}>{winWidth < MOBILE_BREAKPOINT ? <MobileHome /> : <Desktop />}</Suspense>
       {!booted && (
         <Boot
           onDone={() => {
@@ -46,16 +46,22 @@ const rootElement = document.getElementById("root") as HTMLElement;
 
 if (isQuickView) {
   document.documentElement.classList.add("is-quick");
-  const app = (
-    <React.StrictMode>
-      <QuickView />
-    </React.StrictMode>
-  );
-  // The build pre-renders Quick View into the HTML; hydrate it when present.
-  if (rootElement.hasChildNodes()) hydrateRoot(rootElement, app);
-  else createRoot(rootElement).render(app);
+  // The build pre-renders Quick View into the HTML; hydrate it once its code arrives.
+  import("~/pages/QuickView").then(({ default: QuickView }) => {
+    const app = (
+      <React.StrictMode>
+        <QuickView />
+      </React.StrictMode>
+    );
+    if (rootElement.hasChildNodes()) hydrateRoot(rootElement, app);
+    else createRoot(rootElement).render(app);
+  });
 } else if (!["/", "/index.html", "/styleguide"].includes(route)) {
-  createRoot(rootElement).render(<NotFound />);
+  createRoot(rootElement).render(
+    <Suspense fallback={null}>
+      <NotFound />
+    </Suspense>
+  );
 } else if (route === "/styleguide") {
   createRoot(rootElement).render(
     <Suspense fallback={null}>

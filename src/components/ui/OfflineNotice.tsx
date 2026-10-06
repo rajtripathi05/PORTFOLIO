@@ -3,7 +3,8 @@ import { duration, ease } from "~/styles/motion";
 
 /** Shows a small notice while the visitor is offline, and a brief "Back online" toast after. */
 export default function OfflineNotice() {
-  const [online, setOnline] = useState(() => (typeof navigator === "undefined" ? true : navigator.onLine));
+  // `!== false`: Node (pre-rendering) has a navigator without onLine — treat unknown as online.
+  const [online, setOnline] = useState(() => typeof navigator === "undefined" || navigator.onLine !== false);
   const [justBack, setJustBack] = useState(false);
 
   useEffect(() => {
