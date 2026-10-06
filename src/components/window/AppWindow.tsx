@@ -106,6 +106,7 @@ export default function AppWindow({ app }: { app: AppDef }) {
   const area = useArea();
   const reduced = useReducedMotion();
   const sectionRef = useRef<HTMLElement>(null);
+  useReturnFocus(sectionRef, `#dock-${app.id}`);
   const [rect, setRect] = useState<Rect>(() => {
     const windows = useStore.getState().windows;
     const othersOpen = Object.entries(windows).some(([id, w]) => id !== app.id && w?.open && !w.min);

@@ -1,3 +1,4 @@
+import type React from "react";
 import { motion, useMotionValue } from "framer-motion";
 import { duration, ease } from "~/styles/motion";
 import { apps, launchpadIcon } from "~/configs/apps";
@@ -19,6 +20,23 @@ export default function Dock() {
   // Shrink icons on narrower desktops so every labelled icon still fits.
   const size = winWidth < 1000 ? 38 : winWidth < 1200 ? 44 : 48;
   const mag = 1.55;
+  // Roving tabindex: the dock is one Tab stop; arrow keys move between icons.
+  const [focusIndex, setFocusIndex] = useState(1);
+  const onToolbarKeyDown = (e: React.KeyboardEvent) => {
+    const buttons = Array.from(e.currentTarget.querySelectorAll<HTMLButtonElement>("[data-dock-btn]"));
+    const i = buttons.indexOf(document.activeElement as HTMLButtonElement);
+    if (i < 0) return;
+    const to =
+      e.key === "ArrowRight" ? (i + 1) % buttons.length
+      : e.key === "ArrowLeft" ? (i - 1 + buttons.length) % buttons.length
+      : e.key === "Home" ? 0
+      : e.key === "End" ? buttons.length - 1
+      : -1;
+    if (to < 0) return;
+    e.preventDefault();
+    buttons[to].focus();
+    setFocusIndex(to);
+  };
 
   return (
     <motion.nav
@@ -28,7 +46,11 @@ export default function Dock() {
       animate={revealed ? { y: 0, opacity: 1 } : undefined}
       transition={{ duration: duration.emphasis, ease: ease.standard, delay: 0.2 }}
     >
-      <ul
+      <div
+        role="toolbar"
+        aria-label="Apps"
+        aria-orientation="horizontal"
+        onKeyDown={onToolbarKeyDown}
         className="dock-bar material-menubar max-w-full"
         onMouseMove={(e) => magnify && mouseX.set(e.nativeEvent.x)}
         onMouseLeave={() => mouseX.set(null)}
@@ -48,8 +70,10 @@ export default function Dock() {
           index={0}
           revealed={revealed}
           reduced={reduced}
+          tabIndex={focusIndex === 0 ? 0 : -1}
+          onFocusItem={() => setFocusIndex(0)}
         />
-        <li className="dock-sep" aria-hidden="true" />
+        <div className="dock-sep" role="separator" aria-orientation="vertical" />
         {apps.map((app, i) => (
           <DockItem
             key={app.id}
@@ -67,13 +91,15 @@ export default function Dock() {
             index={i + 1}
             revealed={revealed}
             reduced={reduced}
+            tabIndex={focusIndex === i + 1 ? 0 : -1}
+            onFocusItem={() => setFocusIndex(i + 1)}
             onOpen={() => {
               setOverlay(null);
               openApp(app.id);
             }}
           />
         ))}
-      </ul>
+      </div>
     </motion.nav>
   );
 }

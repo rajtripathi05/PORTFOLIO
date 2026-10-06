@@ -56,11 +56,13 @@ interface DockItemProps {
   index: number;
   revealed: boolean;
   reduced: boolean;
+  tabIndex: number;
+  onFocusItem: () => void;
   onOpen: () => void;
 }
 
 export default function DockItem(props: DockItemProps) {
-  const { id, title, icon, isOpen, launches, mouseX, magnify, bounce, size, mag, hint, index, revealed, reduced, onOpen } =
+  const { id, title, icon, isOpen, launches, mouseX, magnify, bounce, size, mag, hint, index, revealed, reduced, tabIndex, onFocusItem, onOpen } =
     props;
   const ref = useRef<HTMLDivElement>(null);
   const width = useDockHoverAnimation(mouseX, ref, size, mag);
@@ -86,7 +88,7 @@ export default function DockItem(props: DockItemProps) {
   }, [launches]);
 
   return (
-    <motion.li
+    <motion.div
       className="relative flex"
       initial={reduced ? false : { y: 14, opacity: 0 }}
       animate={revealed ? { y: 0, opacity: 1 } : undefined}
@@ -103,6 +105,9 @@ export default function DockItem(props: DockItemProps) {
       <button
         type="button"
         id={`dock-${id}`}
+        data-dock-btn
+        tabIndex={tabIndex}
+        onFocus={onFocusItem}
         className="dock-btn"
         onClick={() => {
           // A long-press already opened the menu; don't also launch.
@@ -148,6 +153,6 @@ export default function DockItem(props: DockItemProps) {
         <span className={`dock-dot ${isOpen ? "" : "invisible"}`} aria-hidden="true" />
         {isOpen && <span className="sr-only">(open)</span>}
       </button>
-    </motion.li>
+    </motion.div>
   );
 }

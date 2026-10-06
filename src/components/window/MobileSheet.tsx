@@ -12,6 +12,8 @@ export default function MobileSheet({ app }: { app: AppDef }) {
   const { winWidth } = useWindowSize();
   const drag = useDragControls();
   const doneRef = useRef<HTMLButtonElement>(null);
+  const sheetRef = useRef<HTMLElement>(null);
+  useReturnFocus(sheetRef);
 
   useEffect(() => {
     doneRef.current?.focus({ preventScroll: true });
@@ -21,6 +23,7 @@ export default function MobileSheet({ app }: { app: AppDef }) {
 
   return (
     <motion.section
+      ref={sheetRef}
       role="dialog"
       aria-modal="true"
       aria-labelledby={`sheet-title-${app.id}`}

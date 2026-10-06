@@ -59,6 +59,7 @@ declare global {
   const useReducedMotion: typeof import('./hooks/useReducedMotion')['useReducedMotion']
   const useReducer: typeof import('react')['useReducer']
   const useRef: typeof import('react')['useRef']
+  const useReturnFocus: typeof import('./hooks/useReturnFocus')['useReturnFocus']
   const useShellSetup: typeof import('./hooks/useShellSetup')['useShellSetup']
   const useState: typeof import('react')['useState']
   const useStore: typeof import('./stores/index')['useStore']

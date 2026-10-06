@@ -15,6 +15,7 @@ export default function FloatingPanel({ app }: { app: AppDef }) {
   const reduced = useReducedMotion();
   const { winWidth, winHeight } = useWindowSize();
   const ref = useRef<HTMLElement>(null);
+  useReturnFocus(ref, `#dock-${app.id}`);
 
   const width = Math.min(app.width, winWidth - 24);
   const height = Math.min(app.height, winHeight - MENU_BAR_HEIGHT - DOCK_RESERVE - 8);
