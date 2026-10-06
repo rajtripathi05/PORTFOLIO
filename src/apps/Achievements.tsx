@@ -1,7 +1,7 @@
 import type React from "react";
-import { portfolio, type Achievement } from "~/data/portfolio";
+import { achievementTitle, portfolio, type Achievement } from "~/data/portfolio";
 import { coverFor, mediaFor, mediaSummary, otherHighlights, type MediaItem } from "~/data/media";
-import { useAppHost } from "~/shells/host";
+import { useAppBack, useAppHost } from "~/shells/host";
 import { deepLinkUrl } from "~/utils";
 import { feedback } from "~/sensory/feedback";
 
@@ -25,11 +25,19 @@ const albums: Album[] = [
 const formatDuration = (s?: number) =>
   s === undefined ? "" : `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 
-const DriveLink = () => (
-  <ExternalLink href={portfolio.driveArchiveUrl} className="btn-secondary btn-sm">
+const DriveLink = ({ large }: { large?: boolean }) => (
+  <a
+    href={portfolio.driveArchiveUrl}
+    target="_blank"
+    rel="noopener noreferrer"
+    onClick={() => feedback("open")}
+    className={`btn-secondary ${large ? "btn-lg active:scale-[.96]" : "btn-sm"}`}
+  >
     <span className="i-ph:google-drive-logo-bold" aria-hidden="true" />
     View full archive on Google Drive
-  </ExternalLink>
+    <span aria-hidden="true"> ↗</span>
+    <span className="sr-only"> (opens in a new tab)</span>
+  </a>
 );
 
 const Thumb = ({ item, alt }: { item: MediaItem; alt: string }) => {
@@ -65,20 +73,38 @@ const Thumb = ({ item, alt }: { item: MediaItem; alt: string }) => {
   );
 };
 
-const AlbumView = ({ album, onBack, wide }: { album: Album; onBack: () => void; wide: boolean }) => {
+const AlbumView = ({
+  album,
+  onBack,
+  wide,
+  showBack,
+  touch
+}: {
+  album: Album;
+  onBack: () => void;
+  wide: boolean;
+  /** The phone shell shows its own "‹ Achievements" back button. */
+  showBack: boolean;
+  touch: boolean;
+}) => {
   const [open, setOpen] = useState<number | null>(null);
   const a = album.achievement;
 
-  useEffect(() => {
-    feedback("open");
-  }, [album.id]);
-
   return (
     <div className="mx-auto max-w-[900px] px-6 py-6">
-      <button type="button" className="btn-ghost btn-sm -ml-3" onClick={onBack}>
-        <span className="i-ph:caret-left-bold" aria-hidden="true" />
-        All achievements
-      </button>
+      {showBack && (
+        <button
+          type="button"
+          className={`btn-ghost -ml-3 ${touch ? "btn-lg active:scale-[.96]" : "btn-sm"}`}
+          onClick={() => {
+            feedback("tap");
+            onBack();
+          }}
+        >
+          <span className="i-ph:caret-left-bold" aria-hidden="true" />
+          All achievements
+        </button>
+      )}
       <h1 className="app-h1 mt-2">{a ? [a.name, a.result].filter(Boolean).join(" — ") : album.title}</h1>
       {a && (
         <>
@@ -95,10 +121,12 @@ const AlbumView = ({ album, onBack, wide }: { album: Album; onBack: () => void; 
           {a.links?.length ? (
             <div className="mt-3 flex flex-wrap gap-2">
               {a.links.map((l) => (
-                <ExternalLink key={l.url} href={l.url} className="btn-secondary btn-sm">
-                  <span className="i-ph:github-logo-bold" aria-hidden="true" />
-                  {l.label}
-                </ExternalLink>
+                <span key={l.url} onClick={() => feedback("open")}>
+                  <ExternalLink href={l.url} className={`btn-secondary ${touch ? "btn-lg" : "btn-sm"}`}>
+                    <span className="i-ph:github-logo-bold" aria-hidden="true" />
+                    {l.label}
+                  </ExternalLink>
+                </span>
               ))}
             </div>
           ) : null}
@@ -111,8 +139,11 @@ const AlbumView = ({ album, onBack, wide }: { album: Album; onBack: () => void; 
             <li key={item.src}>
               <button
                 type="button"
-                onClick={() => setOpen(i)}
-                className="relative block aspect-square w-full overflow-hidden rounded-card ring-accent focus-visible:ring-2"
+                onClick={() => {
+                  feedback("open");
+                  setOpen(i);
+                }}
+                className="relative block aspect-square w-full overflow-hidden rounded-card ring-accent transition-transform duration-micro focus-visible:ring-2 active:scale-[.96]"
                 aria-label={`Open ${item.type === "video" ? "video" : item.type === "pdf" ? "document" : "photo"}: ${item.name}`}
               >
                 <Thumb item={item} alt="" />
@@ -124,7 +155,12 @@ const AlbumView = ({ album, onBack, wide }: { album: Album; onBack: () => void; 
         <div className="app-card mt-6 flex flex-col items-center gap-3 px-6 py-10 text-center">
           <span className="i-ph:images-duotone text-[44px] text-ink-3" aria-hidden="true" />
           <p className="text-ink-2">No photos here yet — the full archive is on Google Drive.</p>
-          <DriveLink />
+          <DriveLink large={touch} />
+        </div>
+      )}
+      {album.items.length > 0 && (
+        <div className="mt-6">
+          <DriveLink large={touch} />
         </div>
       )}
 
@@ -134,7 +170,10 @@ const AlbumView = ({ album, onBack, wide }: { album: Album; onBack: () => void; 
           items={album.items}
           index={open}
           onIndex={setOpen}
-          onClose={() => setOpen(null)}
+          onClose={() => {
+            feedback("close");
+            setOpen(null);
+          }}
         />
       )}
     </div>
@@ -147,8 +186,12 @@ const AlbumCard = ({ album, onOpen }: { album: Album; onOpen: () => void }) => {
   return (
     <button
       type="button"
-      onClick={onOpen}
-      className="app-card group flex h-full w-full flex-col overflow-hidden bg-panel text-left transition-shadow hover:shadow-raised"
+      onClick={() => {
+        feedback("open");
+        onOpen();
+      }}
+      aria-label={a ? `${achievementTitle(a)}${a.prize ? `, ${a.prize}` : ""} — open album` : `${album.title} — open album`}
+      className="app-card group flex h-full w-full flex-col overflow-hidden bg-panel text-left transition duration-micro hover:shadow-raised active:scale-[.98]"
     >
       <span className="relative block aspect-[4/3] w-full overflow-hidden bg-panel-3">
         {cover ? (
@@ -180,9 +223,13 @@ const AlbumCard = ({ album, onOpen }: { album: Album; onOpen: () => void }) => {
 };
 
 export default function Achievements() {
-  const { width, params, nonce } = useAppHost();
+  const { shell, width, params, nonce } = useAppHost();
   const [selected, setSelected] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const touch = shell !== "desktop";
+
+  // Phone/tablet: the album is a pushed detail; the shell's back button returns here.
+  useAppBack(selected !== null, "Achievements", () => setSelected(null));
 
   useEffect(() => {
     const id = params?.id;
@@ -211,7 +258,13 @@ export default function Achievements() {
   return (
     <div ref={scrollRef} className="app-scroll">
       {album ? (
-        <AlbumView album={album} onBack={() => setSelected(null)} wide={width >= 640} />
+        <AlbumView
+          album={album}
+          onBack={() => setSelected(null)}
+          wide={width >= 640}
+          showBack={shell !== "phone"}
+          touch={touch}
+        />
       ) : (
         <div className="mx-auto max-w-[1000px] px-6 py-7">
           <div className="flex flex-wrap items-end justify-between gap-3">
@@ -219,7 +272,7 @@ export default function Achievements() {
               <h1 className="app-h1">Achievements</h1>
               <p className="mt-1 text-ink-2">Open an award to see its photos, certificates and videos.</p>
             </div>
-            <DriveLink />
+            <DriveLink large={touch} />
           </div>
           <div className="mt-6">{grid(achievementsList)}</div>
           {others.length > 0 && (

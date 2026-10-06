@@ -1,3 +1,4 @@
+/** One-line status toast (store: showToast). Shell-agnostic. */
 export default function Toast() {
   const toast = useStore((s) => s.toast);
   return (

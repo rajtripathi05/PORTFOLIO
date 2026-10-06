@@ -1,13 +1,17 @@
-import { shortcutLabel } from "~/utils";
+import { shortcutLabel } from "~/utils/env";
+import { feedback } from "~/sensory/feedback";
+import { startTour } from "~/features/tour";
 
 const shortcuts: [string, string][] = [
   [shortcutLabel("K"), "Search the portfolio"],
   ["Esc", "Close the front window, menu or viewer"],
-  ["⌘M / Ctrl+M", "Minimize the front window"],
+  [shortcutLabel("W"), "Close the front window (if your browser allows it)"],
+  [shortcutLabel("M"), "Minimize the front window"],
   ["?", "Show this help"],
   ["← / →", "Previous / next photo in the viewer"]
 ];
 
+/** "How to use this site". Shell-agnostic; keyboard shortcuts only matter on a keyboard. */
 export default function HelpPanel({ onClose }: { onClose: () => void }) {
   const setOverlay = useStore((s) => s.setOverlay);
   const openApp = useStore((s) => s.openApp);
@@ -20,27 +24,32 @@ export default function HelpPanel({ onClose }: { onClose: () => void }) {
           <li className="flex gap-3">
             <span className="i-ph:cursor-click-bold mt-0.5 text-[18px] text-accent-text" aria-hidden="true" />
             <span>
-              <strong>Click any icon</strong> in the dock at the bottom (or on the desktop) to open it.
+              <strong>Click or tap any icon</strong> in the dock (or on the desktop) to open it. Apps that don't
+              fit in the dock are under <strong>More</strong>.
             </span>
           </li>
           <li className="flex gap-3">
             <span className="i-ph:app-window-bold mt-0.5 text-[18px] text-accent-text" aria-hidden="true" />
             <span>
-              Windows have three buttons at the top-left: <strong>red closes</strong>,{" "}
-              <strong>yellow minimizes</strong> to the dock, <strong>green maximizes</strong>. Drag the title bar
-              to move a window, and its edges to resize it.
+              Windows have three buttons at the top-left: <strong>× closes</strong>, <strong>– minimizes</strong>{" "}
+              to the dock, <strong>+ maximizes</strong>. Drag the title bar to move a window (drop it on a screen
+              edge to fill that half), and its edges to resize it.
             </span>
           </li>
           <li className="flex gap-3">
             <span className="i-ph:sparkle-bold mt-0.5 text-[18px] text-accent-text" aria-hidden="true" />
             <span>
-              <strong>Ask AI</strong> (top right) answers questions about Raj's work.
+              <strong>Ask AI</strong> answers questions about Raj's work.
             </span>
           </li>
           <li className="flex gap-3">
             <span className="i-ph:article-bold mt-0.5 text-[18px] text-accent-text" aria-hidden="true" />
             <span>
-              Prefer a normal web page? <a className="text-link font-semibold" href="/quick">Open Quick View</a>.
+              Prefer a normal web page?{" "}
+              <a className="text-link font-semibold" href="/quick" onClick={() => feedback("tap")}>
+                Open Quick View
+              </a>
+              .
             </span>
           </li>
         </ul>
@@ -60,6 +69,17 @@ export default function HelpPanel({ onClose }: { onClose: () => void }) {
         </dl>
 
         <div className="mt-6 flex flex-wrap justify-end gap-2">
+          <button
+            type="button"
+            className="btn-secondary"
+            onClick={() => {
+              feedback("tap");
+              setOverlay(null);
+              startTour();
+            }}
+          >
+            Take the 30-second tour
+          </button>
           <button
             type="button"
             className="btn-secondary"

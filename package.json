@@ -40,6 +40,7 @@
     "eslint": "^8.57.0",
     "ffmpeg-static": "^5.2.0",
     "playwright": "^1.63.0",
+    "qrcode": "^1.5.4",
     "sharp": "^0.33.4",
     "typescript": "^5.4.5",
     "unocss": "^0.59.4",

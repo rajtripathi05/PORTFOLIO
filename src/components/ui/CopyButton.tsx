@@ -23,26 +23,27 @@ export default function CopyButton({
   const [state, setState] = useState<"idle" | "copied" | "failed">("idle");
   const timer = useRef<ReturnType<typeof setTimeout>>();
   const reduced = useReducedMotion();
+  const btn = useRef<HTMLButtonElement>(null);
 
   useEffect(() => () => clearTimeout(timer.current), []);
 
   const onClick = async () => {
     const ok = await copyText(text);
     setState(ok ? "copied" : "failed");
-    feedback(ok ? "success" : "error");
+    feedback(ok ? "success" : "error", { el: btn.current });
     clearTimeout(timer.current);
     timer.current = setTimeout(() => setState("idle"), 1800);
   };
 
   const content =
     state === "copied"
-      ? { key: "copied", icon: "i-ph:check-bold text-success", text: "Copied" }
+      ? { key: "copied", icon: "", text: "Copied ✓" }
       : state === "failed"
         ? { key: "failed", icon: "i-ph:warning-bold", text: "Copy failed" }
         : { key: "idle", icon, text: label };
 
   return (
-    <button type="button" className={`${className} min-w-[7.5rem]`} onClick={onClick}>
+    <button ref={btn} type="button" className={`${className} min-w-[7.5rem]`} onClick={onClick}>
       <AnimatePresence mode="wait" initial={false}>
         <motion.span
           key={content.key}
@@ -52,7 +53,7 @@ export default function CopyButton({
           exit={reduced ? { opacity: 0 } : { opacity: 0, y: -6 }}
           transition={{ duration: duration.micro, ease: ease.standard }}
         >
-          <span className={content.icon} aria-hidden="true" />
+          {content.icon && <span className={content.icon} aria-hidden="true" />}
           {content.text}
         </motion.span>
       </AnimatePresence>

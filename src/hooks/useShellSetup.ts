@@ -1,8 +1,8 @@
 import { readDeepLink } from "~/utils/deeplink";
 
 /**
- * Setup shared by the desktop and the mobile home screen:
- * follows the OS theme and opens `?open=…&id=…` deep links.
+ * Setup shared by every shell: follows the OS theme and opens
+ * `/?open=<app>&id=<id>&q=<q>&url=<url>` deep links on load.
  * Returns true when the page was opened through a deep link.
  */
 export function useShellSetup(): boolean {
@@ -18,7 +18,7 @@ export function useShellSetup(): boolean {
 
   useEffect(() => {
     const link = readDeepLink();
-    if (link) openApp(link.app, link.payload);
+    if (link) openApp(link.app, link.params);
   }, []);
 
   return deepLinked;

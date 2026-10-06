@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
  * Captures a screenshot of each project's live site (run locally, then commit):
- *   node scripts/capture-previews.mjs
+ *   node scripts/capture-previews.mjs            (all projects)
+ *   node scripts/capture-previews.mjs nsu meshcraft   (only these; other entries are kept)
  * Writes public/previews/<id>.webp (960w) + <id>-sm.webp (480w) and
  * src/data/previews.json. Projects without a live link are skipped.
  * Uses the locally installed Chrome via Playwright.
@@ -24,9 +25,16 @@ const { portfolio, isTodoLink } = await import(`data:text/javascript;base64,${Bu
 await fs.mkdir(OUT, { recursive: true });
 const browser = await chromium.launch({ channel: "chrome" });
 const page = await browser.newPage({ viewport: { width: 1280, height: 800 }, deviceScaleFactor: 1 });
-const manifest = {};
+const only = process.argv.slice(2).filter((a) => !a.startsWith("-"));
+let manifest = {};
+try {
+  manifest = JSON.parse(await fs.readFile(MANIFEST, "utf8"));
+} catch {}
+// Drop entries for projects that no longer exist.
+for (const id of Object.keys(manifest)) if (!portfolio.projects.some((p) => p.id === id)) delete manifest[id];
 
 for (const p of portfolio.projects) {
+  if (only.length && !only.includes(p.id)) continue;
   const url = p.url ?? p.subLinks?.find((l) => !isTodoLink(l.url))?.url;
   if (!url) {
     console.log(`- ${p.id}: no live link, skipped`);

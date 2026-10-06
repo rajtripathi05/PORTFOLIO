@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { preloadApps } from "~/configs/apps";
 import { portfolio } from "~/data/portfolio";
 import { duration, ease } from "~/styles/motion";
+import { feedback } from "~/sensory/feedback";
 
 // Boot screen: RT monogram + a progress bar that tracks real preloading (every app
 // chunk and the profile photo). Ends as soon as loading is done — at least 600ms so the
@@ -41,10 +42,23 @@ export default function Boot({ onDone }: { onDone: () => void }) {
     const cap = setTimeout(finish, MAX_MS);
     const onKey = () => finish();
     window.addEventListener("keydown", onKey);
+    // Browsers only allow audio after a gesture: the boot chime plays on the first
+    // click/tap/key within a few seconds of landing (during boot or just after).
+    const removeChime = () => {
+      window.removeEventListener("pointerdown", chime, true);
+      window.removeEventListener("keydown", chime, true);
+    };
+    const chime = () => {
+      removeChime();
+      feedback("boot");
+    };
+    window.addEventListener("pointerdown", chime, true);
+    window.addEventListener("keydown", chime, true);
     return () => {
       clearTimeout(cap);
       clearTimeout(minTimer);
       window.removeEventListener("keydown", onKey);
+      setTimeout(removeChime, 2500);
     };
   }, []);
 

@@ -1,5 +1,6 @@
 import type React from "react";
 import { isTodoLink } from "~/data/portfolio";
+import { feedback } from "~/sensory/feedback";
 
 interface ExternalLinkProps {
   href?: string;
@@ -25,9 +26,15 @@ export default function ExternalLink({
     );
   }
   return (
-    <a className={className} href={href} target="_blank" rel="noopener noreferrer">
+    <a
+      className={className}
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      onClick={(e) => feedback("open", { el: e.currentTarget })}
+    >
       {children}
-      <span aria-hidden="true">↗</span>
+      <span aria-hidden="true"> ↗</span>
       <span className="sr-only"> (opens in a new tab)</span>
     </a>
   );

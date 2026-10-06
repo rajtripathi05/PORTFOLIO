@@ -1,118 +1,68 @@
-import { portfolio, type ExperienceItem } from "~/data/portfolio";
+import { portfolio } from "~/data/portfolio";
 import { useAppHost } from "~/shells/host";
+import { feedback } from "~/sensory/feedback";
+import RoleCard, { roleDomId } from "~/components/content/RoleCard";
+import { useScrollTarget } from "~/components/content/useScrollTarget";
 
-const COLLAPSED_BULLETS = 3;
-
-function Role({
-  job,
-  latest,
-  narrow,
-  highlight
-}: {
-  job: ExperienceItem;
-  latest: boolean;
-  narrow: boolean;
-  highlight: boolean;
-}) {
-  const [expanded, setExpanded] = useState(false);
-  // Long cards collapse only on narrow screens.
-  const collapsible = narrow && job.bullets.length > COLLAPSED_BULLETS;
-  const bullets = collapsible && !expanded ? job.bullets.slice(0, COLLAPSED_BULLETS) : job.bullets;
-
-  return (
-    <li id={`exp-item-${job.id}`} className="relative scroll-mt-4 pb-5 last:pb-0">
-      <span
-        className={`absolute -left-[33px] top-5 size-4 rounded-full border-[3px] border-[var(--surface)] ${
-          latest ? "bg-accent ring-4 ring-[var(--accent-subtle)]" : "bg-[var(--gray-5)]"
-        }`}
-        aria-hidden="true"
-      />
-      <article
-        aria-labelledby={`exp-${job.id}`}
-        className={`rounded-card border p-4 transition-colors duration-emphasis ${
-          highlight
-            ? "border-accent bg-accent-soft"
-            : latest
-              ? "border-hairline bg-panel-2 shadow-resting"
-              : "border-transparent"
-        }`}
-      >
-        {latest && <p className="app-h2 mb-1 !text-accent-text">Most recent</p>}
-        <div className={`flex gap-x-4 gap-y-1 ${narrow ? "flex-col" : "items-baseline justify-between"}`}>
-          <h2 id={`exp-${job.id}`} className="text-callout font-bold leading-snug">
-            {job.role}
-            <span className="font-normal text-ink-3"> | </span>
-            {job.orgUrl ? (
-              <a className="text-link font-bold" href={job.orgUrl} target="_blank" rel="noopener noreferrer">
-                {job.org}
-                <span className="sr-only"> (opens in a new tab)</span>
-              </a>
-            ) : (
-              job.org
-            )}
-          </h2>
-          <p className="flex-none whitespace-nowrap text-footnote font-medium tabular text-ink-3">
-            {job.dates}
-            {job.location && <> · {job.location}</>}
-          </p>
-        </div>
-        {job.tagline && <p className="mt-1 italic text-ink-2">{job.tagline}</p>}
-        <ul className="bullets measure mt-2.5 text-ink-1">
-          {bullets.map((b) => (
-            <li key={b}>
-              <RichText text={b} links={job.links} />
-            </li>
-          ))}
-        </ul>
-        {collapsible && (
-          <button
-            type="button"
-            className="btn-ghost btn-sm -ml-3 mt-2"
-            aria-expanded={expanded}
-            onClick={() => setExpanded((e) => !e)}
-          >
-            {expanded ? "Show less" : `Show ${job.bullets.length - COLLAPSED_BULLETS} more`}
-            <span
-              className={`i-ph:caret-down-bold transition-transform duration-micro ${expanded ? "rotate-180" : ""}`}
-              aria-hidden="true"
-            />
-          </button>
-        )}
-      </article>
-    </li>
-  );
-}
+const internshipIds = new Set(portfolio.internships.map((r) => r.id));
 
 export default function Experience() {
-  const { width, params, nonce } = useAppHost();
-  const narrow = width < 600;
+  const { shell } = useAppHost();
+  const touch = shell !== "desktop";
   const rootRef = useRef<HTMLDivElement>(null);
-  const [highlight, setHighlight] = useState<string | null>(null);
+  const [showInterns, setShowInterns] = useState(false);
 
-  // Opening with { id } (Spotlight, AI) scrolls to that role and highlights it briefly.
-  useEffect(() => {
-    const id = params?.id;
-    if (typeof id !== "string") return;
-    const t = setTimeout(() => {
-      rootRef.current?.querySelector(`#exp-item-${id}`)?.scrollIntoView({ block: "start", behavior: "smooth" });
-      setHighlight(id);
-    }, 150);
-    const t2 = setTimeout(() => setHighlight(null), 2200);
-    return () => {
-      clearTimeout(t);
-      clearTimeout(t2);
-    };
-  }, [nonce]);
+  // A deep link to an internship opens the collapsed section first, then scrolls to it.
+  const highlight = useScrollTarget(rootRef, roleDomId, (id) => {
+    if (internshipIds.has(id)) setShowInterns(true);
+  });
 
   return (
     <div ref={rootRef} className="app-scroll">
-      <div className="mx-auto max-w-[800px] px-6 py-7 sm:px-9">
+      <div className={`mx-auto max-w-[800px] py-7 ${shell === "phone" ? "px-4" : "px-6 sm:px-9"}`}>
         <h1 className="app-h1">Experience</h1>
-        <ol className="relative ml-2 mt-6 border-l-2 border-hairline pl-6">
+
+        <ol className={`relative mt-6 border-l-2 border-hairline ${shell === "phone" ? "ml-1 pl-4" : "ml-2 pl-6"}`}>
           {portfolio.experience.map((job, i) => (
-            <Role key={job.id} job={job} latest={i === 0} narrow={narrow} highlight={highlight === job.id} />
+            <li key={job.id} className="relative pb-4 last:pb-0">
+              <span
+                className={`absolute top-5 size-3.5 rounded-full border-[3px] border-[var(--surface)] ${
+                  shell === "phone" ? "-left-[24px]" : "-left-[32px]"
+                } ${i === 0 ? "bg-accent" : "bg-[var(--gray-5)]"}`}
+                aria-hidden="true"
+              />
+              {i === 0 && <p className="app-h2 mb-1 !text-accent-text">Most recent</p>}
+              <RoleCard role={job} app="experience" featured={i === 0} highlight={highlight === job.id} />
+            </li>
           ))}
         </ol>
+
+        <section className="mt-8" aria-labelledby="exp-interns-toggle">
+          <button
+            id="exp-interns-toggle"
+            type="button"
+            aria-expanded={showInterns}
+            aria-controls="exp-interns"
+            className={`btn-secondary w-full justify-between ${touch ? "!h-11 active:scale-[.96]" : ""}`}
+            onClick={(e) => {
+              feedback("toggle", { el: e.currentTarget });
+              setShowInterns((v) => !v);
+            }}
+          >
+            <span className="font-semibold">Internships ({portfolio.internships.length})</span>
+            <span
+              className={`i-ph:caret-down-bold transition-transform duration-micro ${showInterns ? "rotate-180" : ""}`}
+              aria-hidden="true"
+            />
+          </button>
+          {showInterns && (
+            <div id="exp-interns" className="mt-3 grid gap-3">
+              {portfolio.internships.map((r) => (
+                <RoleCard key={r.id} role={r} app="experience" highlight={highlight === r.id} />
+              ))}
+            </div>
+          )}
+        </section>
       </div>
     </div>
   );

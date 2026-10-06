@@ -4,26 +4,40 @@ import { apps } from "~/configs/apps";
 import { getWallpaper } from "~/configs/wallpapers";
 import { DOCK_RESERVE, MENU_BAR_HEIGHT, storage } from "~/utils";
 import { hasEscapeHandlers } from "~/hooks/useEscape";
+import { feedback } from "~/sensory/feedback";
+import { useParallax } from "~/sensory/parallax";
+import Spotlight from "~/features/spotlight/Spotlight";
+import MenuBar from "./desktop/MenuBar";
+import DesktopIcons from "./desktop/DesktopIcons";
+import AppWindow from "./desktop/AppWindow";
+import FloatingPanel from "./desktop/FloatingPanel";
+import Dock from "./desktop/Dock";
+import Launchpad from "./desktop/Launchpad";
+import ShellContextMenu from "./desktop/ShellContextMenu";
+import Welcome from "./shared/Welcome";
+import HelpPanel from "./shared/HelpPanel";
+import Credits from "./shared/Credits";
+import OfflineNotice from "./shared/OfflineNotice";
+import Toast from "./shared/Toast";
+import { showStartHint } from "./shared/startHint";
 
 const isTyping = (el: Element | null) =>
   !!el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || (el as HTMLElement).isContentEditable);
 
-export default function Desktop() {
+export default function DesktopShell() {
   const windows = useStore((s) => s.windows);
-  const dark = useStore((s) => s.dark);
   const wallpaperId = useStore((s) => s.wallpaper);
   const overlay = useStore((s) => s.overlay);
   const setOverlay = useStore((s) => s.setOverlay);
-  const toggleOverlay = useStore((s) => s.toggleOverlay);
-  const closeFocused = useStore((s) => s.closeFocused);
-  const minimizeApp = useStore((s) => s.minimizeApp);
   const openApp = useStore((s) => s.openApp);
-  const setDockHint = useStore((s) => s.setDockHint);
   const revealed = useStore((s) => s.revealed);
   const setContextMenu = useStore((s) => s.setContextMenu);
+  const reduced = useReducedMotion();
 
   const deepLinked = useShellSetup();
   const wallpaper = getWallpaper(wallpaperId);
+  const wallpaperRef = useRef<HTMLDivElement>(null);
+  useParallax(wallpaperRef, { max: 4, source: "mouse" });
 
   // First visit: welcome card 300ms after the desktop reveal finishes (not for deep links).
   useEffect(() => {
@@ -36,69 +50,84 @@ export default function Desktop() {
     return () => clearTimeout(t);
   }, [revealed]);
 
-  const finishWelcome = () => {
+  useEffect(() => {
+    if (overlay === "spotlight") feedback("spotlight");
+  }, [overlay]);
+
+  const dismissWelcome = () => {
     storage.set("welcomed", "1");
     setOverlay(null);
+  };
+  const finishWelcome = () => {
+    dismissWelcome();
     openApp("about");
-    if (storage.get("hintShown") === "1") return;
-    storage.set("hintShown", "1");
-    // One-time "Start here" ring on the Projects dock icon; cleared by the next app launch.
-    const startCount = useStore.getState().openCount;
-    setTimeout(() => setDockHint("projects"), 700);
-    const unsub = useStore.subscribe((s) => {
-      if (s.openCount > startCount) {
-        setDockHint(null);
-        unsub();
-      }
-    });
-    setTimeout(() => {
-      setDockHint(null);
-      unsub();
-    }, 7000);
+    showStartHint("projects");
   };
 
   // Global shortcuts. Escape closes the front window when nothing else (menu, dialog,
-  // viewer) has claimed it. ⌘W / Ctrl+W can't be intercepted by web pages, so it isn't used.
+  // viewer) has claimed it. ⌘W / Ctrl+W also closes it where the browser allows.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (!useStore.getState().revealed) return; // boot screen handles keys itself
+      const state = useStore.getState();
+      if (!state.revealed) return; // the boot screen handles keys itself
       const mod = e.metaKey || e.ctrlKey;
-      if (mod && e.key.toLowerCase() === "k") {
+      const key = e.key.toLowerCase();
+      if (mod && key === "k") {
         e.preventDefault();
-        toggleOverlay("spotlight");
-      } else if (mod && e.key.toLowerCase() === "m") {
-        const id = useStore.getState().focusedId;
-        if (id) {
+        state.toggleOverlay("spotlight");
+      } else if (mod && key === "m") {
+        if (state.focusedId) {
           e.preventDefault();
-          minimizeApp(id);
+          state.minimizeApp(state.focusedId);
+        }
+      } else if (mod && key === "w") {
+        if (state.focusedId) {
+          e.preventDefault();
+          state.closeApp(state.focusedId);
         }
       } else if (e.key === "?" && !mod && !isTyping(document.activeElement) && !hasEscapeHandlers()) {
         e.preventDefault();
+        feedback("tap");
         setOverlay("help");
       } else if (e.key === "Escape" && !e.defaultPrevented && !hasEscapeHandlers()) {
-        closeFocused();
+        state.closeFocused();
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  const closeOverlay = () => setOverlay(null);
+  const closeOverlay = () => {
+    feedback("close");
+    setOverlay(null);
+  };
 
   return (
-    <motion.div
+    <div
       className="fixed inset-0 overflow-hidden"
-      style={{ background: wallpaper.background }}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: revealed ? 1 : 0 }}
-      transition={{ duration: duration.emphasis, ease: ease.standard }}
       onContextMenu={(e) => {
         // Only the bare desktop: windows, menus and the dock keep their own behaviour.
         if ((e.target as HTMLElement).closest(".window, header, nav, [role=dialog], [role=menu]")) return;
         e.preventDefault();
+        feedback("tap");
         setContextMenu({ kind: "desktop", x: e.clientX, y: e.clientY });
       }}
     >
+      {/* Reveal: wallpaper fades in → menu bar slides down → dock rises (< 700ms in total). */}
+      <motion.div
+        className="pointer-events-none absolute inset-0"
+        aria-hidden="true"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: revealed ? 1 : 0 }}
+        transition={{ duration: reduced ? duration.standard : duration.emphasis, ease: ease.standard }}
+      >
+        <div
+          ref={wallpaperRef}
+          className="absolute -inset-2 will-change-transform"
+          style={{ background: wallpaper.background }}
+        />
+      </motion.div>
+
       <a
         href="/quick"
         className="sr-only z-[300] rounded-button bg-accent px-4 py-2 font-semibold text-on-accent focus:not-sr-only focus:fixed focus:left-3 focus:top-10"
@@ -135,16 +164,16 @@ export default function Desktop() {
       <Dock />
 
       <AnimatePresence>
-        {overlay === "welcome" && <Welcome key="welcome" onStart={finishWelcome} />}
+        {overlay === "welcome" && <Welcome key="welcome" onStart={finishWelcome} onDismiss={dismissWelcome} />}
         {overlay === "help" && <HelpPanel key="help" onClose={closeOverlay} />}
         {overlay === "credits" && <Credits key="credits" onClose={closeOverlay} />}
-        {overlay === "spotlight" && <Spotlight key="spotlight" onClose={closeOverlay} />}
+        {overlay === "spotlight" && <Spotlight key="spotlight" onClose={() => setOverlay(null)} shell="desktop" />}
         {overlay === "launchpad" && <Launchpad key="launchpad" onClose={closeOverlay} />}
       </AnimatePresence>
 
       <ShellContextMenu />
       <OfflineNotice />
       <Toast />
-    </motion.div>
+    </div>
   );
 }

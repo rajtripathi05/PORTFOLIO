@@ -14,7 +14,8 @@ export default function AchievementBadges({ a }: { a: Achievement }) {
         </span>
       )}
       {a.prize && (
-        <span className="rounded-full border border-hairline bg-panel px-2.5 py-0.5 text-footnote font-bold tabular-nums">
+        <span className="hstack gap-1 rounded-full bg-accent-soft px-2.5 py-0.5 text-footnote font-bold tabular-nums text-accent-text">
+          <span className="i-ph:medal-bold text-[13px]" aria-hidden="true" />
           {a.prize}
         </span>
       )}

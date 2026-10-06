@@ -1,7 +1,9 @@
 import React, { lazy, Suspense } from "react";
 import { createRoot, hydrateRoot } from "react-dom/client";
-import Boot from "~/pages/Boot";
-import { MOBILE_BREAKPOINT, storage } from "~/utils";
+import { resolveShell, useShellKind } from "~/shells/device";
+import { initSensory } from "~/sensory";
+import { TourLayer } from "~/features/tour";
+import { storage } from "~/utils/storage";
 
 import "@fontsource-variable/inter";
 import "@unocss/reset/tailwind.css";
@@ -10,34 +12,50 @@ import "~/styles/index.css";
 
 const route = window.location.pathname.replace(/\/+$/, "") || "/";
 const isQuickView = route === "/quick";
-// Route-level code splitting: each route downloads only what it needs.
-const Desktop = lazy(() => import("~/pages/Desktop"));
-const MobileHome = lazy(() => import("~/pages/MobileHome"));
+
+// Each shell is its own chunk, so a phone never downloads the window manager.
+const DesktopShell = lazy(() => import("~/shells/DesktopShell"));
+const TabletShell = lazy(() => import("~/shells/TabletShell"));
+const PhoneShell = lazy(() => import("~/shells/PhoneShell"));
+const Boot = lazy(() => import("~/shells/desktop/Boot"));
 const Styleguide = lazy(() => import("~/pages/Styleguide"));
 const NotFound = lazy(() => import("~/pages/NotFound"));
 
 export default function App() {
-  // Returning visitors skip the intro entirely.
-  const [booted, setBooted] = useState(() => storage.get("seenIntro") === "1");
+  const viewAs = useStore((s) => s.viewAs);
+  const shell = useShellKind(viewAs);
   const setRevealed = useStore((s) => s.setRevealed);
-  const { winWidth } = useWindowSize();
+  // The boot screen plays once, on a first visit that lands on the desktop shell.
+  const [booting, setBooting] = useState(
+    () => storage.get("seenIntro") !== "1" && resolveShell(useStore.getState().viewAs) === "desktop"
+  );
+  const showBoot = booting && shell === "desktop";
+
+  useLayoutEffect(() => {
+    document.documentElement.dataset.shell = shell;
+  }, [shell]);
 
   useEffect(() => {
-    if (booted) setRevealed(true);
-  }, [booted]);
+    if (!showBoot) setRevealed(true);
+  }, [showBoot]);
 
-  // The shell mounts underneath the boot screen, so it is fully ready when boot fades out.
+  const finishBoot = () => {
+    storage.set("seenIntro", "1");
+    setBooting(false);
+  };
+
+  // The shell mounts underneath the boot screen, so it is ready when boot fades out.
   return (
     <>
-      <Suspense fallback={null}>{winWidth < MOBILE_BREAKPOINT ? <MobileHome /> : <Desktop />}</Suspense>
-      {!booted && (
-        <Boot
-          onDone={() => {
-            storage.set("seenIntro", "1");
-            setBooted(true);
-          }}
-        />
+      <Suspense fallback={null}>
+        {shell === "desktop" ? <DesktopShell /> : shell === "tablet" ? <TabletShell /> : <PhoneShell />}
+      </Suspense>
+      {showBoot && (
+        <Suspense fallback={<div className="fixed inset-0 z-[500] bg-[var(--boot-bg)]" aria-hidden="true" />}>
+          <Boot onDone={finishBoot} />
+        </Suspense>
       )}
+      <TourLayer />
     </>
   );
 }
@@ -69,6 +87,7 @@ if (isQuickView) {
     </Suspense>
   );
 } else {
+  initSensory();
   createRoot(rootElement).render(
     <React.StrictMode>
       <App />

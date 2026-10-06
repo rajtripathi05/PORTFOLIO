@@ -4,8 +4,8 @@
     "srcSm": "/previews/nsu-sm.webp",
     "width": 960,
     "height": 600,
-    "color": "#e8f8f8",
-    "url": "https://indiaglycolsnsu.netlify.app/"
+    "color": "#f8f8f8",
+    "url": "https://datadrivenplant.netlify.app/"
   },
   "tbdos": {
     "src": "/previews/tbdos.webp",
@@ -38,5 +38,13 @@
     "height": 600,
     "color": "#281818",
     "url": "https://fmcgai.netlify.app/"
+  },
+  "meshcraft": {
+    "src": "/previews/meshcraft.webp",
+    "srcSm": "/previews/meshcraft-sm.webp",
+    "width": 960,
+    "height": 600,
+    "color": "#485858",
+    "url": "https://www.meshcraftassets.com/"
   }
 }
