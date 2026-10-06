@@ -1,14 +1,14 @@
 import type { StateCreator } from "zustand";
-import type { AppId } from "~/configs/apps";
-import { haptic } from "~/lib/haptics";
+import type { AppId, AppParams } from "~/types";
+import { feedback } from "~/sensory/feedback";
 
 export interface WindowState {
   open: boolean;
   min: boolean;
   max: boolean;
   z: number;
-  /** App-specific data, e.g. { id: "nsu" } to select a project. */
-  payload?: Record<string, unknown>;
+  /** Open params, e.g. { id: "nsu" } to select a project. */
+  params?: AppParams;
   /** Increments on every openApp call so apps can react to repeated opens. */
   nonce: number;
   /** Order in which the window was opened, used for cascading positions. */
@@ -22,7 +22,7 @@ export interface WindowsSlice {
   focusedId: AppId | null;
   topZ: number;
   openCount: number;
-  openApp: (id: AppId, payload?: Record<string, unknown>) => void;
+  openApp: (id: AppId, params?: AppParams) => void;
   closeApp: (id: AppId) => void;
   minimizeApp: (id: AppId) => void;
   toggleMaxApp: (id: AppId) => void;
@@ -52,12 +52,12 @@ export const createWindowsSlice: StateCreator<WindowsSlice> = (set, get) => ({
   topZ: 10,
   openCount: 0,
 
-  openApp: (id, payload) =>
+  openApp: (id, params) =>
     set((state) => {
       const prev = state.windows[id];
       const z = state.topZ + 1;
       const wasOpen = !!prev?.open;
-      haptic(wasOpen ? "tap" : "open");
+      feedback(wasOpen ? "tap" : "open");
       return {
         topZ: z,
         focusedId: id,
@@ -69,7 +69,7 @@ export const createWindowsSlice: StateCreator<WindowsSlice> = (set, get) => ({
             min: false,
             max: prev?.open ? prev.max : false,
             z,
-            payload: payload ?? (wasOpen ? prev?.payload : undefined),
+            params: params ?? (wasOpen ? prev?.params : undefined),
             nonce: (prev?.nonce ?? 0) + 1,
             order: wasOpen ? prev!.order : state.openCount,
             launches: (prev?.launches ?? 0) + (wasOpen ? 0 : 1)
@@ -82,7 +82,7 @@ export const createWindowsSlice: StateCreator<WindowsSlice> = (set, get) => ({
     set((state) => {
       const prev = state.windows[id];
       if (!prev) return {};
-      haptic("close");
+      feedback("close");
       const windows = { ...state.windows, [id]: { ...prev, open: false, min: false, max: false } };
       return { windows, focusedId: topVisible(windows) };
     }),
@@ -91,7 +91,7 @@ export const createWindowsSlice: StateCreator<WindowsSlice> = (set, get) => ({
     set((state) => {
       const prev = state.windows[id];
       if (!prev) return {};
-      haptic("tap");
+      feedback("minimize");
       const windows = { ...state.windows, [id]: { ...prev, min: true } };
       return { windows, focusedId: topVisible(windows) };
     }),

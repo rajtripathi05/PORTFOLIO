@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { copyText } from "~/utils";
-import { haptic } from "~/lib/haptics";
+import { feedback } from "~/sensory/feedback";
 import { duration, ease } from "~/styles/motion";
 
 interface CopyButtonProps {
@@ -29,7 +29,7 @@ export default function CopyButton({
   const onClick = async () => {
     const ok = await copyText(text);
     setState(ok ? "copied" : "failed");
-    if (ok) haptic("success");
+    feedback(ok ? "success" : "error");
     clearTimeout(timer.current);
     timer.current = setTimeout(() => setState("idle"), 1800);
   };

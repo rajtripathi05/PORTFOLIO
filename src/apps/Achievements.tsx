@@ -1,10 +1,9 @@
 import type React from "react";
 import { portfolio, type Achievement } from "~/data/portfolio";
 import { coverFor, mediaFor, mediaSummary, otherHighlights, type MediaItem } from "~/data/media";
-import { useWindow } from "~/components/window/WindowContext";
+import { useAppHost } from "~/shells/host";
 import { deepLinkUrl } from "~/utils";
-import { haptic } from "~/lib/haptics";
-import { playAchievementMotif } from "~/lib/sound";
+import { feedback } from "~/sensory/feedback";
 
 interface Album {
   id: string;
@@ -70,11 +69,8 @@ const AlbumView = ({ album, onBack, wide }: { album: Album; onBack: () => void; 
   const [open, setOpen] = useState<number | null>(null);
   const a = album.achievement;
 
-  // A little celebration when an award opens: a soft haptic pulse, and — only if the
-  // visitor turned ambient music on — a short motif tuned to this achievement.
   useEffect(() => {
-    haptic("achievement");
-    playAchievementMotif(album.id);
+    feedback("open");
   }, [album.id]);
 
   return (
@@ -184,12 +180,12 @@ const AlbumCard = ({ album, onOpen }: { album: Album; onOpen: () => void }) => {
 };
 
 export default function Achievements() {
-  const { width, payload, nonce } = useWindow();
+  const { width, params, nonce } = useAppHost();
   const [selected, setSelected] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const id = payload?.id;
+    const id = params?.id;
     if (typeof id === "string" && albums.some((a) => a.id === id)) setSelected(id);
   }, [nonce]);
 

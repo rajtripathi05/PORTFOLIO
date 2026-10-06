@@ -1,7 +1,7 @@
 import type React from "react";
 import { mustOpenInNewTab, portfolio, type Project } from "~/data/portfolio";
 import { previewFor } from "~/data/previews";
-import { useWindow } from "~/components/window/WindowContext";
+import { useAppHost } from "~/shells/host";
 import { deepLinkUrl, openInNewTab } from "~/utils";
 
 const projects = portfolio.projects;
@@ -55,14 +55,14 @@ const PreviewCard = ({ project, onOpen }: { project: Project; onOpen: (url: stri
 };
 
 export default function Projects() {
-  const { width, payload, nonce } = useWindow();
+  const { width, params, nonce } = useAppHost();
   const openApp = useStore((s) => s.openApp);
   const [selected, setSelected] = useState(projects[0].id);
   const articleRef = useRef<HTMLElement>(null);
 
   // Opening with { id } (from Spotlight, the AI assistant, deep links…) selects that project.
   useEffect(() => {
-    const id = payload?.id;
+    const id = params?.id;
     if (typeof id === "string" && projects.some((p) => p.id === id)) setSelected(id);
   }, [nonce]);
 

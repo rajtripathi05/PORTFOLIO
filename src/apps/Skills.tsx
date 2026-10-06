@@ -1,5 +1,5 @@
 import { portfolio } from "~/data/portfolio";
-import { useWindow } from "~/components/window/WindowContext";
+import { useAppHost } from "~/shells/host";
 
 const groupIcons: Record<string, string> = {
   Programming: "i-ph:code-bold",
@@ -17,12 +17,12 @@ const catStyle = (i: number) => ({
 });
 
 export default function Skills() {
-  const { width, payload, nonce } = useWindow();
+  const { width, params, nonce } = useAppHost();
   const [filter, setFilter] = useState("");
 
   // Spotlight opens Skills with { q: "Power BI" } to pre-fill the filter.
   useEffect(() => {
-    if (typeof payload?.q === "string") setFilter(payload.q);
+    if (typeof params?.q === "string") setFilter(params.q);
   }, [nonce]);
 
   const q = filter.trim().toLowerCase();

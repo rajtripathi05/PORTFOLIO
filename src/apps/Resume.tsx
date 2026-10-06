@@ -1,5 +1,5 @@
 import { portfolio } from "~/data/portfolio";
-import { useWindow } from "~/components/window/WindowContext";
+import { useAppHost } from "~/shells/host";
 import { isTouchDevice } from "~/utils";
 
 const { resumePdf, name } = portfolio.identity;
@@ -10,7 +10,8 @@ const ZOOMS = [75, 100, 125, 150, 200];
 const canEmbedPdf = () => !isTouchDevice() && !/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
 export default function Resume() {
-  const { mobile } = useWindow();
+  const { shell } = useAppHost();
+  const mobile = shell !== "desktop";
   const embed = !mobile && canEmbedPdf();
   // null = fit to width
   const [zoom, setZoom] = useState<number | null>(null);

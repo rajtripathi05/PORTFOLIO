@@ -138,6 +138,18 @@ button:disabled {
 .tile-launchpad {
   background: linear-gradient(180deg, var(--icon-launchpad-1), var(--icon-launchpad-2));
 }
+.tile-research {
+  background: linear-gradient(180deg, var(--icon-research-1), var(--icon-research-2));
+}
+.tile-leadership {
+  background: linear-gradient(180deg, var(--icon-leadership-1), var(--icon-leadership-2));
+}
+.tile-certifications {
+  background: linear-gradient(180deg, var(--icon-certifications-1), var(--icon-certifications-2));
+}
+.tile-settings {
+  background: linear-gradient(180deg, var(--icon-settings-1), var(--icon-settings-2));
+}
 
 /* Labels drawn directly on media (Launchpad over a blurred scrim). */
 .label-on-media {

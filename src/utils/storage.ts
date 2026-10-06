@@ -15,5 +15,18 @@ export const storage = {
     } catch {
       /* ignore */
     }
+  },
+  remove(key: string): void {
+    try {
+      window.localStorage.removeItem(PREFIX + key);
+    } catch {
+      /* ignore */
+    }
   }
 };
+
+/** Keys that make the boot screen, welcome card and "Start here" hint show only once. */
+export const INTRO_KEYS = ["seenIntro", "welcomed", "hintShown"] as const;
+
+/** Settings → "Reset intro": the next load plays the intro again. */
+export const resetIntro = (): void => INTRO_KEYS.forEach((k) => storage.remove(k));

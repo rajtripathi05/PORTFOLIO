@@ -1,5 +1,5 @@
 import { portfolio, type ExperienceItem } from "~/data/portfolio";
-import { useWindow } from "~/components/window/WindowContext";
+import { useAppHost } from "~/shells/host";
 
 const COLLAPSED_BULLETS = 3;
 
@@ -84,14 +84,14 @@ function Role({
 }
 
 export default function Experience() {
-  const { width, payload, nonce } = useWindow();
+  const { width, params, nonce } = useAppHost();
   const narrow = width < 600;
   const rootRef = useRef<HTMLDivElement>(null);
   const [highlight, setHighlight] = useState<string | null>(null);
 
   // Opening with { id } (Spotlight, AI) scrolls to that role and highlights it briefly.
   useEffect(() => {
-    const id = payload?.id;
+    const id = params?.id;
     if (typeof id !== "string") return;
     const t = setTimeout(() => {
       rootRef.current?.querySelector(`#exp-item-${id}`)?.scrollIntoView({ block: "start", behavior: "smooth" });

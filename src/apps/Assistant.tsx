@@ -1,7 +1,7 @@
 import type React from "react";
 import { actionLabel, MAX_USER_CHARS, type AssistantAction } from "~/data/assistant";
 import { askAssistant, type ChatMessage } from "~/lib/askAssistant";
-import { useWindow } from "~/components/window/WindowContext";
+import { useAppHost } from "~/shells/host";
 
 const STORAGE_KEY = "rt-portfolio:chat";
 
@@ -56,7 +56,8 @@ const suggestionsFor = (msgs: ChatMessage[]): string[] => {
 };
 
 export default function Assistant() {
-  const { mobile } = useWindow();
+  const { shell } = useAppHost();
+  const mobile = shell !== "desktop";
   const openApp = useStore((s) => s.openApp);
   const [messages, setMessages] = useState<ChatMessage[]>(loadChat);
   const [input, setInput] = useState("");

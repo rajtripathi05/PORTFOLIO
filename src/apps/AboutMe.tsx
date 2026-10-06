@@ -1,5 +1,5 @@
 import { portfolio } from "~/data/portfolio";
-import { useWindow } from "~/components/window/WindowContext";
+import { useAppHost } from "~/shells/host";
 import type { AppId } from "~/configs/apps";
 
 const { identity, summary, education, stats, achievements } = portfolio;
@@ -19,7 +19,7 @@ const explore: { id: AppId; label: string; icon: string }[] = [
 ];
 
 export default function AboutMe() {
-  const { width } = useWindow();
+  const { width } = useAppHost();
   const openApp = useStore((s) => s.openApp);
   const narrow = width < 620;
 

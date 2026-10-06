@@ -1,7 +1,7 @@
 import type React from "react";
 import { liveProjectLinks, mustOpenInNewTab, portfolio, safeHost } from "~/data/portfolio";
 import { previewForUrl } from "~/data/previews";
-import { useWindow } from "~/components/window/WindowContext";
+import { useAppHost } from "~/shells/host";
 import { openInNewTab } from "~/utils";
 
 // Browsers can't reliably tell from JS whether a site refused to be framed, so if the
@@ -122,7 +122,7 @@ const NewTabOnly = ({ url }: { url: string }) => (
 );
 
 export default function Safari() {
-  const { width, payload, nonce } = useWindow();
+  const { width, params, nonce } = useAppHost();
   const [history, setHistory] = useState<string[]>([]);
   const [index, setIndex] = useState(-1);
   const [reloadKey, setReloadKey] = useState(0);
@@ -143,7 +143,7 @@ export default function Safari() {
 
   // Opening Safari with { url } (from Projects, Spotlight, the assistant) loads it.
   useEffect(() => {
-    const target = payload?.url;
+    const target = params?.url;
     if (typeof target === "string" && target !== url) navigate(target);
   }, [nonce]);
 
