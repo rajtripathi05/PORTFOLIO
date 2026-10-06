@@ -108,6 +108,17 @@ function ZoomableImage({
 /** Poster frame with a custom play button; the video only loads/plays after a click (never autoplays on open). */
 function VideoPlayer({ item, label }: { item: MediaItem; label: string }) {
   const [playing, setPlaying] = useState(false);
+  const [failed, setFailed] = useState(false);
+  if (failed)
+    return (
+      <div className="text-center" role="alert">
+        <span className="i-ph:video-camera-slash-duotone text-[56px]" aria-hidden="true" />
+        <p className="mt-2 font-semibold">This video couldn't play here.</p>
+        <a className="btn-media btn-lg mt-4" href={item.src} target="_blank" rel="noopener noreferrer">
+          Open the video file ↗
+        </a>
+      </div>
+    );
   if (playing)
     return (
       <video
@@ -116,6 +127,7 @@ function VideoPlayer({ item, label }: { item: MediaItem; label: string }) {
         controls
         autoPlay
         playsInline
+        onError={() => setFailed(true)}
         className="max-h-full max-w-full rounded-sm bg-[var(--media-bg)]"
         aria-label={label}
       />

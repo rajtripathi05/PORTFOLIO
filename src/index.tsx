@@ -4,6 +4,7 @@ import Desktop from "~/pages/Desktop";
 import Boot from "~/pages/Boot";
 import MobileHome from "~/pages/MobileHome";
 import QuickView from "~/pages/QuickView";
+import NotFound from "~/pages/NotFound";
 import { MOBILE_BREAKPOINT, storage } from "~/utils";
 
 import "@fontsource-variable/inter";
@@ -53,6 +54,8 @@ if (isQuickView) {
   // The build pre-renders Quick View into the HTML; hydrate it when present.
   if (rootElement.hasChildNodes()) hydrateRoot(rootElement, app);
   else createRoot(rootElement).render(app);
+} else if (!["/", "/index.html", "/styleguide"].includes(route)) {
+  createRoot(rootElement).render(<NotFound />);
 } else if (route === "/styleguide") {
   createRoot(rootElement).render(
     <Suspense fallback={null}>

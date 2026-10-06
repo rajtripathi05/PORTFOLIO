@@ -13,6 +13,7 @@ interface LazyImageProps {
 /** Lazy image with blur-up: dominant colour → blurred preview → sharp image (no layout shift). */
 export default function LazyImage({ src, alt, width, height, color, blur, contain, className = "" }: LazyImageProps) {
   const [loaded, setLoaded] = useState(false);
+  const [failed, setFailed] = useState(false);
   const fit = contain ? "object-contain" : "object-cover";
   return (
     <span className={`relative block overflow-hidden ${className}`} style={{ backgroundColor: color ?? "var(--surface-3)" }}>
@@ -36,10 +37,17 @@ export default function LazyImage({ src, alt, width, height, color, blur, contai
         loading="lazy"
         decoding="async"
         onLoad={() => setLoaded(true)}
+        onError={() => setFailed(true)}
         className={`relative size-full ${fit} transition-opacity duration-emphasis ease-standard ${
           loaded ? "opacity-100" : "opacity-0"
         }`}
       />
+      {failed && (
+        <span className="absolute inset-0 flex-center flex-col gap-1 bg-panel-3 text-caption text-ink-3" role="img" aria-label={alt || "Image unavailable"}>
+          <span className="i-ph:image-broken-duotone text-[28px]" aria-hidden="true" />
+          Image unavailable
+        </span>
+      )}
     </span>
   );
 }

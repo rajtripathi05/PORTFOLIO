@@ -24,4 +24,11 @@ await fs.mkdir(path.join(DIST, "quick"), { recursive: true });
 await fs.writeFile(path.join(DIST, "quick", "index.html"), page);
 // Also /quick.html, so hosts that map /quick → quick.html serve the pre-rendered page too.
 await fs.writeFile(path.join(DIST, "quick.html"), page);
+// Netlify serves dist/404.html (with a 404 status) for unknown URLs; the app renders NotFound there.
+await fs.writeFile(
+  path.join(DIST, "404.html"),
+  template
+    .replace(/<title>.*?<\/title>/, "<title>Page not found — Raj Tripathi</title>")
+    .replace("</head>", '  <meta name="robots" content="noindex" />\n  </head>')
+);
 console.log(`[prerender] dist/quick/index.html (${(page.length / 1024).toFixed(1)} KB)`);

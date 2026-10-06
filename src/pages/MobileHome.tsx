@@ -127,6 +127,7 @@ export default function MobileHome() {
       </nav>
 
       <AnimatePresence>{top && <MobileSheet key={top.id} app={top} />}</AnimatePresence>
+      <OfflineNotice />
       <Toast />
     </div>
   );

@@ -14,6 +14,7 @@ export default function Resume() {
   const embed = !mobile && canEmbedPdf();
   // null = fit to width
   const [zoom, setZoom] = useState<number | null>(null);
+  const [pdfLoaded, setPdfLoaded] = useState(false);
 
   const step = (dir: 1 | -1) => {
     const current = zoom ?? 100;
@@ -71,12 +72,28 @@ export default function Resume() {
       </div>
 
       {embed ? (
-        <iframe
-          key={src}
-          title={`${name} — resume (PDF)`}
-          src={src}
-          className="min-h-0 w-full flex-1 bg-panel-3"
-        />
+        <div className="relative min-h-0 flex-1">
+          <iframe
+            key={src}
+            title={`${name} — resume (PDF)`}
+            src={src}
+            onLoad={() => setPdfLoaded(true)}
+            className="size-full bg-panel-3"
+          />
+          {!pdfLoaded && (
+            <div className="absolute inset-0 flex justify-center bg-panel-3 p-8" aria-busy="true" aria-label="Loading the resume">
+              <div className="w-full max-w-[560px] space-y-3 rounded-sm bg-panel p-8 shadow-raised">
+                <div className="skeleton h-7 w-1/2" />
+                <div className="skeleton h-3 w-2/3" />
+                <div className="skeleton mt-6 h-3 w-full" />
+                <div className="skeleton h-3 w-11/12" />
+                <div className="skeleton h-3 w-4/5" />
+                <div className="skeleton mt-6 h-3 w-full" />
+                <div className="skeleton h-3 w-10/12" />
+              </div>
+            </div>
+          )}
+        </div>
       ) : (
         <div className="app-scroll flex-1">
           <div className="mx-auto flex max-w-[420px] flex-col items-center px-6 py-10 text-center">

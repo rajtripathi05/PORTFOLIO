@@ -143,6 +143,7 @@ export default function Desktop() {
       </AnimatePresence>
 
       <ShellContextMenu />
+      <OfflineNotice />
       <Toast />
     </motion.div>
   );

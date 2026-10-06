@@ -28,6 +28,7 @@ declare global {
   const MenuList: typeof import('./components/menus/Menu')['MenuList']
   const MobileSheet: typeof import('./components/window/MobileSheet')['default']
   const Monogram: typeof import('./components/Monogram')['default']
+  const OfflineNotice: typeof import('./components/ui/OfflineNotice')['default']
   const ProjectLinks: typeof import('./components/ProjectLinks')['default']
   const RichText: typeof import('./components/ui/RichText')['default']
   const ShellContextMenu: typeof import('./components/menus/ShellContextMenu')['default']

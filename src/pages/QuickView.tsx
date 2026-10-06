@@ -392,6 +392,8 @@ export default function QuickView() {
         </p>
       </footer>
 
+      <OfflineNotice />
+
       {viewer && (
         <Lightbox
           title={viewer.title}
