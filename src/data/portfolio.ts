@@ -285,9 +285,9 @@ const projects: Project[] = [
     title: "IGL Digital Safety & Compliance Ecosystem",
     descriptor: "HSE, RCA, BBS & Training",
     subLinks: [
-      { label: "HSE Portal", url: "TODO_HSE_URL" },
-      { label: "RCA Studio", url: "TODO_RCA_URL" },
-      { label: "BBS", url: "TODO_BBS_URL" },
+      { label: "RCA Studio", url: "https://iglrca.netlify.app/" },
+      { label: "HSE Portal", url: "https://iglsafetymanagementsystem.netlify.app/" },
+      { label: "BBS", url: "https://iglbbs.netlify.app/" },
       { label: "Training", url: "https://igltraining.netlify.app/" }
     ],
     tags: ["Workflow Digitization", "RCA/CAPA", "Dashboards", "AI-assisted"],
@@ -510,7 +510,7 @@ export const portfolio: PortfolioData = {
  * They always open in a new tab. Once you allow this portfolio's domain in their
  * headers, delete the host here and they'll open inside Safari again.
  */
-export const noEmbedHosts: string[] = ["igltraining.netlify.app", "fmcgai.netlify.app"];
+export const noEmbedHosts: string[] = ["igltraining.netlify.app", "fmcgai.netlify.app", "iglrca.netlify.app", "iglbbs.netlify.app"];
 
 /* ---------------------------------------------------------------- helpers */
 
