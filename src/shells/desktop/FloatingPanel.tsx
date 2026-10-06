@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { motion } from "framer-motion";
 import type { AppDef } from "~/configs/apps";
 import { DOCK_RESERVE, MENU_BAR_HEIGHT } from "~/utils";
-import { WindowContext } from "./WindowContext";
+import { AppHostContext } from "../host";
 import { fadeFast, spring } from "~/styles/motion";
 
 // Siri-style panel pinned under the menu bar (used by "Ask Raj's AI").
@@ -67,11 +67,13 @@ export default function FloatingPanel({ app }: { app: AppDef }) {
         </h2>
       </header>
       <div className="window-body">
-        <WindowContext.Provider value={{ id: app.id, width, payload: win.payload, nonce: win.nonce, mobile: false }}>
+        <AppHostContext.Provider
+          value={{ id: app.id, shell: "desktop", width, params: win.params, nonce: win.nonce, close: () => closeApp(app.id) }}
+        >
           <Suspense fallback={<AppSkeleton />}>
             <Content />
           </Suspense>
-        </WindowContext.Provider>
+        </AppHostContext.Provider>
       </div>
     </motion.section>
   );

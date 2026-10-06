@@ -2,6 +2,7 @@ import { apps, type AppId } from "~/configs/apps";
 import { wallpapers } from "~/configs/wallpapers";
 import { copyText, deepLinkUrl } from "~/utils";
 import type { MenuEntry } from "./Menu";
+import ContextMenu from "./ContextMenu";
 
 // Quick View section that matches each app (for "Open in Quick View").
 const quickSection: Partial<Record<AppId, string>> = {

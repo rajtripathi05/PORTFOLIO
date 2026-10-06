@@ -54,7 +54,7 @@ export const searchIndex: SearchItem[] = [
     group: "Experience" as const,
     title: `${e.role} — ${e.org}`,
     subtitle: e.dates,
-    body: [e.tagline, ...e.bullets].filter(Boolean).join(" "),
+    body: [...(e.taglines ?? []), ...e.bullets].filter(Boolean).join(" "),
     app: "experience" as const,
     payload: { id: e.id },
     icon: "i-ph:briefcase-fill"

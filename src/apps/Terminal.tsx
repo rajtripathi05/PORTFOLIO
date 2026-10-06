@@ -71,7 +71,11 @@ const outputs: Record<string, () => React.ReactNode> = {
               {e.location ? `, ${e.location}` : ""})
             </span>
           </p>
-          {e.tagline && <p className={C.dim}>{e.tagline}</p>}
+          {e.taglines?.map((t) => (
+            <p key={t} className={C.dim}>
+              {t}
+            </p>
+          ))}
           {e.bullets.map((b) => (
             <p key={b} className="pl-3">
               <span className={C.ok}>•</span> {b}

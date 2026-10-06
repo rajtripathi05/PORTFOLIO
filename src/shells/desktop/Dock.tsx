@@ -3,6 +3,7 @@ import { motion, useMotionValue } from "framer-motion";
 import { duration, ease } from "~/styles/motion";
 import { apps, launchpadIcon } from "~/configs/apps";
 import { isTouchDevice } from "~/utils";
+import DockItem from "./DockItem";
 
 export default function Dock() {
   const windows = useStore((s) => s.windows);

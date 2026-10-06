@@ -4,8 +4,9 @@ import { duration, ease } from "~/styles/motion";
 import { portfolio } from "~/data/portfolio";
 import { wallpapers } from "~/configs/wallpapers";
 import { MENU_BAR_HEIGHT, shortcutLabel } from "~/utils";
-import type { MenuEntry } from "./Menu";
+import Menu, { type MenuEntry } from "./Menu";
 import { hapticsSupported } from "~/sensory/haptics";
+import { useSensory } from "~/sensory";
 
 export const downloadResume = () => {
   const a = document.createElement("a");
@@ -26,10 +27,14 @@ export default function MenuBar() {
   const toggleDark = useStore((s) => s.toggleDark);
   const wallpaper = useStore((s) => s.wallpaper);
   const setWallpaper = useStore((s) => s.setWallpaper);
-  const sound = useStore((s) => s.sound);
-  const toggleSound = useStore((s) => s.toggleSound);
-  const haptics = useStore((s) => s.haptics);
-  const toggleHaptics = useStore((s) => s.toggleHaptics);
+  const muted = useSensory((s) => s.muted);
+  const ambient = useSensory((s) => s.ambient);
+  const haptics = useSensory((s) => s.haptics);
+  const toggleMute = useSensory((s) => s.toggleMute);
+  const setPrefs = useSensory((s) => s.setPrefs);
+  const sound = ambient && !muted;
+  const toggleSound = () => setPrefs(sound ? { ambient: false } : { ambient: true, muted: false });
+  const toggleHaptics = () => setPrefs({ haptics: !haptics });
   const { winWidth } = useWindowSize();
   const revealed = useStore((s) => s.revealed);
   const reduced = useReducedMotion();
@@ -85,6 +90,7 @@ export default function MenuBar() {
     { type: "sep" },
     { type: "heading", label: "Sound & Feel" },
     { type: "item", label: "Ambient Music", checked: sound, toggle: true, onSelect: toggleSound },
+    { type: "item", label: "Mute All Sounds", checked: muted, toggle: true, onSelect: toggleMute },
     ...(hapticsSupported()
       ? [{ type: "item", label: "Haptic Feedback", checked: haptics, toggle: true, onSelect: toggleHaptics } as MenuEntry]
       : []),

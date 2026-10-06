@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import type { AppDef } from "~/configs/apps";
 import { DOCK_RESERVE, MENU_BAR_HEIGHT } from "~/utils";
 import { duration, ease, spring } from "~/styles/motion";
-import { WindowContext } from "./WindowContext";
+import { AppHostContext } from "../host";
 
 interface Rect {
   x: number;
@@ -252,13 +252,13 @@ export default function AppWindow({ app }: { app: AppDef }) {
             </h2>
           </header>
           <div className="window-body">
-            <WindowContext.Provider
-              value={{ id: app.id, width: shown.w, payload: win.payload, nonce: win.nonce, mobile: false }}
+            <AppHostContext.Provider
+              value={{ id: app.id, shell: "desktop", width: shown.w, params: win.params, nonce: win.nonce, close: () => closeApp(app.id) }}
             >
               <Suspense fallback={<AppSkeleton />}>
                 <Content />
               </Suspense>
-            </WindowContext.Provider>
+            </AppHostContext.Provider>
           </div>
         </motion.section>
       </Rnd>

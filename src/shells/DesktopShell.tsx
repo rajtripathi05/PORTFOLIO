@@ -19,6 +19,7 @@ import HelpPanel from "./shared/HelpPanel";
 import Credits from "./shared/Credits";
 import OfflineNotice from "./shared/OfflineNotice";
 import Toast from "./shared/Toast";
+import { TourLayer } from "~/features/tour";
 import { showStartHint } from "./shared/startHint";
 
 const isTyping = (el: Element | null) =>
@@ -167,13 +168,14 @@ export default function DesktopShell() {
         {overlay === "welcome" && <Welcome key="welcome" onStart={finishWelcome} onDismiss={dismissWelcome} />}
         {overlay === "help" && <HelpPanel key="help" onClose={closeOverlay} />}
         {overlay === "credits" && <Credits key="credits" onClose={closeOverlay} />}
-        {overlay === "spotlight" && <Spotlight key="spotlight" onClose={() => setOverlay(null)} shell="desktop" />}
+        {overlay === "spotlight" && <Spotlight key="spotlight" onClose={() => setOverlay(null)} />}
         {overlay === "launchpad" && <Launchpad key="launchpad" onClose={closeOverlay} />}
       </AnimatePresence>
 
       <ShellContextMenu />
       <OfflineNotice />
       <Toast />
+      <TourLayer />
     </div>
   );
 }

@@ -1,2 +1,5 @@
-// Placeholder until the iPadOS-style shell lands: tablets temporarily get the desktop shell.
-export { default } from "./DesktopShell";
+import TouchHome from "./touch/TouchHome";
+
+export default function TabletShell() {
+  return <TouchHome shell="tablet" />;
+}
