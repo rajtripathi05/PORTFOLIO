@@ -1,7 +1,7 @@
 import type React from "react";
 import { achievementTitle, isTodoLink, portfolio } from "~/data/portfolio";
 import { MAX_USER_CHARS } from "~/data/assistant";
-import { askAssistant } from "~/lib/askAssistant";
+import { askAssistant } from "~/features/ai/askAssistant";
 
 const p = portfolio;
 const PROMPT = "raj@portfolio ~ %";

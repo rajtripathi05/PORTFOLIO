@@ -1,6 +1,6 @@
 import type React from "react";
 import { actionLabel, MAX_USER_CHARS, type AssistantAction } from "~/data/assistant";
-import { askAssistant, type ChatMessage } from "~/lib/askAssistant";
+import { askAssistant, type ChatMessage } from "~/features/ai/askAssistant";
 import { useAppHost } from "~/shells/host";
 
 const STORAGE_KEY = "rt-portfolio:chat";

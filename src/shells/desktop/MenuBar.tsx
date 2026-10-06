@@ -5,7 +5,7 @@ import { portfolio } from "~/data/portfolio";
 import { wallpapers } from "~/configs/wallpapers";
 import { MENU_BAR_HEIGHT, shortcutLabel } from "~/utils";
 import type { MenuEntry } from "./Menu";
-import { hapticsSupported } from "~/lib/haptics";
+import { hapticsSupported } from "~/sensory/haptics";
 
 export const downloadResume = () => {
   const a = document.createElement("a");

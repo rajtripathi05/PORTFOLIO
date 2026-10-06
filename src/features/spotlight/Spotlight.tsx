@@ -1,7 +1,7 @@
 import type React from "react";
 import { Fragment } from "react";
 import { motion } from "framer-motion";
-import { groupOrder, search, searchIndex, suggestedKeys, type SearchItem } from "~/lib/search";
+import { groupOrder, search, searchIndex, suggestedKeys, type SearchItem } from "~/features/spotlight/search";
 import { shortcutLabel } from "~/utils";
 import { fadeFast, spring } from "~/styles/motion";
 
