@@ -18,6 +18,8 @@ export const hapticsSupported = (): boolean =>
 
 export const vibrate = (name: HapticName): void => {
   if (!hapticsSupported()) return;
+  // Browsers block (and log) vibration until the visitor has tapped something.
+  if (navigator.userActivation && !navigator.userActivation.hasBeenActive) return;
   try {
     navigator.vibrate(PATTERNS[name]);
   } catch {
