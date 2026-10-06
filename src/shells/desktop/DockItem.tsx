@@ -107,6 +107,7 @@ export default function DockItem(props: DockItemProps) {
       <button
         type="button"
         id={`dock-${id}`}
+        data-tour-id={id}
         data-dock-btn
         tabIndex={tabIndex}
         onFocus={() => {

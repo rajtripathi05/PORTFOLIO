@@ -30,6 +30,7 @@ export default function Launchpad({ onClose }: { onClose: () => void }) {
           <li key={app.id} className="flex justify-center">
             <button
               ref={i === 0 ? firstRef : undefined}
+              data-tour-id={app.id}
               type="button"
               className="flex w-28 flex-col items-center gap-2 rounded-panel p-2 text-on-media transition-transform active:scale-95"
               onClick={() => {

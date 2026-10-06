@@ -233,3 +233,33 @@
     transform: none;
   }
 }
+
+/* ------------------------------------------------------------ desktop dock "More" stack */
+.dock-more {
+  position: absolute;
+  bottom: calc(100% + 14px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: grid;
+  gap: 2px;
+  min-width: 200px;
+  padding: 6px;
+  border-radius: 14px;
+  border: 1px solid var(--hairline);
+  box-shadow: var(--shadow-overlay);
+}
+.dock-more-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left;
+  color: var(--text-1);
+}
+.dock-more-item:hover,
+.dock-more-item:focus-visible {
+  background: var(--accent-subtle);
+}

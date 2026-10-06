@@ -37,6 +37,7 @@ export default function DesktopIcons() {
           <button
             key={icon.app}
             ref={(el) => (refs.current[i] = el)}
+            data-tour-id={icon.app}
             type="button"
             className="group flex w-[92px] flex-col items-center gap-1 rounded-button p-1.5 outline-offset-0"
             onClick={() => {
