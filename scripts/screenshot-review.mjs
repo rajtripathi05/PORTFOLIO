@@ -107,7 +107,11 @@ async function desktopSuite(browser, width, height, theme) {
   if (theme === "light" && width === 1440) await audit(page, "desktop");
 
   for (const id of APPS) {
-    await page.click(`#dock-${id}`);
+    if (await page.locator(`#dock-${id}`).count()) await page.click(`#dock-${id}`);
+    else {
+      await page.click("#dock-more"); // overflow apps live in the dock's More stack
+      await page.click(`[role=menuitem][data-tour-id="${id}"]`);
+    }
     await sleep(1100);
     await shot(page, `${tag}-app-${id}`);
     if (theme === "light" && width === 1440) await audit(page, `app-${id}`);
