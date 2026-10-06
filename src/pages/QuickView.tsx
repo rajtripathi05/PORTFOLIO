@@ -2,21 +2,37 @@ import type React from "react";
 import { achievementTitle, portfolio } from "~/data/portfolio";
 import { coverFor, mediaFor, mediaSummary, type MediaItem } from "~/data/media";
 import { previewFor } from "~/data/previews";
+import { isTodoLink } from "~/data/portfolio";
+import type { Role } from "~/types";
+import OfflineNotice from "~/shells/shared/OfflineNotice";
+import { downloadVCard } from "~/features/vcard";
+import { share } from "~/features/share";
 
 // Plain, scrollable, crawlable version of the portfolio. Pre-rendered to static HTML at
 // build time (scripts/prerender-quick.mjs), then hydrated. Everything reads portfolio.ts.
 
-const { identity, summary, education, experience, projects, achievements, skills, stats } = portfolio;
+const { identity, summary, education, experience, internships, research, copyrights, leadership, projects, achievements, certifications, skills, stats } = portfolio;
 
 const statRow = [stats[0], { value: String(achievements.length), label: "awards & hackathon wins" }, ...stats.slice(1)];
 
 // Every photo/video across achievements, for the gallery strip.
 const gallery = achievements.flatMap((a) => mediaFor(a).map((item, index) => ({ a, item, index })));
 
+// Certifications grouped by issuer, in data order.
+const certGroups = certifications.reduce<{ issuer: string; items: typeof certifications }[]>((acc, c) => {
+  const g = acc.find((x) => x.issuer === c.issuer);
+  if (g) g.items.push(c);
+  else acc.push({ issuer: c.issuer, items: [c] });
+  return acc;
+}, []);
+
 const sections = [
   { id: "experience", label: "Experience" },
+  { id: "research", label: "Research & IP" },
   { id: "projects", label: "Projects" },
   { id: "achievements", label: "Achievements" },
+  { id: "leadership", label: "Leadership" },
+  { id: "certifications", label: "Certifications" },
   { id: "skills", label: "Skills" },
   { id: "contact", label: "Contact" }
 ];
@@ -36,6 +52,80 @@ const Section = ({
     </h2>
     {children}
   </section>
+);
+
+const Ext = ({ href, children }: { href: string; children: React.ReactNode }) => (
+  <a className="text-link" href={href} target="_blank" rel="noopener noreferrer">
+    {children}
+    <span aria-hidden="true"> ↗</span>
+    <span className="sr-only"> (opens in a new tab)</span>
+  </a>
+);
+
+/** One role: the same shape serves experience, internships, research and leadership. */
+const QvRole = ({ r, subtitle }: { r: Role; subtitle?: string }) => (
+  <li>
+    <h3 className="text-headline font-bold leading-snug">
+      {r.role}
+      {r.org && (
+        <>
+          {" "}
+          <span className="font-normal text-ink-3">|</span> {r.orgUrl ? <Ext href={r.orgUrl}>{r.org}</Ext> : r.org}
+        </>
+      )}
+    </h3>
+    <p className="mt-0.5 text-body font-medium tabular-nums text-ink-3">
+      {r.dates}
+      {r.location && ` · ${r.location}`}
+    </p>
+    {subtitle && <p className="mt-1 italic text-ink-2">{subtitle}</p>}
+    {r.taglines?.map((t) => (
+      <p key={t} className="mt-1.5 italic text-ink-2">
+        {t}
+      </p>
+    ))}
+    <ul className="bullets qv-prose mt-2.5">
+      {r.bullets.map((b) => (
+        <li key={b}>
+          <RichText text={b} links={r.inlineLinks} />
+        </li>
+      ))}
+    </ul>
+    {r.highlights && (
+      <div className="mt-3">
+        <p className="font-semibold">{r.highlights.heading}</p>
+        <ul className="bullets qv-prose mt-1.5">
+          {r.highlights.items.map((i) => (
+            <li key={i.name}>
+              <strong>{i.name}:</strong> {i.description}
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+    {r.tags?.length ? (
+      <p className="mt-2.5 flex flex-wrap gap-1.5">
+        {r.tags.map((t) => (
+          <span key={t} className="chip">
+            {t}
+          </span>
+        ))}
+      </p>
+    ) : null}
+    {r.links?.some((l) => !isTodoLink(l.url)) && (
+      <p className="qv-actions mt-3 flex flex-wrap gap-2">
+        {r.links
+          .filter((l) => !isTodoLink(l.url))
+          .map((l) => (
+            <a key={l.url} className="btn-secondary btn-sm" href={l.url} target="_blank" rel="noopener noreferrer">
+              {l.label}
+              <span aria-hidden="true"> ↗</span>
+              <span className="sr-only"> (opens in a new tab)</span>
+            </a>
+          ))}
+      </p>
+    )}
+  </li>
 );
 
 export default function QuickView() {
@@ -156,6 +246,28 @@ export default function QuickView() {
                 <span className="i-ph:github-logo-bold" aria-hidden="true" />
                 GitHub
               </ExternalLink>
+              <a className="btn-secondary" href={`tel:${identity.phone.replace(/\s+/g, "")}`}>
+                <span className="i-ph:phone-bold" aria-hidden="true" />
+                Call
+              </a>
+              {mounted && (
+                <>
+                  <button type="button" className="btn-secondary" onClick={downloadVCard}>
+                    <span className="i-ph:address-book-bold" aria-hidden="true" />
+                    Save contact
+                  </button>
+                  <button
+                    type="button"
+                    className="btn-secondary"
+                    onClick={() =>
+                      void share({ title: `${identity.name} — Portfolio`, url: window.location.origin + "/quick" })
+                    }
+                  >
+                    <span className="i-ph:share-network-bold" aria-hidden="true" />
+                    Share
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -193,32 +305,73 @@ export default function QuickView() {
           <Section id="experience" title="Experience">
             <ol className="qv-timeline">
               {experience.map((job) => (
-                <li key={job.id}>
-                  <h3 className="text-headline font-bold leading-snug">
-                    {job.role} <span className="font-normal text-ink-3">|</span>{" "}
-                    {job.orgUrl ? (
-                      <a className="text-link" href={job.orgUrl} target="_blank" rel="noopener noreferrer">
-                        {job.org}
-                      </a>
-                    ) : (
-                      job.org
-                    )}
-                  </h3>
-                  <p className="mt-0.5 text-body font-medium tabular-nums text-ink-3">
-                    {job.dates}
-                    {job.location && ` · ${job.location}`}
-                  </p>
-                  {job.tagline && <p className="mt-1.5 italic text-ink-2">{job.tagline}</p>}
-                  <ul className="bullets qv-prose mt-2.5">
-                    {job.bullets.map((b) => (
-                      <li key={b}>
-                        <RichText text={b} links={job.links} />
-                      </li>
-                    ))}
-                  </ul>
-                </li>
+                <QvRole key={job.id} r={job} />
               ))}
             </ol>
+            {internships.length > 0 && (
+              <>
+                <h3 className="qv-h3 mt-8">Internships</h3>
+                <ol className="qv-timeline mt-4">
+                  {internships.map((job) => (
+                    <QvRole key={job.id} r={job} />
+                  ))}
+                </ol>
+              </>
+            )}
+          </Section>
+
+          <Section id="research" title="Research & IP">
+            <ol className="qv-timeline">
+              {research.map((r) => (
+                <QvRole key={r.id} r={r} subtitle={r.topic} />
+              ))}
+            </ol>
+            {research
+              .filter((r) => !isTodoLink(r.paperUrl))
+              .map((r) => (
+                <p key={r.id} className="mt-3">
+                  <Ext href={r.paperUrl}>{isTodoLink(r.paperTitle) ? "Read the paper" : r.paperTitle}</Ext>
+                  {!isTodoLink(r.venue) && <span className="text-ink-2"> · {r.venue}</span>}
+                </p>
+              ))}
+            <div className="mt-6 grid gap-4">
+              {copyrights.map((c) => (
+                <article key={c.id} className="qv-card qv-project has-preview" aria-labelledby={`qv-${c.id}`}>
+                  <img
+                    className="qv-media qv-project-preview"
+                    src={c.certificateThumb}
+                    alt={`First page of the copyright certificate for “${c.title}”`}
+                    width={480}
+                    height={300}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <div className="min-w-0">
+                    <p className="text-footnote font-semibold uppercase tracking-wide text-ink-3">Copyright · {c.office}</p>
+                    <h3 id={`qv-${c.id}`} className="mt-1 text-headline font-bold leading-snug">
+                      {c.title}
+                    </h3>
+                    <dl className="mt-2 grid gap-x-4 gap-y-1 text-body text-ink-2 sm:grid-cols-[auto_1fr]">
+                      <dt className="font-semibold text-ink-1">Class of work</dt>
+                      <dd>{c.workClass}</dd>
+                      <dt className="font-semibold text-ink-1">Registration no.</dt>
+                      <dd className="tabular-nums">{c.regNo}</dd>
+                      <dt className="font-semibold text-ink-1">Dated</dt>
+                      <dd>{c.dated}</dd>
+                      <dt className="font-semibold text-ink-1">Role</dt>
+                      <dd>{c.role}</dd>
+                    </dl>
+                    <p className="qv-actions mt-3">
+                      <a className="btn-secondary btn-sm" href={c.certificatePdf} target="_blank" rel="noopener noreferrer">
+                        View certificate (PDF)
+                        <span aria-hidden="true"> ↗</span>
+                        <span className="sr-only"> (opens in a new tab)</span>
+                      </a>
+                    </p>
+                  </div>
+                </article>
+              ))}
+            </div>
           </Section>
 
           <Section id="projects" title="Projects">
@@ -333,6 +486,34 @@ export default function QuickView() {
                 View full archive on Google Drive
               </ExternalLink>
             </p>
+          </Section>
+
+          <Section id="leadership" title="Leadership">
+            <ol className="qv-timeline">
+              {leadership.map((r) => (
+                <QvRole key={r.id} r={r} />
+              ))}
+            </ol>
+          </Section>
+
+          <Section id="certifications" title="Certifications">
+            <p className="qv-prose mb-4 text-ink-2">{portfolio.certificationsSummary}</p>
+            <div className="grid gap-4">
+              {certGroups.map((g) => (
+                <div key={g.issuer} className="qv-card">
+                  <h3 className="font-bold">{g.issuer}</h3>
+                  <ul className="mt-2.5 grid gap-2">
+                    {g.items.map((c) => (
+                      <li key={c.id} className="text-body">
+                        <span className="font-semibold">{c.course}</span>
+                        <span className="text-ink-3"> · {c.issued}</span> <Ext href={c.verifyUrl}>Verify</Ext>
+                        <span className="qv-print-url">{c.verifyUrl}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
           </Section>
 
           <Section id="skills" title="Technical Skills">

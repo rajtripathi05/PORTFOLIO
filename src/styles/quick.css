@@ -76,6 +76,11 @@ html.is-quick {
   font-weight: 750;
   letter-spacing: var(--ls-title);
 }
+.qv-h3 {
+  font-size: var(--text-headline);
+  font-weight: 700;
+  color: var(--text-2);
+}
 .qv-section {
   padding-top: var(--space-12);
   scroll-margin-top: var(--space-16);
