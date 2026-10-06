@@ -193,3 +193,30 @@ button:disabled {
     min-height: 36px;
   }
 }
+
+/* Visual micro-feedback (src/sensory/feedback.ts sets data-feedback for ~700ms). */
+@keyframes fb-settle {
+  0% { transform: scale(0.96); }
+  60% { transform: scale(1.015); }
+  100% { transform: scale(1); }
+}
+@keyframes fb-glow {
+  0% { box-shadow: 0 0 0 0 var(--success-subtle); }
+  40% { box-shadow: 0 0 0 6px var(--success-subtle); }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+@keyframes fb-shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-4px); }
+  40%, 80% { transform: translateX(4px); }
+}
+[data-feedback="success"] { animation: fb-glow 0.7s ease-out; }
+[data-feedback="error"] { animation: fb-shake 0.4s ease-in-out; box-shadow: 0 0 0 2px var(--danger-subtle); }
+[data-feedback="tap"], [data-feedback="open"], [data-feedback="toggle"], [data-feedback="selection"] {
+  animation: fb-settle 0.28s ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-feedback] { animation: none; }
+  [data-feedback="success"] { box-shadow: 0 0 0 3px var(--success-subtle); }
+  [data-feedback="error"] { box-shadow: 0 0 0 2px var(--danger); }
+}

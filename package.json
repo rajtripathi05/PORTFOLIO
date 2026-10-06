@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "vite --host",
     "media": "node scripts/build-achievements.mjs",
-    "prebuild": "node scripts/build-achievements.mjs && node scripts/check-content.mjs",
+    "prebuild": "node scripts/build-achievements.mjs && node scripts/build-ip.mjs && node scripts/generate-qr.mjs && node scripts/check-content.mjs",
     "build": "vite build && vite build --ssr src/entries/quick-server.tsx --outDir .ssr && node scripts/prerender-quick.mjs && tsc --noEmit",
     "serve": "vite preview --host",
     "typecheck": "tsc --noEmit",
