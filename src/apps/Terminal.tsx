@@ -2,6 +2,8 @@ import type React from "react";
 import { achievementTitle, isTodoLink, portfolio } from "~/data/portfolio";
 import { MAX_USER_CHARS } from "~/data/assistant";
 import { askAssistant } from "~/features/ai/askAssistant";
+import { feedback } from "~/sensory/feedback";
+import type { Role } from "~/types";
 
 const p = portfolio;
 const PROMPT = "raj@portfolio ~ %";
@@ -13,6 +15,9 @@ const COMMANDS: Record<string, string> = {
   projects: "Projects and live links",
   skills: "Technical skills",
   achievements: "Awards and hackathon wins",
+  research: "Research and copyright",
+  leadership: "Leadership and community roles",
+  certifications: "Courses and verified certificates",
   contact: "How to get in touch",
   resume: "Open the resume PDF",
   clear: "Clear the screen",
@@ -34,7 +39,49 @@ const A = ({ href, children }: { href: string; children: React.ReactNode }) => (
   </a>
 );
 
+const roleList = (roles: Role[], topic?: (r: Role) => string | undefined) => (
+  <div className="space-y-2">
+    {roles.map((e) => (
+      <div key={e.id}>
+        <p>
+          <span className={C.head}>{e.role}</span>
+          {e.org && <> | {e.org}</>} <span className={C.dim}>({e.dates})</span>
+        </p>
+        {topic?.(e) && <p className={C.dim}>{topic(e)}</p>}
+        {e.bullets.map((b) => (
+          <p key={b} className="pl-3">
+            <span className={C.ok}>•</span> {b}
+          </p>
+        ))}
+      </div>
+    ))}
+  </div>
+);
+
 const outputs: Record<string, () => React.ReactNode> = {
+  research: () => (
+    <div className="space-y-3">
+      {roleList(p.research, (r) => (r as (typeof p.research)[number]).topic)}
+      {p.copyrights.map((c) => (
+        <p key={c.id}>
+          <span className={C.head}>Copyright:</span> {c.title} <span className={C.dim}>({c.regNo}, {c.dated}, {c.role})</span>{" "}
+          <A href={c.certificatePdf}>certificate</A>
+        </p>
+      ))}
+    </div>
+  ),
+  leadership: () => roleList(p.leadership),
+  certifications: () => (
+    <div className="space-y-1">
+      <p className={C.dim}>{p.certificationsSummary}</p>
+      {p.certifications.map((c) => (
+        <p key={c.id}>
+          <span className={C.head}>{c.course}</span> <span className={C.dim}>— {c.issuer}, {c.issued}</span>{" "}
+          <A href={c.verifyUrl}>verify</A>
+        </p>
+      ))}
+    </div>
+  ),
   help: () => (
     <div>
       <p>Available commands:</p>
@@ -220,7 +267,7 @@ export default function Terminal() {
     setInput("");
     if (!line) return push("", null);
     const [name, ...rest] = line.split(/\s+/);
-    const cmd = name.toLowerCase();
+    const cmd = ({ certs: "certifications", cert: "certifications", ip: "research" } as Record<string, string>)[name.toLowerCase()] ?? name.toLowerCase();
     if (cmd === "clear") return setEntries([]);
     if (cmd === "ai") return void runAi(line, rest.join(" "));
     if (cmd === "resume") {
@@ -296,7 +343,10 @@ export default function Terminal() {
           id="terminal-input"
           ref={inputRef}
           value={input}
-          onChange={(e) => setInput(e.target.value)}
+          onChange={(e) => {
+            feedback("typing");
+            setInput(e.target.value);
+          }}
           onKeyDown={onKeyDown}
           autoFocus
           autoComplete="off"
