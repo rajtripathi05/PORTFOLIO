@@ -1,5 +1,8 @@
 import type React from "react";
 import { portfolio } from "~/data/portfolio";
+import { downloadVCard } from "~/features/vcard";
+import { share } from "~/features/share";
+import { feedback } from "~/sensory/feedback";
 
 const { identity } = portfolio;
 
@@ -126,6 +129,31 @@ export default function Contact() {
             <ExternalLink href={identity.github} className="btn-secondary btn-sm">
               Open
             </ExternalLink>
+          </Row>
+          <Row icon="i-ph:address-book-bold" label="Contact card" value="Save to your address book">
+            <button
+              type="button"
+              className="btn-secondary btn-sm"
+              onClick={(e) => {
+                feedback("success", { el: e.currentTarget });
+                downloadVCard();
+              }}
+            >
+              Save contact
+            </button>
+            <button
+              type="button"
+              className="btn-secondary btn-sm"
+              onClick={async (e) => {
+                const el = e.currentTarget;
+                const r = await share({ title: `${identity.name} — Portfolio`, url: window.location.origin });
+                if (r === "copied") useStore.getState().showToast("Link copied");
+                if (r === "shared" || r === "copied") feedback("success", { el });
+                if (r === "failed") feedback("error", { el });
+              }}
+            >
+              Share site
+            </button>
           </Row>
           <Row icon="i-ph:file-text-bold" label="Resume" value="Raj_Tripathi_Resume.pdf">
             <a className="btn-secondary btn-sm" href={identity.resumePdf} download="Raj_Tripathi_Resume.pdf">

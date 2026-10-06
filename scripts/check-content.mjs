@@ -33,9 +33,26 @@ for (const s of portfolio.stats) {
   if (!everything.includes(norm(core))) problems.push(`Stat "${s.value} ${s.label}" is not in the content`);
 }
 
-const forbidden = ["₹50 Lakhs", "Jun 2026 – Present", "Currently working as"];
+const forbidden = ["₹50 Lakhs", "50 Lakh", "HOD", "Jun 2026 – Present", "Currently working as"];
 for (const f of forbidden)
   if (JSON.stringify(portfolio).includes(f)) problems.push(`Forbidden text found: "${f}"`);
+
+// India Glycols must never read as a current role.
+for (const r of [...portfolio.experience, ...portfolio.internships])
+  if (/india glycols/i.test(r.org ?? "") && /present/i.test(r.dates)) problems.push(`"${r.id}": India Glycols dates say "Present"`);
+
+// No cheque (a real bank cheque) in anything that ships.
+const walk = async (dir) => {
+  let out = [];
+  for (const e of await fs.readdir(dir, { withFileTypes: true }).catch(() => [])) {
+    const p = path.join(dir, e.name);
+    out = out.concat(e.isDirectory() ? await walk(p) : [p]);
+  }
+  return out;
+};
+for (const dir of ["public", "dist"])
+  for (const f of await walk(path.join(ROOT, dir)))
+    if (/cheque/i.test(path.basename(f))) problems.push(`Cheque file must not ship: ${path.relative(ROOT, f)}`);
 
 if (problems.length) {
   console.error("[content] ✗ " + problems.join("\n[content] ✗ "));

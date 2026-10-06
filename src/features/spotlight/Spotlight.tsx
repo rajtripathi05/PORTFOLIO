@@ -32,7 +32,7 @@ export default function Spotlight({ onClose }: { onClose: () => void }) {
   const launch = (item?: SearchItem) => {
     if (!item) return;
     onClose();
-    openApp(item.app, item.payload);
+    openApp(item.app, item.params);
   };
 
   const onKeyDown = (e: React.KeyboardEvent) => {

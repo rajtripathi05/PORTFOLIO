@@ -345,7 +345,7 @@ const achievements: Achievement[] = [
     description:
       "Designed a multi-agent LLM prototype using task decomposition, tool-use concepts and shared context.",
     teamSize: "Team of 3",
-    links: [{ label: "GitHub", url: "https://github.com/PeriscopeHackathon2025/Opus" }],
+    links: [{ label: "GitHub", url: "TODO_PERISCOPE_REPO" }],
     mediaFolder: "Periscope (Team of 3)"
   },
   {
