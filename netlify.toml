@@ -55,3 +55,8 @@
   for = "/styleguide"
   [headers.values]
     X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/ip/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"

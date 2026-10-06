@@ -1,6 +1,6 @@
 # Raj Tripathi — Portfolio
 
-A macOS-style desktop portfolio that anyone can use in seconds, with a plain **Quick View** page, a mobile home screen, an AI assistant grounded in the portfolio, and an accessible, token-based design system.
+A macOS-style desktop portfolio that anyone can use in seconds, with a plain **Quick View** page, device-adaptive shells (desktop, tablet and phone), an AI assistant grounded in the portfolio, and an accessible, token-based design system.
 
 Built with React 18, TypeScript, Vite, UnoCSS, Zustand and Framer Motion. Deployed on Netlify.
 
@@ -100,4 +100,12 @@ All colours, type sizes, spacing, radii, shadows, materials and motion live in `
 
 ## Sound & haptics
 
-Ambient music is **off by default** and never starts on its own. The speaker button (menu bar / mobile home) or **View → Ambient Music** turns it on. It is generated live with the Web Audio API (no audio files): a very slow pad, plus a short motif tuned to each achievement when you open it. Haptic feedback uses the Vibration API (Android) and can be turned off in **View → Haptic Feedback**.
+Nothing plays until the visitor interacts. UI sounds (soft taps, open/close, success) are synthesised in the browser with the Web Audio API — **no audio files ship** — and loaded lazily on the first interaction (`src/sensory`). They are off by default under reduced motion. The optional **ambient pad** is off on every load and starts only from a click (Settings, the menu-bar speaker, or **View → Ambient Music**). **Mute** is always one tap away (menu bar, phone/tablet status bar). Haptics use the Vibration API on touch devices and can be turned off in Settings.
+
+## Device shells
+
+`src/shells/device.ts` picks Desktop (windows + dock), Tablet (iPadOS-style home and page cards) or Phone (iOS-style home and full-screen apps). Apps never import shell code; they read `useAppHost()` (`src/shells/host.tsx`) for `params`, width and in-app back steps. **Settings → View as** forces a shell.
+
+## Pending content (TODO_ placeholders)
+
+Placeholder links starting with `TODO_` render as "coming soon" or are hidden: the HSE / RCA / BBS project URLs, the research paper title/venue/link, the Periscope repo (`TODO_PERISCOPE_REPO`, private), and `SITE_URL` (set in Netlify to enable the QR code). `npm run check:content` also blocks stale facts and any cheque file in `public/` or `dist/`.
