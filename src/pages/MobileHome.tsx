@@ -23,6 +23,8 @@ export default function MobileHome() {
   const focusedId = useStore((s) => s.focusedId);
   const dark = useStore((s) => s.dark);
   const toggleDark = useStore((s) => s.toggleDark);
+  const sound = useStore((s) => s.sound);
+  const toggleSound = useStore((s) => s.toggleSound);
   const wallpaperId = useStore((s) => s.wallpaper);
   const openApp = useStore((s) => s.openApp);
   const closeFocused = useStore((s) => s.closeFocused);
@@ -58,14 +60,27 @@ export default function MobileHome() {
             <Monogram size={22} />
             {portfolio.identity.name}
           </p>
-          <button
-            type="button"
-            className="grid size-11 place-items-center rounded-full material-menubar active:scale-[.96]"
-            onClick={toggleDark}
-            aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
-          >
-            <span className={`${dark ? "i-ph:sun-bold" : "i-ph:moon-bold"} text-[19px]`} />
-          </button>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              className="grid size-11 place-items-center rounded-full material-menubar active:scale-[.96]"
+              onClick={toggleSound}
+              aria-pressed={sound}
+              aria-label={sound ? "Turn ambient music off" : "Turn ambient music on"}
+            >
+              <span
+                className={`${sound ? "i-ph:speaker-simple-high-bold text-accent-text" : "i-ph:speaker-simple-slash-bold"} text-[19px]`}
+              />
+            </button>
+            <button
+              type="button"
+              className="grid size-11 place-items-center rounded-full material-menubar active:scale-[.96]"
+              onClick={toggleDark}
+              aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
+            >
+              <span className={`${dark ? "i-ph:sun-bold" : "i-ph:moon-bold"} text-[19px]`} />
+            </button>
+          </div>
         </header>
 
         <main className="home mx-auto mt-4 max-w-[560px]">

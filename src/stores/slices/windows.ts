@@ -1,5 +1,6 @@
 import type { StateCreator } from "zustand";
 import type { AppId } from "~/configs/apps";
+import { haptic } from "~/lib/haptics";
 
 export interface WindowState {
   open: boolean;
@@ -56,6 +57,7 @@ export const createWindowsSlice: StateCreator<WindowsSlice> = (set, get) => ({
       const prev = state.windows[id];
       const z = state.topZ + 1;
       const wasOpen = !!prev?.open;
+      haptic(wasOpen ? "tap" : "open");
       return {
         topZ: z,
         focusedId: id,
@@ -80,6 +82,7 @@ export const createWindowsSlice: StateCreator<WindowsSlice> = (set, get) => ({
     set((state) => {
       const prev = state.windows[id];
       if (!prev) return {};
+      haptic("close");
       const windows = { ...state.windows, [id]: { ...prev, open: false, min: false, max: false } };
       return { windows, focusedId: topVisible(windows) };
     }),
@@ -88,6 +91,7 @@ export const createWindowsSlice: StateCreator<WindowsSlice> = (set, get) => ({
     set((state) => {
       const prev = state.windows[id];
       if (!prev) return {};
+      haptic("tap");
       const windows = { ...state.windows, [id]: { ...prev, min: true } };
       return { windows, focusedId: topVisible(windows) };
     }),

@@ -1,7 +1,7 @@
 import type React from "react";
 
 export type MenuEntry =
-  | { type: "item"; label: string; hint?: string; checked?: boolean; onSelect: () => void }
+  | { type: "item"; label: string; hint?: string; checked?: boolean; toggle?: boolean; onSelect: () => void }
   | { type: "sep" }
   | { type: "heading"; label: string };
 
@@ -66,7 +66,7 @@ export const MenuList = forwardRef<HTMLDivElement, MenuListProps>(function MenuL
             key={i}
             type="button"
             data-menu-item
-            role={checkable ? "menuitemradio" : "menuitem"}
+            role={entry.toggle ? "menuitemcheckbox" : checkable ? "menuitemradio" : "menuitem"}
             aria-checked={checkable ? entry.checked : undefined}
             tabIndex={-1}
             className="menu-item"

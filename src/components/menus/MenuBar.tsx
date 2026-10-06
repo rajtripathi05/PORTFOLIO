@@ -5,6 +5,7 @@ import { portfolio } from "~/data/portfolio";
 import { wallpapers } from "~/configs/wallpapers";
 import { MENU_BAR_HEIGHT, shortcutLabel } from "~/utils";
 import type { MenuEntry } from "./Menu";
+import { hapticsSupported } from "~/lib/haptics";
 
 export const downloadResume = () => {
   const a = document.createElement("a");
@@ -25,6 +26,10 @@ export default function MenuBar() {
   const toggleDark = useStore((s) => s.toggleDark);
   const wallpaper = useStore((s) => s.wallpaper);
   const setWallpaper = useStore((s) => s.setWallpaper);
+  const sound = useStore((s) => s.sound);
+  const toggleSound = useStore((s) => s.toggleSound);
+  const haptics = useStore((s) => s.haptics);
+  const toggleHaptics = useStore((s) => s.toggleHaptics);
   const { winWidth } = useWindowSize();
   const revealed = useStore((s) => s.revealed);
   const reduced = useReducedMotion();
@@ -77,6 +82,12 @@ export default function MenuBar() {
         onSelect: () => setWallpaper(w.id)
       })
     ),
+    { type: "sep" },
+    { type: "heading", label: "Sound & Feel" },
+    { type: "item", label: "Ambient Music", checked: sound, toggle: true, onSelect: toggleSound },
+    ...(hapticsSupported()
+      ? [{ type: "item", label: "Haptic Feedback", checked: haptics, toggle: true, onSelect: toggleHaptics } as MenuEntry]
+      : []),
     { type: "sep" },
     { type: "item", label: "Show All Apps (Launchpad)", onSelect: () => setOverlay("launchpad") },
     { type: "item", label: "Quick View (simple page)", onSelect: goQuickView }
@@ -141,6 +152,16 @@ export default function MenuBar() {
           <span className="i-ph:article-bold" aria-hidden="true" />
           Quick View
         </a>
+        <button
+          type="button"
+          className="menubar-btn"
+          onClick={toggleSound}
+          aria-pressed={sound}
+          aria-label={sound ? "Turn ambient music off" : "Turn ambient music on"}
+          title={sound ? "Ambient music: on" : "Ambient music: off"}
+        >
+          <span className={`${sound ? "i-ph:speaker-simple-high-bold text-accent-text" : "i-ph:speaker-simple-slash-bold"} text-[15px]`} />
+        </button>
         <button
           type="button"
           className="menubar-btn"
