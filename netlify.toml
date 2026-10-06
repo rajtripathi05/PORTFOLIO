@@ -2,10 +2,56 @@
   command = "npm run build"
   publish = "dist"
 
+[build.environment]
+  NODE_VERSION = "22"
+
 [functions]
   directory = "netlify/functions"
 
+# Local development: `netlify dev` runs Vite and the chat function together.
 [dev]
   command = "npm run dev"
   targetPort = 5173
   framework = "#custom"
+
+# Routes. No catch-all SPA redirect: deep links use query strings on "/"
+# (e.g. /?open=projects&id=nsu), /quick is pre-rendered, and unknown paths get
+# the real 404 page (dist/404.html) with a 404 status.
+[[redirects]]
+  from = "/styleguide"
+  to = "/index.html"
+  status = 200
+
+# Security headers. Framing is allowed only from this site itself (SAMEORIGIN),
+# so nothing breaks; the CSP keeps third-party code out while allowing the live
+# project sites inside Safari (frame-src https:) and the chat function.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self'; font-src 'self'; connect-src 'self'; frame-src 'self' https:; object-src 'none'; base-uri 'self'; frame-ancestors 'self'"
+
+# Hashed build assets never change: cache them for a year.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/achievements/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/previews/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/styleguide"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"

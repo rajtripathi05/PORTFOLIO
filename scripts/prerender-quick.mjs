@@ -18,7 +18,10 @@ if (!html.includes("Raj Tripathi")) throw new Error("Quick View pre-render produ
 const page = template
   .replace("<html lang=\"en\">", "<html lang=\"en\" class=\"is-quick\">")
   .replace(/<title>.*?<\/title>/, "<title>Raj Tripathi — Quick View</title>")
-  .replace('<div id="root"></div>', `<div id="root">${html}</div>`);
+  .replace('<div id="root"></div>', `<div id="root">${html}</div>`)
+  // Quick View is its own page for search engines.
+  .replace(/(<link rel="canonical" href=")([^"]*?)\/?"/, "$1$2/quick\"")
+  .replace(/(<meta property="og:url" content=")([^"]*?)\/?"/, "$1$2/quick\"");
 
 await fs.mkdir(path.join(DIST, "quick"), { recursive: true });
 await fs.writeFile(path.join(DIST, "quick", "index.html"), page);
@@ -31,4 +34,18 @@ await fs.writeFile(
     .replace(/<title>.*?<\/title>/, "<title>Page not found — Raj Tripathi</title>")
     .replace("</head>", '  <meta name="robots" content="noindex" />\n  </head>')
 );
+// sitemap.xml with absolute URLs when the site URL is known (Netlify sets URL).
+const site = (process.env.SITE_URL || process.env.URL || "").replace(/\/$/, "");
+if (site) {
+  const urls = ["/", "/quick"].map((u) => `  <url><loc>${site}${u}</loc></url>`).join("\n");
+  await fs.writeFile(
+    path.join(DIST, "sitemap.xml"),
+    `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`
+  );
+  const robots = await fs.readFile(path.join(DIST, "robots.txt"), "utf8");
+  await fs.writeFile(path.join(DIST, "robots.txt"), `${robots.trimEnd()}
+
+Sitemap: ${site}/sitemap.xml
+`);
+}
 console.log(`[prerender] dist/quick/index.html (${(page.length / 1024).toFixed(1)} KB)`);
