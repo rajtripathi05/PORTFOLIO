@@ -6,7 +6,7 @@
     "dev": "vite --host",
     "media": "node scripts/build-achievements.mjs",
     "prebuild": "node scripts/build-achievements.mjs && node scripts/build-ip.mjs && node scripts/generate-qr.mjs && node scripts/check-content.mjs && node scripts/check-icons.mjs",
-    "build": "vite build && vite build --ssr src/entries/quick-server.tsx --outDir .ssr && node scripts/prerender-quick.mjs && tsc --noEmit",
+    "build": "vite build && vite build --ssr src/entries/quick-server.tsx --outDir .ssr && node scripts/prerender-quick.mjs && tsc --noEmit && node scripts/check-three.mjs",
     "serve": "vite preview --host",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
@@ -15,7 +15,8 @@
     "check:contrast": "node scripts/check-contrast.mjs",
     "check:icons": "node scripts/check-icons.mjs",
     "matrix": "node scripts/device-matrix.mjs",
-    "previews": "node scripts/capture-previews.mjs"
+    "previews": "node scripts/capture-previews.mjs",
+    "check:three": "node scripts/check-three.mjs"
   },
   "prettier": "@renovamen/prettier-config",
   "dependencies": {
@@ -26,6 +27,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-rnd": "^10.4.10",
+    "three": "0.186.1",
     "zustand": "^4.5.2"
   },
   "devDependencies": {
@@ -37,6 +39,7 @@
     "@types/node": "^20.12.8",
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.0",
+    "@types/three": "0.186.0",
     "@unocss/reset": "^0.59.4",
     "@vitejs/plugin-react": "^4.2.1",
     "eslint": "^8.57.0",

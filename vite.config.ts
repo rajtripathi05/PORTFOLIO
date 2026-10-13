@@ -55,7 +55,10 @@ export default defineConfig({
             ? "react"
             : /node_modules[\\/]framer-motion[\\/]/.test(id)
               ? "motion"
-              : undefined
+              : // Only the Local Dash game imports it (scripts/check-three.mjs).
+                /node_modules[\\/]three[\\/]/.test(id)
+                ? "three"
+                : undefined
       }
     }
   },
