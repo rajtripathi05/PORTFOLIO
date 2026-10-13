@@ -256,7 +256,17 @@ const projects: Project[] = [
     bullets: [
       "Converted batch chemical manufacturing constraints into a master-workbook-driven planning platform covering demand, production, capacity, BOM/raw materials, packaging materials, scheduling, KPI views, economics and scenario/risk analysis.",
       "Structured deterministic/custom scheduling logic with a 3D plant representation and AI-assisted replanning layer for natural-language exploration, stakeholder interpretation and operational decision support."
-    ]
+    ],
+    // Verbatim from the bullets above (scripts/check-content.mjs enforces it).
+    caseStudy: {
+      problem: ["batch chemical manufacturing constraints"],
+      approach: [
+        "Converted batch chemical manufacturing constraints into a master-workbook-driven planning platform covering demand, production, capacity, BOM/raw materials, packaging materials, scheduling, KPI views, economics and scenario/risk analysis.",
+        "Structured deterministic/custom scheduling logic with a 3D plant representation and AI-assisted replanning layer for natural-language exploration, stakeholder interpretation and operational decision support."
+      ],
+      impact: [],
+      impactNote: "TODO_NSU_IMPACT"
+    }
   },
   {
     id: "meshcraft",
@@ -278,7 +288,17 @@ const projects: Project[] = [
     tags: ["Decision Support", "Optimization", "Day-ahead Planning"],
     bullets: [
       "Built an advisory decision-support platform using historical operating data for LP/MP steam requirements, turbine allocation, HP steam requirement, day-ahead planning, what-if/outage scenarios, optimization logic and business/economic trade-offs; tested over 1,370 real operating hours."
-    ]
+    ],
+    // Verbatim fragments of the bullet above (scripts/check-content.mjs enforces it).
+    caseStudy: {
+      problem: ["LP/MP steam requirements, turbine allocation, HP steam requirement, day-ahead planning, what-if/outage scenarios"],
+      approach: [
+        "Built an advisory decision-support platform using historical operating data",
+        "optimization logic and business/economic trade-offs"
+      ],
+      impact: ["tested over 1,370 real operating hours"],
+      impactNote: "TODO_TBDOS_IMPACT"
+    }
   },
   {
     id: "igl-safety",

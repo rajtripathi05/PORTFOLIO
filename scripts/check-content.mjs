@@ -23,6 +23,13 @@ for (const p of portfolio.projects) {
   const text = norm([p.title, p.descriptor ?? "", ...p.bullets].join(" "));
   for (const tag of p.tags ?? [])
     if (!text.includes(norm(tag))) problems.push(`Project "${p.id}": tag "${tag}" is not in its text`);
+  // A case study only reuses the project's own words, verbatim (.claude/skills/case-study).
+  const own = [p.descriptor ?? "", ...p.bullets].join("\n");
+  const cs = p.caseStudy;
+  for (const line of cs ? [...cs.problem, ...cs.approach, ...cs.impact] : [])
+    if (!own.includes(line)) problems.push(`Project "${p.id}": case-study line is not verbatim from its bullets: "${line}"`);
+  if (cs?.impactNote && !cs.impactNote.startsWith("TODO_"))
+    problems.push(`Project "${p.id}": impactNote must stay a TODO_ placeholder until Raj supplies real outcomes`);
 }
 
 const everything = norm(

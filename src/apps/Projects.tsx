@@ -6,6 +6,14 @@ import { useAppBack, useAppHost } from "~/shells/host";
 import { feedback } from "~/sensory/feedback";
 import { deepLinkUrl, openInNewTab } from "~/utils";
 import SitePreview from "~/components/gallery/SitePreview";
+import Segmented from "~/components/Segmented";
+import CaseStudyStory from "~/components/CaseStudyStory";
+
+type View = "overview" | "case";
+const VIEWS: { id: View; label: string }[] = [
+  { id: "overview", label: "Overview" },
+  { id: "case", label: "Case study" }
+];
 
 const projects = portfolio.projects;
 
@@ -67,15 +75,20 @@ const ProjectDetail = ({
   project,
   index,
   touch,
+  view,
+  onView,
   onSelect,
   onOpen
 }: {
   project: Project;
   index: number;
   touch: boolean;
+  view: View;
+  onView: (v: View) => void;
   onSelect: (i: number) => void;
   onOpen: (url: string, label: string) => void;
 }) => {
+  const study = view === "case" ? project.caseStudy : undefined;
   const prev = projects[(index - 1 + projects.length) % projects.length];
   const next = projects[(index + 1) % projects.length];
   const navBtn = `btn-ghost ${touch ? "btn-lg active:scale-[.96]" : "btn-sm"} min-w-0 max-w-[48%]`;
@@ -86,7 +99,7 @@ const ProjectDetail = ({
           Project {index + 1} of {projects.length}
         </p>
         <CopyButton
-          text={deepLinkUrl("projects", project.id)}
+          text={deepLinkUrl("projects", project.id, undefined, study ? "case" : undefined)}
           label="Copy link"
           copiedLabel="Link to this project copied"
           className={touch ? "btn-ghost btn-lg" : "btn-ghost btn-sm"}
@@ -116,14 +129,31 @@ const ProjectDetail = ({
         <ProjectLinks project={project} onOpenInSafari={onOpen} large={touch} />
       </div>
 
+      {project.caseStudy && (
+        <div className="mt-5 flex">
+          <Segmented label="Project view" value={view} options={VIEWS} onChange={onView} />
+        </div>
+      )}
+
       <PreviewCard project={project} onOpen={onOpen} />
 
-      <h2 className="app-h2 mt-8">Overview</h2>
-      <ul className="bullets measure mt-2.5 text-callout leading-relaxed">
-        {project.bullets.map((b) => (
-          <li key={b}>{b}</li>
-        ))}
-      </ul>
+      {study ? (
+        <>
+          <h2 className="app-h2 mt-8">Case study</h2>
+          <div className="mt-4">
+            <CaseStudyStory study={study} />
+          </div>
+        </>
+      ) : (
+        <>
+          <h2 className="app-h2 mt-8">Overview</h2>
+          <ul className="bullets measure mt-2.5 text-callout leading-relaxed">
+            {project.bullets.map((b) => (
+              <li key={b}>{b}</li>
+            ))}
+          </ul>
+        </>
+      )}
 
       <nav aria-label="More projects" className="mt-9 flex justify-between gap-2 border-t border-hairline pt-4">
         <button
@@ -154,6 +184,8 @@ export default function Projects() {
   const openApp = useStore((s) => s.openApp);
   const reduced = useReducedMotion();
   const [selected, setSelected] = useState<string | null>(null);
+  // Kept across projects; only projects with a case study show it.
+  const [view, setView] = useState<View>("overview");
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // Phones and narrow windows: a list that pushes the detail. Wider: sidebar + detail.
@@ -167,6 +199,7 @@ export default function Projects() {
   useEffect(() => {
     const id = params?.id;
     if (typeof id === "string" && projects.some((p) => p.id === id)) setSelected(id);
+    setView(params?.view === "case" ? "case" : "overview");
   }, [nonce]);
 
   useEffect(() => {
@@ -221,7 +254,15 @@ export default function Projects() {
                 All projects
               </button>
             )}
-            <ProjectDetail project={project} index={index} touch={touch} onSelect={select} onOpen={openLive} />
+            <ProjectDetail
+              project={project}
+              index={index}
+              touch={touch}
+              view={view}
+              onView={setView}
+              onSelect={select}
+              onOpen={openLive}
+            />
           </article>
         </motion.div>
       );
@@ -303,7 +344,15 @@ export default function Projects() {
       <div ref={scrollRef} className="app-scroll min-w-0 flex-1">
         {project && (
           <article aria-labelledby="project-title">
-            <ProjectDetail project={project} index={index} touch={touch} onSelect={select} onOpen={openLive} />
+            <ProjectDetail
+              project={project}
+              index={index}
+              touch={touch}
+              view={view}
+              onView={setView}
+              onSelect={select}
+              onOpen={openLive}
+            />
           </article>
         )}
       </div>

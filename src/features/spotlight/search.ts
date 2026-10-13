@@ -50,6 +50,18 @@ export const searchIndex: SearchItem[] = [
     params: { id: p.id },
     icon: "i-ph:folder-simple-fill"
   })),
+  ...portfolio.projects
+    .filter((p) => p.caseStudy)
+    .map((p) => ({
+      key: `case-${p.id}`,
+      group: "Projects" as const,
+      title: `${p.title}: case study`,
+      subtitle: "Problem → Approach → Impact",
+      body: ["case study", ...p.caseStudy!.problem, ...p.caseStudy!.approach, ...p.caseStudy!.impact].join(" "),
+      app: "projects" as const,
+      params: { id: p.id, view: "case" },
+      icon: "i-ph:book-open-text-fill"
+    })),
   ...portfolio.achievements.map((a) => ({
     key: `achievement-${a.id}`,
     group: "Achievements" as const,

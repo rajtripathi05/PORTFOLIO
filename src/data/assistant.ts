@@ -198,6 +198,16 @@ export const buildKnowledge = (): string => {
     if (!pr.url && !pr.subLinks?.length) lines.push("  No live link.");
     if (pr.tags?.length) lines.push(`  Tags: ${pr.tags.join(", ")}`);
     lines.push(bullets(pr.bullets));
+    // Case study: the same words regrouped (impactNote is a TODO_ placeholder, never sent).
+    const cs = pr.caseStudy;
+    if (cs)
+      lines.push(
+        `  Case study (open with view=case): ` +
+          ([["Problem", cs.problem], ["Approach", cs.approach], ["Impact", cs.impact]] as const)
+            .filter(([, l]) => l.length)
+            .map(([k, l]) => `${k}: ${l.join(" / ")}`)
+            .join("; ")
+      );
   }
 
   lines.push("\nACHIEVEMENTS:");

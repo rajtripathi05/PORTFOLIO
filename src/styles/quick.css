@@ -155,6 +155,10 @@ html.is-quick {
   @page {
     margin: 16mm 14mm;
   }
+  /* Backgrounds may not print: keep the case-study markers visible as outlines. */
+  .case-marker {
+    border: 1px solid currentColor;
+  }
   html,
   body,
   #root {

@@ -38,6 +38,39 @@
 .bullets li::marker {
   color: var(--text-3);
 }
+
+/* Case study (components/CaseStudyStory.tsx): numbered steps joined by a rail. */
+.case-story {
+  display: grid;
+  gap: var(--space-5);
+  list-style: none;
+  padding: 0;
+}
+.case-step {
+  position: relative;
+  padding-left: 42px;
+  break-inside: avoid;
+}
+.case-marker {
+  position: absolute;
+  left: 0;
+  top: -4px;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--accent-subtle);
+  color: var(--accent-text);
+}
+.case-rail {
+  position: absolute;
+  left: 13px;
+  top: 30px;
+  bottom: calc(-1 * var(--space-5) - 2px);
+  width: 2px;
+  background: var(--hairline);
+}
 .text-link {
   color: var(--accent-text);
   text-decoration: underline;

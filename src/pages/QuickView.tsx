@@ -7,6 +7,7 @@ import type { Role } from "~/types";
 import OfflineNotice from "~/shells/shared/OfflineNotice";
 import { downloadVCard } from "~/features/vcard";
 import { share } from "~/features/share";
+import CaseStudyStory from "~/components/CaseStudyStory";
 
 // Plain, scrollable, crawlable version of the portfolio. Pre-rendered to static HTML at
 // build time (scripts/prerender-quick.mjs), then hydrated. Everything reads portfolio.ts.
@@ -415,6 +416,12 @@ export default function QuickView() {
                       <li key={b}>{b}</li>
                     ))}
                   </ul>
+                  {pr.caseStudy && (
+                    <section className="mt-4" aria-label={`Case study: ${pr.title}`}>
+                      <p className="mb-3 text-footnote font-bold text-ink-2">Case study</p>
+                      <CaseStudyStory study={pr.caseStudy} headingLevel={4} />
+                    </section>
+                  )}
                   <div className="qv-actions mt-4">
                     <ProjectLinks project={pr} />
                   </div>

@@ -38,6 +38,8 @@ export interface AppParams {
   /** Safari: page to load, and the label shown for it. */
   url?: string;
   label?: string;
+  /** Projects: "case" opens the case-study view. */
+  view?: string;
 }
 
 /** Opens (or brings forward) an app in whichever shell is active. */
@@ -227,6 +229,16 @@ export interface Project {
   tags?: string[];
   /** Shown as a tag next to the chips, e.g. "Team project". */
   team?: string;
+  /** Problem → Approach → Impact, built only from this project's own bullets (verbatim). */
+  caseStudy?: CaseStudy;
+}
+
+export interface CaseStudy {
+  problem: string[];
+  approach: string[];
+  impact: string[];
+  /** `TODO_…` until Raj adds real outcomes; never displayed. */
+  impactNote?: string;
 }
 
 export type TeamSize = "Solo" | "Team of 2" | "Team of 3" | "Team of 4";
