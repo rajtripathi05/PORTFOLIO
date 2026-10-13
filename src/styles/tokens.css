@@ -193,6 +193,15 @@
   --dash-umbrella: #24304a;
   --dash-handle: #6b4a2b;
   --dash-speedline: rgba(255, 255, 255, 0.55);
+  /* Fullscreen layer + HUD glass over the 3D scene (checked against a white sky). */
+  --dash-layer-bg: #10131c;
+  --dash-hud-bg: rgba(14, 18, 30, 0.7);
+  --dash-hud-border: rgba(255, 255, 255, 0.18);
+  --dash-hud-ink: #ffffff;
+  --dash-hud-ink-2: rgba(255, 255, 255, 0.86);
+  --dash-launch-shadow: rgba(60, 20, 0, 0.45);
+  --dash-vignette: rgba(8, 10, 20, 0.5);
+  --dash-flash: #ffffff;
 
   /* Vada pav easter egg (features/vadapav): decorative, drawn on a canvas. */
   --vp-bun: #e2a03f;

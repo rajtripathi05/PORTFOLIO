@@ -62,7 +62,7 @@ const flood = (cells: Cell[], start: number): Cell[] => {
 };
 
 export default function Minesweeper({ size, onFinish, best }: GameProps) {
-  const board = Math.min(size, 420);
+  const board = Math.min(size, 680);
   const gap = 3;
   const cell = Math.floor((board - gap * (W + 1)) / W);
   const [cells, setCells] = useState<Cell[]>(empty);

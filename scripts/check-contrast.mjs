@@ -151,7 +151,10 @@ const pairs = [
   ["2048: 2048 tile", "tile-ink-top", ["tile-2048"], LARGE],
   ...["1", "2", "3", "4", "5", "6", "7", "8"].map((n) => [`Minesweeper ${n}`, `game-${n}`, ["surface", "game-board"], AA]),
   ["Tic-tac-toe X", "game-x", ["surface", "game-board", "game-cell"], LARGE],
-  ["Tic-tac-toe O", "game-o", ["surface", "game-board", "game-cell"], LARGE]
+  ["Tic-tac-toe O", "game-o", ["surface", "game-board", "game-cell"], LARGE],
+  // Mumbai Local Dash HUD glass over the 3D scene; worst case is a white sky behind it.
+  ["Runner HUD text on HUD glass", "dash-hud-ink", ["dash-hud-bg"], AA],
+  ["Runner HUD secondary on HUD glass", "dash-hud-ink-2", ["dash-hud-bg"], AA]
 ];
 
 const evaluate = (vars, theme) =>

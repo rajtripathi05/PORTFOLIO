@@ -73,7 +73,7 @@ const relaxedMove = (b: Mark[]): number => {
 };
 
 export default function TicTacToe({ size, onFinish, best }: GameProps) {
-  const board = Math.min(size, 360);
+  const board = Math.min(size, 560);
   const [cells, setCells] = useState<Mark[]>(Array(9).fill(null));
   const [level, setLevel] = useState<Level>("relaxed");
   const [round, setRound] = useState(0);

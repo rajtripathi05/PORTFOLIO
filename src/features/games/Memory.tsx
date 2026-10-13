@@ -46,7 +46,7 @@ const deal = () => shuffle(PAIRS.flatMap((_, i) => [i, i])).map((pair, i) => ({ 
 const clock = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 
 export default function Memory({ size, onFinish, best }: GameProps) {
-  const board = Math.min(size, 440);
+  const board = Math.min(size, 680);
   const cols = 4;
   const gap = Math.round(board * 0.025);
   const [deck, setDeck] = useState(deal);

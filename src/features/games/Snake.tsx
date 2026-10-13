@@ -53,7 +53,7 @@ const fresh = () => {
 };
 
 export default function Snake({ size, onFinish, best }: GameProps) {
-  const cell = Math.max(12, Math.floor(Math.min(size, 540) / N));
+  const cell = Math.max(12, Math.floor(Math.min(size, 720) / N));
   const px = cell * N;
   const colors = useTokenColors(COLORS);
   const canvasRef = useRef<HTMLCanvasElement>(null);

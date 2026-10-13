@@ -16,7 +16,13 @@ const component = (g: GameDef) => {
   return c;
 };
 
-/** Measures the space a board can use (width and height of the game area). */
+/** Room a game needs above its board: the score chips row and its gap. */
+const STATS_RESERVE = 64;
+
+/**
+ * Measures the free area under the header and returns the largest square a board can
+ * use there, in portrait and landscape alike.
+ */
 function useBoardSize(ref: RefObject<HTMLElement>): number {
   const [size, setSize] = useState(360);
   useEffect(() => {
@@ -24,12 +30,28 @@ function useBoardSize(ref: RefObject<HTMLElement>): number {
     if (!el || typeof ResizeObserver === "undefined") return;
     const ro = new ResizeObserver(([e]) => {
       const { width, height } = e.contentRect;
-      setSize(Math.max(220, Math.floor(Math.min(width - 24, height - 150))));
+      setSize(Math.max(220, Math.floor(Math.min(width, height - STATS_RESERVE))));
     });
     ro.observe(el);
     return () => ro.disconnect();
   }, []);
   return size;
+}
+
+/** Desktop: a running game gets the whole screen; the window restores when it ends. */
+function useMaximizeWhilePlaying(): void {
+  const { shell, id } = useAppHost();
+  useEffect(() => {
+    if (shell !== "desktop") return;
+    const st = useStore.getState();
+    const wasMax = !!st.windows[id]?.max;
+    if (!wasMax) st.toggleMaxApp(id);
+    return () => {
+      const now = useStore.getState();
+      // Leave it alone if the visitor already restored it, or closed the window.
+      if (!wasMax && now.windows[id]?.max) now.toggleMaxApp(id);
+    };
+  }, []);
 }
 
 function GameView({ game, onExit }: { game: GameDef; onExit: () => void }) {
@@ -39,6 +61,7 @@ function GameView({ game, onExit }: { game: GameDef; onExit: () => void }) {
   const size = useBoardSize(areaRef);
   const Game = component(game);
   const touch = useMemo(isCoarsePointer, []);
+  useMaximizeWhilePlaying();
 
   // Escape leaves the game (desktop; touch shells use their back button). Handled here,
   // not globally, so it only applies while focus is in this window; preventDefault
@@ -49,24 +72,27 @@ function GameView({ game, onExit }: { game: GameDef; onExit: () => void }) {
     onExit();
   };
 
+  const hintId = `game-hint-${game.id}`;
   return (
-    <div className="flex h-full flex-col" onKeyDown={onKeyDown}>
+    <div className="flex h-full flex-col" onKeyDown={onKeyDown} aria-describedby={hintId}>
+      {/* One thin header on the desktop; touch shells already show "‹ Arcade" in their bar. */}
       {shell === "desktop" && (
-        <div className="flex flex-none items-center gap-3 px-4 pt-3">
-          <button type="button" className="btn-ghost btn-sm !px-2" onClick={onExit}>
+        <div className="flex flex-none items-center gap-2 px-3 pt-2">
+          <button type="button" className="btn-ghost btn-sm !px-2" onClick={onExit} title="Esc to leave">
             <span className="i-ph:caret-left-bold" aria-hidden="true" />
             All games
           </button>
-          <span className="ml-auto text-footnote text-ink-3">Esc to leave</span>
+          <span className={`arcade-mini !size-6 !rounded-[7px] ${game.tile}`} aria-hidden="true">
+            <span className={`${game.glyph} text-[13px]`} />
+          </span>
+          <h2 className="text-callout font-bold">{game.title}</h2>
         </div>
       )}
-      <div className="flex flex-none items-center gap-3 px-5 pb-1 pt-3">
-        <span className={`arcade-mini !size-9 !rounded-[11px] ${game.tile}`} aria-hidden="true">
-          <span className={`${game.glyph} text-[19px]`} />
-        </span>
-        <h2 className="text-headline font-bold">{game.title}</h2>
-      </div>
-      <div ref={areaRef} className="min-h-0 flex-1 overflow-y-auto px-3 pb-4">
+      {shell !== "desktop" && <h2 className="sr-only">{game.title}</h2>}
+      <p id={hintId} className="sr-only">
+        {touch ? game.controls.touch : game.controls.keys}
+      </p>
+      <div ref={areaRef} className="game-area min-h-0 flex-1 overflow-y-auto">
         <Suspense
           fallback={
             <div className="skeleton mx-auto mt-6 size-64" role="status">
@@ -81,7 +107,6 @@ function GameView({ game, onExit }: { game: GameDef; onExit: () => void }) {
             onFinish={(score) => useArcade.getState().record(game.id, score, game.lowerIsBetter)}
           />
         </Suspense>
-        <p className="game-hint mt-1">{touch ? game.controls.touch : game.controls.keys}</p>
       </div>
     </div>
   );

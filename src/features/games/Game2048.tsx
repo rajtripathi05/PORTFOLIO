@@ -88,7 +88,7 @@ const canMove = (tiles: Tile[]): boolean => {
 };
 
 export default function Game2048({ size, onFinish, best }: GameProps) {
-  const board = Math.min(size, 440);
+  const board = Math.min(size, 680);
   const gap = Math.round(board * 0.028);
   const cell = (board - gap * (SIZE + 1)) / SIZE;
   const [tiles, setTiles] = useState<Tile[]>(newBoard);
