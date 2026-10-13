@@ -108,7 +108,7 @@ The wallpapers (Peacock, Marigold, Lagoon, Mist) are original SVGs generated fro
 
 ## Arcade
 
-`src/apps/Arcade.tsx` hosts six games: Snake, 2048, Memory, Minesweeper, Tic-Tac-Toe and **Raj Quiz**. Each game plays by keyboard and touch, pauses when hidden, respects reduced motion, and is its own code chunk (`src/features/games/`). Best scores stay in the visitor's browser. Memory and the Quiz build their facts from `portfolio.ts` by id, so they always match the content. Deep link a game with `/?open=arcade&id=snake`; in the Terminal, type `games` or `play 2048`.
+`src/apps/Arcade.tsx` hosts seven games: **Mumbai Local Dash** (a 3D runner; three.js loads only with it, enforced by `npm run check:three`), Snake, 2048, Memory, Minesweeper, Tic-Tac-Toe and **Raj Quiz**. Each game plays by keyboard and touch, pauses when hidden, respects reduced motion, and is its own code chunk (`src/features/games/`). Best scores stay in the visitor's browser. Memory and the Quiz build their facts from `portfolio.ts` by id, so they always match the content. Deep link a game with `/?open=arcade&id=snake`; in the Terminal, type `games` or `play 2048`.
 
 Easter egg: type `vadapav` anywhere on the desktop (or `vada pav` in the Terminal).
 
