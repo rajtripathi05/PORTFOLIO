@@ -77,7 +77,8 @@ export function buildRunner(C: DashColors, mats: Mats): Rig {
         { g: rbox(0.28, 0.16, 0.08, 0.04), c: C["dash-backpack-2"], p: [0, 0.24, 0.37] },
         { g: rbox(0.06, 0.05, 0.42, 0.02), c: C["dash-backpack-2"], p: [-0.13, 0.6, 0.02] },
         { g: rbox(0.06, 0.05, 0.42, 0.02), c: C["dash-backpack-2"], p: [0.13, 0.6, 0.02] },
-        { g: cap(0.07, 0.06), c: C["dash-skin"], p: [0, 0.66, 0] }
+        { g: cap(0.07, 0.06), c: C["dash-skin"], p: [0, 0.66, 0] },
+        { g: torus(0.1, 0.03, 6, 14), c: C["dash-shirt-2"], p: [0, 0.62, 0], r: [Math.PI / 2, 0, 0] }
       ]
     },
     mats

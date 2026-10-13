@@ -760,7 +760,7 @@ export function createRain(C: DashColors, max: number) {
       const n = Math.floor(budget * weight);
       lines.visible = n > 0;
       if (!n) return;
-      mat.opacity = 0.18 + weight * 0.22;
+      mat.opacity = 0.3 + weight * 0.35;
       const fall = 24;
       for (let i = 0; i < n; i++) {
         const d = drops[i];
@@ -776,7 +776,7 @@ export function createRain(C: DashColors, max: number) {
         pos[k + 1] = d.y;
         pos[k + 2] = z;
         pos[k + 3] = x;
-        pos[k + 4] = d.y + 0.55;
+        pos[k + 4] = d.y + 0.9;
         pos[k + 5] = z - speed * 0.02;
       }
       geo.setDrawRange(0, n * 2);

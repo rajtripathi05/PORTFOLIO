@@ -808,7 +808,7 @@ export function createDash(o: DashOptions) {
     } else {
       // Portrait: a little further back and higher, looking down more, so all three lanes
       // fit the narrow view and the horizon sits in the upper third.
-      tmpV.set(st.px * 0.6, 2.85 + st.py * 0.3 + back * 0.55, 6.2 + back * 0.4);
+      tmpV.set(st.px * 0.6, 2.85 + st.py * 0.3 + back * 0.35, 6.2 - back * 0.6);
       camLook.set(st.px * 0.7, 1.0 - back * 0.2 + st.py * 0.25, -12 + back * 2.9);
     }
     if (mode === "over") tmpV.z -= Math.min(1, st.crashT) * 1.2;
