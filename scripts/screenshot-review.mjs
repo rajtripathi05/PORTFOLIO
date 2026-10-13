@@ -24,7 +24,7 @@ const only = args.find((a) => a.startsWith("--only="))?.slice(7);
 const OUT = path.join(ROOT, "review", label);
 const PORT = 4180;
 const BASE = `http://localhost:${PORT}`;
-const APPS = ["about", "projects", "experience", "achievements", "skills", "resume", "contact", "safari", "terminal", "arcade"];
+const APPS = ["about", "projects", "experience", "achievements", "skills", "resume", "contact", "safari", "terminal", "arcade", "hire"];
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
