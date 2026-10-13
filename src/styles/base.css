@@ -200,3 +200,13 @@ button:disabled {
   [data-feedback="success"] { box-shadow: 0 0 0 3px var(--success-subtle); }
   [data-feedback="error"] { box-shadow: 0 0 0 2px var(--danger); }
 }
+
+/* Mumbai Local desktop launcher */
+.ml-icon { overflow: visible; filter: var(--icon-drop); transition: transform 0.25s var(--ease-out, ease-out); }
+.ml-launch:hover .ml-icon, .ml-launch:focus-visible .ml-icon { transform: translateY(-4px) scale(1.06); }
+.ml-sweep { opacity: 0; }
+.ml-launch:hover .ml-sweep { animation: ml-sweep 0.7s ease-out 1; }
+.ml-halo { transform-origin: center; transform-box: fill-box; animation: ml-pulse 2.4s ease-in-out infinite; }
+@keyframes ml-sweep { from { opacity: 0.35; transform: skewX(-20deg) translateX(0); } to { opacity: 0.35; transform: skewX(-20deg) translateX(130px); } }
+@keyframes ml-pulse { 50% { opacity: 0.6; transform: scale(0.85); } }
+@media (prefers-reduced-motion: reduce) { .ml-icon, .ml-halo, .ml-launch:hover .ml-sweep { animation: none; transition: none; } .ml-launch:hover .ml-icon { transform: none; } }

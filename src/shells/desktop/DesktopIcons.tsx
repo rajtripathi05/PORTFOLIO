@@ -1,6 +1,8 @@
 import type React from "react";
 import type { AppId } from "~/configs/apps";
 import { MENU_BAR_HEIGHT } from "~/utils";
+import { feedback } from "~/sensory/feedback";
+import MumbaiLocalIcon from "./MumbaiLocalIcon";
 
 const icons: { app: AppId; label: string; glyph: string; color: string }[] = [
   { app: "resume", label: "Resume.pdf", glyph: "i-ph:file-pdf-fill", color: "text-file-pdf" },
@@ -65,6 +67,26 @@ export default function DesktopIcons() {
           </button>
         );
       })}
+      <button
+        type="button"
+        className="ml-launch group flex w-[92px] flex-col items-center gap-1 rounded-button p-1.5 outline-offset-0"
+        aria-label="Play Mumbai Local Dash"
+        onClick={(e) => {
+          feedback("open", { el: e.currentTarget });
+          openApp("arcade", { id: "local" });
+        }}
+        onKeyDown={(e) => {
+          if (e.key === "ArrowUp" || e.key === "ArrowLeft") {
+            e.preventDefault();
+            refs.current[icons.length - 1]?.focus();
+          }
+        }}
+      >
+        <MumbaiLocalIcon />
+        <span className="whitespace-nowrap rounded-sm bg-[var(--label-chip)] px-1.5 py-px text-footnote font-semibold leading-tight text-ink-1">
+          Mumbai Local
+        </span>
+      </button>
     </nav>
   );
 }
