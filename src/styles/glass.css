@@ -167,3 +167,44 @@
     transform: none;
   }
 }
+
+/* ---------------- skyline wallpaper: lit windows (features/glass/NightLights.tsx) ----------------
+   One static layer that only changes opacity with the hour (--lit on <html>). A few windows
+   on ::after twinkle slowly. */
+.wp-lights {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: var(--wp-lights);
+  opacity: var(--lit, 0.15);
+  transition: opacity 2s linear;
+}
+.wp-lights::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--wp-twinkle);
+  opacity: 0;
+  animation: wp-twinkle 9s ease-in-out infinite alternate;
+}
+/* Phones crop to the dense towers behind the icon grid: keep the windows dimmer there. */
+.touch-shell .wp-lights {
+  opacity: calc(var(--lit, 0.15) * 0.55);
+}
+@keyframes wp-twinkle {
+  0%,
+  55% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wp-lights {
+    transition: none;
+  }
+  .wp-lights::after {
+    animation: none;
+  }
+}

@@ -6,6 +6,7 @@ import type { ShellKind } from "~/types";
 import AppIcon from "~/components/AppIcon";
 import { feedback } from "~/sensory/feedback";
 import { useParallax } from "~/sensory/parallax";
+import { NightLights } from "~/features/glass";
 import { ArcadeWidget } from "~/features/games/ArcadeWidget";
 import { AwardsWidget, FeaturedWidget, ProfileWidget } from "../shared/Widgets";
 import StatusBar from "./StatusBar";
@@ -58,7 +59,9 @@ export default function TouchHome({ shell }: { shell: Exclude<ShellKind, "deskto
         className="absolute -inset-3 will-change-transform"
         style={{ background: wallpaper.background }}
         aria-hidden="true"
-      />
+      >
+        <NightLights wallpaper={wallpaper} />
+      </div>
       <div ref={homeRef} className="touch-home">
         <StatusBar />
         <div className="touch-scroll">

@@ -1,6 +1,8 @@
 import { installWallpapers } from "~/configs/wallpapers";
+import { trackNightLights } from "./NightLights";
 
 export { default as LiquidFilters } from "./LiquidFilters";
+export { NightLights } from "./NightLights";
 
 /** "clear" (default, like iOS 26) or "tinted" (more opaque, easier to read). */
 export type GlassStyle = "clear" | "tinted";
@@ -68,4 +70,5 @@ export function initGlass(): void {
   installWallpapers();
   document.documentElement.dataset.lens = supportsLens() ? "on" : "off";
   trackLight();
+  trackNightLights();
 }

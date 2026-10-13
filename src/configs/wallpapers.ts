@@ -30,6 +30,25 @@ export interface Wallpaper {
   /** CSS background value; a custom property, so light/dark is handled by CSS. */
   background: string;
   ribbons?: { light: RibbonPalette; dark: RibbonPalette; flip?: boolean };
+  /** A night skyline (light = dusk). Its lit windows are a separate overlay. */
+  skyline?: { light: SkylinePalette; dark: SkylinePalette };
+}
+
+export interface SkylinePalette {
+  /** Sky, top → horizon. */
+  sky: [string, string, string];
+  /** Haze along the horizon. */
+  glow: string;
+  /** Sea, horizon → bottom edge. */
+  sea: [string, string];
+  /** Building layers, back → front, and the sea link. */
+  far: string;
+  mid: string;
+  near: string;
+  link: string;
+  /** Small decorative lights (not checked for contrast, like a ribbon highlight). */
+  moon: string;
+  windows: string;
 }
 
 const peacock: Wallpaper["ribbons"] = {
@@ -90,10 +109,37 @@ const lagoon: Wallpaper["ribbons"] = {
   }
 };
 
+/** Mumbai at night; the light theme gets the same skyline at dusk. */
+const mumbai: Wallpaper["skyline"] = {
+  light: {
+    sky: ["#9fb4ff", "#e7b8e8", "#ffc9a8"],
+    glow: "#ffb38a",
+    sea: ["#a9b9f0", "#8fa3e6"],
+    far: "#b7a9e0",
+    mid: "#9d8fd0",
+    near: "#8d80c2",
+    link: "#8a8fd0",
+    moon: "#fff4d6",
+    windows: "#fff3c4"
+  },
+  dark: {
+    sky: ["#040716", "#0b1030", "#2a1a45"],
+    glow: "#4a2450",
+    sea: ["#0a1838", "#050b1d"],
+    far: "#1a2148",
+    mid: "#11163a",
+    near: "#080b20",
+    link: "#2a3466",
+    moon: "#f3ead0",
+    windows: "#ffc96b"
+  }
+};
+
 export const wallpapers: Wallpaper[] = [
   { id: "peacock", name: "Peacock", background: "var(--wp-peacock)", ribbons: peacock },
   { id: "marigold", name: "Marigold", background: "var(--wp-marigold)", ribbons: marigold },
   { id: "lagoon", name: "Lagoon", background: "var(--wp-lagoon)", ribbons: lagoon },
+  { id: "mumbai-night", name: "Mumbai Night", background: "var(--wp-mumbai-night)", skyline: mumbai },
   { id: "mist", name: "Mist", background: "var(--wallpaper-dusk)" }
 ];
 
@@ -137,16 +183,121 @@ export const ribbonSvg = (p: RibbonPalette, flip = false): string => {
   );
 };
 
+/* ---------------------------------------------------------- skyline */
+
+// Silhouettes only, standing on the waterline (y = G): [x, width, height, spire?].
+const G = 690;
+type Block = [number, number, number, number?];
+const FAR: Block[] = [
+  [20, 60, 330], [95, 40, 260], [150, 70, 380, 40], [600, 50, 300], [660, 80, 420],
+  [760, 45, 350], [820, 70, 460, 50], [905, 55, 330], [980, 60, 280], [1050, 40, 220]
+];
+const MID: Block[] = [
+  [0, 90, 200], [100, 70, 250], [180, 60, 170], [250, 90, 280, 30], [560, 70, 210], [640, 60, 300],
+  [710, 90, 240], [810, 60, 330], [880, 80, 260], [970, 70, 190], [1050, 60, 140]
+];
+const NEAR: Block[] = [
+  [0, 70, 110], [75, 50, 150], [130, 90, 90], [200, 60, 130], [265, 100, 70], [560, 80, 120],
+  [650, 50, 160], [705, 110, 100], [820, 60, 140], [885, 90, 80], [980, 70, 120], [1055, 60, 60]
+];
+// A Gateway-of-India-style arch: two piers, an arched opening, four turrets and two domes.
+const ARCH =
+  "M400 690V585h150v105h-50v-55a25 25 0 0 0-50 0v55zM402 585v-30h20v30zM528 585v-30h20v30z" +
+  "M447 585v-16h14v16zM489 585v-16h14v16zM424 585v-8h102v8zM402 555a10 8 0 0 1 20 0zM528 555a10 8 0 0 1 20 0z";
+const blocks = (list: Block[]) =>
+  list
+    .map(([x, w, h, s]) => `M${x} ${G}v-${h}h${w}v${h}z` + (s ? `M${x + w / 2 - 1} ${G - h}v-${s}h2v${s}z` : ""))
+    .join("");
+
+// Cable-stayed sea link on the horizon: deck, two inverted-Y pylons and fanned stays.
+const seaLink = () => {
+  let d = "M1080 676Q1340 660 1620 670";
+  let stays = "";
+  for (const [x, top] of [[1290, 520], [1470, 540]]) {
+    d += `M${x - 14} 672L${x} ${top + 60}L${x + 14} 670M${x} ${top + 60}V${top}`;
+    for (let i = 0; i < 6; i++) stays += `M${x} ${top + 10 + i * 8}L${x - 40 - i * 26} 669M${x} ${top + 10 + i * 8}L${x + 40 + i * 26} 667`;
+  }
+  return { d, stays };
+};
+
+/** Mumbai Night as an SVG document (1600×1000, same framing as the ribbons). */
+export const skylineSvg = (p: SkylinePalette): string => {
+  const link = seaLink();
+  return (
+    `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 1000' preserveAspectRatio='xMidYMid slice'>` +
+    `<defs>` +
+    `<linearGradient id='s' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='${p.sky[0]}'/>` +
+    `<stop offset='.45' stop-color='${p.sky[1]}'/><stop offset='.69' stop-color='${p.sky[2]}'/></linearGradient>` +
+    `<linearGradient id='w' x1='0' y1='0' x2='0' y2='1'>${stops(p.sea)}</linearGradient>` +
+    `<linearGradient id='r' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='${p.moon}' stop-opacity='.55'/>` +
+    `<stop offset='1' stop-color='${p.moon}' stop-opacity='0'/></linearGradient>` +
+    `<radialGradient id='g'><stop offset='0' stop-color='${p.glow}' stop-opacity='.8'/><stop offset='1' stop-color='${p.glow}' stop-opacity='0'/></radialGradient>` +
+    `<radialGradient id='m'><stop offset='.2' stop-color='${p.moon}' stop-opacity='.45'/><stop offset='1' stop-color='${p.moon}' stop-opacity='0'/></radialGradient>` +
+    `<filter id='b' x='-50%' y='-50%' width='200%' height='200%'><feGaussianBlur stdDeviation='6'/></filter>` +
+    `</defs>` +
+    `<rect width='1600' height='1000' fill='url(#s)'/>` +
+    `<ellipse cx='800' cy='${G}' rx='900' ry='150' fill='url(#g)'/>` +
+    `<circle cx='960' cy='210' r='150' fill='url(#m)'/><circle cx='960' cy='210' r='34' fill='${p.moon}'/>` +
+    `<path fill='none' stroke='${p.link}' stroke-width='5' d='${link.d}'/>` +
+    `<path fill='none' stroke='${p.link}' stroke-width='1.2' d='${link.stays}'/>` +
+    `<path fill='${p.far}' d='${blocks(FAR)}'/>` +
+    `<path fill='${p.mid}' d='${blocks(MID)}'/>` +
+    `<path fill='${p.near}' d='${blocks(NEAR)}${ARCH}'/>` +
+    `<rect y='${G}' width='1600' height='${1000 - G}' fill='url(#w)'/>` +
+    `<g filter='url(#b)' fill='url(#r)'><ellipse cx='960' cy='780' rx='30' ry='90'/>` +
+    `<path d='M920 712h80v4h-80zM932 740h56v3h-56zM940 770h40v3h-40zM948 800h24v2h-24z'/></g>` +
+    `</svg>`
+  );
+};
+
+/**
+ * The skyline's windows as their own SVG (same framing), so CSS can fade them with the
+ * hour (`--lit`). Each layer's windows are hidden behind the layers in front of it, and a
+ * coarse "off" pattern leaves about half of them dark. `twinkle` draws a sparse subset.
+ */
+export const windowsSvg = (color: string, twinkle = false): string => {
+  const off = [[0, 0], [3, 0], [6, 0], [2, 1], [5, 1], [1, 2], [2, 2], [6, 2], [4, 3], [0, 4], [3, 4], [5, 4], [1, 0], [4, 1], [3, 3], [6, 3], [5, 2], [2, 4]]
+    .map(([c, r]) => `M${c * 14} ${r * 18}h14v18h-14z`)
+    .join("");
+  const mask = (id: string, d: string) =>
+    `<mask id='${id}' maskUnits='userSpaceOnUse' x='0' y='0' width='1600' height='1000'>` +
+    `<rect width='1600' height='1000' fill='#fff'/><path d='${d}'/>${twinkle ? "" : "<rect width='1600' height='1000' fill='url(#q)'/>"}</mask>`;
+  const [tw, th] = twinkle ? [154, 126] : [14, 18];
+  const win = twinkle ? "M74 59h5v7h-5zM18 113h5v7h-5zM130 23h5v7h-5z" : "M4 5h5v7h-5z";
+  return (
+    `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 1000' preserveAspectRatio='xMidYMid slice'>` +
+    `<defs>` +
+    `<pattern id='p' width='${tw}' height='${th}' patternUnits='userSpaceOnUse'><path fill='${color}' d='${win}'/></pattern>` +
+    `<pattern id='q' width='98' height='90' patternUnits='userSpaceOnUse'><path d='${off}'/></pattern>` +
+    mask("a", blocks(MID) + blocks(NEAR) + ARCH) +
+    mask("c", blocks(NEAR) + ARCH) +
+    mask("e", "") +
+    `</defs>` +
+    `<path mask='url(#a)' fill='url(#p)' d='${blocks(FAR)}'/>` +
+    `<path mask='url(#c)' fill='url(#p)' d='${blocks(MID)}'/>` +
+    `<path mask='url(#e)' fill='url(#p)' d='${blocks(NEAR)}'/>` +
+    `</svg>`
+  );
+};
+
 const cssUrl = (svg: string) => `url("data:image/svg+xml,${encodeURIComponent(svg)}") center / cover no-repeat`;
 
-/** CSS that defines --wp-<id> for both themes. */
+/** CSS that defines --wp-<id> (and a skyline's --wp-<id>-windows / -twinkle) for both themes. */
 export const wallpaperCss = (): string => {
   const light: string[] = [];
   const dark: string[] = [];
   for (const w of wallpapers) {
-    if (!w.ribbons) continue;
-    light.push(`--wp-${w.id}: ${cssUrl(ribbonSvg(w.ribbons.light, w.ribbons.flip))}, ${w.ribbons.light.bg[0]};`);
-    dark.push(`--wp-${w.id}: ${cssUrl(ribbonSvg(w.ribbons.dark, w.ribbons.flip))}, ${w.ribbons.dark.bg[0]};`);
+    if (w.ribbons) {
+      light.push(`--wp-${w.id}: ${cssUrl(ribbonSvg(w.ribbons.light, w.ribbons.flip))}, ${w.ribbons.light.bg[0]};`);
+      dark.push(`--wp-${w.id}: ${cssUrl(ribbonSvg(w.ribbons.dark, w.ribbons.flip))}, ${w.ribbons.dark.bg[0]};`);
+    }
+    if (w.skyline) {
+      for (const [out, p] of [[light, w.skyline.light], [dark, w.skyline.dark]] as const) {
+        out.push(`--wp-${w.id}: ${cssUrl(skylineSvg(p))}, ${p.sky[0]};`);
+        out.push(`--wp-${w.id}-windows: ${cssUrl(windowsSvg(p.windows))};`);
+        out.push(`--wp-${w.id}-twinkle: ${cssUrl(windowsSvg(p.windows, true))};`);
+      }
+    }
   }
   return `:root{${light.join("")}}.dark{${dark.join("")}}`;
 };

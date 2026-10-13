@@ -22,6 +22,7 @@ import Credits from "./shared/Credits";
 import OfflineNotice from "./shared/OfflineNotice";
 import Toast from "./shared/Toast";
 import { TourLayer } from "~/features/tour";
+import { NightLights } from "~/features/glass";
 import { showStartHint } from "./shared/startHint";
 
 const isTyping = (el: Element | null) =>
@@ -128,7 +129,9 @@ export default function DesktopShell() {
           ref={wallpaperRef}
           className="absolute -inset-2 will-change-transform"
           style={{ background: wallpaper.background }}
-        />
+        >
+          <NightLights wallpaper={wallpaper} />
+        </div>
       </motion.div>
 
       <a

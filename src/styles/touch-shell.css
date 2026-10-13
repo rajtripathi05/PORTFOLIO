@@ -26,23 +26,9 @@
   overscroll-behavior: contain;
   padding: 6px max(16px, env(safe-area-inset-right)) calc(env(safe-area-inset-bottom) + 170px)
     max(16px, env(safe-area-inset-left));
-  /* Scroll edge effect (iOS 26): content softens as it slides under the status bar and dock. */
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent 0,
-    #000 12px,
-    #000 calc(100% - 210px),
-    rgba(0, 0, 0, 0.25) calc(100% - 80px),
-    rgba(0, 0, 0, 0.25)
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 0,
-    #000 12px,
-    #000 calc(100% - 210px),
-    rgba(0, 0, 0, 0.25) calc(100% - 80px),
-    rgba(0, 0, 0, 0.25)
-  );
+  /* No mask-image here: a mask makes this a backdrop root, and every glass widget inside
+     would then frost only its own scroller instead of the wallpaper. The glass dock
+     softens what scrolls under it. */
 }
 .touch-page {
   display: grid;

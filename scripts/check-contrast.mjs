@@ -68,12 +68,17 @@ const ratio = (a, b) => {
 };
 
 // Every colour a wallpaper can show behind glass: each ribbon palette (minus its thin
-// decorative highlight) and the stops of CSS-gradient wallpapers such as Mist.
+// decorative highlight), each skyline palette (minus the moon and the small lit windows)
+// and the stops of CSS-gradient wallpapers such as Mist.
 const wallpaperStops = (vars) =>
   wallpapers.flatMap((w) => {
     if (w.ribbons) {
       const p = vars === dark ? w.ribbons.dark : w.ribbons.light;
       return [...p.bg, ...p.glow, ...p.back, ...p.main, ...p.front].map((c) => ({ w: w.id, c: parseColor(c) }));
+    }
+    if (w.skyline) {
+      const p = vars === dark ? w.skyline.dark : w.skyline.light;
+      return [...p.sky, p.glow, ...p.sea, p.far, p.mid, p.near, p.link].map((c) => ({ w: w.id, c: parseColor(c) }));
     }
     const value = resolve(vars, w.background);
     return [...value.matchAll(/#[0-9a-f]{6}/gi)].map((m) => ({ w: w.id, c: parseColor(m[0]) }));
