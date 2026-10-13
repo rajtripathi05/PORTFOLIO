@@ -6,6 +6,7 @@ import { games, getGame } from "~/features/games/registry";
 import { apps } from "~/configs/apps";
 import { getWallpaper } from "~/configs/wallpapers";
 import { feedback } from "~/sensory/feedback";
+import { vadaPav } from "~/features/vadapav";
 import type { Role } from "~/types";
 
 const p = portfolio;
@@ -334,6 +335,11 @@ export default function Terminal() {
     const cmd = ({ certs: "certifications", cert: "certifications", ip: "research" } as Record<string, string>)[name.toLowerCase()] ?? name.toLowerCase();
     if (cmd === "clear") return setEntries([]);
     if (cmd === "ai") return void runAi(line, rest.join(" "));
+    // Not in help: phones can't type it on the desktop, so the Terminal takes it too.
+    if (line.toLowerCase().replace(/\s+/g, "") === "vadapav") {
+      vadaPav();
+      return push(line, <span className={C.ok}>Order up. 🌶️</span>);
+    }
     if (cmd === "resume") {
       openApp("resume");
       return push(line, <span className={C.ok}>Opening the resume…</span>);

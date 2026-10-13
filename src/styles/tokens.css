@@ -146,6 +146,16 @@
   --icon-game-mines-2: #4a5568;
   --icon-game-ttt-1: #ff8fa3;
   --icon-game-ttt-2: #e0294f;
+  --icon-game-local-1: #ffcc4d;
+  --icon-game-local-2: #c2410c;
+  --icon-hire-1: #34d399;
+  --icon-hire-2: #0e7490;
+
+  /* Vada pav easter egg (features/vadapav): decorative, drawn on a canvas. */
+  --vp-bun: #e2a03f;
+  --vp-bun-light: #f6cf74;
+  --vp-patty: #d9661f;
+  --vp-chilli: #2f9e44;
 
   /* ---- Games (src/features/games) ---- */
   /* Boards are a cool tint; cells sit raised on them (white); opened cells sink into the tint. */

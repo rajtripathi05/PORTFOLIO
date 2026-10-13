@@ -110,6 +110,8 @@ The wallpapers (Peacock, Marigold, Lagoon, Mist) are original SVGs generated fro
 
 `src/apps/Arcade.tsx` hosts six games: Snake, 2048, Memory, Minesweeper, Tic-Tac-Toe and **Raj Quiz**. Each game plays by keyboard and touch, pauses when hidden, respects reduced motion, and is its own code chunk (`src/features/games/`). Best scores stay in the visitor's browser. Memory and the Quiz build their facts from `portfolio.ts` by id, so they always match the content. Deep link a game with `/?open=arcade&id=snake`; in the Terminal, type `games` or `play 2048`.
 
+Easter egg: type `vadapav` anywhere on the desktop (or `vada pav` in the Terminal).
+
 ## Sound & haptics
 
 Nothing plays until the visitor interacts. UI sounds (soft taps, open/close, success) are synthesised in the browser with the Web Audio API — **no audio files ship** — and loaded lazily on the first interaction (`src/sensory`). They are off by default under reduced motion. The optional **ambient pad** is off on every load and starts only from a click (Settings, the menu-bar speaker, or **View → Ambient Music**). **Mute** is always one tap away (menu bar, phone/tablet status bar). Haptics use the Vibration API on touch devices and can be turned off in Settings.
