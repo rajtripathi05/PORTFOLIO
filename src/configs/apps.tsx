@@ -172,7 +172,7 @@ export const apps: AppDef[] = [
   {
     id: "arcade",
     title: "Arcade",
-    description: "Snake, 2048, Memory, Minesweeper, Tic-Tac-Toe and a quiz about Raj",
+    description: "Mumbai Local Dash, Snake, 2048, Memory, Minesweeper, Tic-Tac-Toe and a quiz about Raj",
     icon: { glyph: "i-ph:game-controller-fill", tile: "tile-arcade" },
     width: 760,
     height: 720,

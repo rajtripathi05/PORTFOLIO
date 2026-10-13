@@ -5,6 +5,19 @@ export type { GameDef, GameId, GameProps } from "./types";
 /** The Arcade's games, in library order. Each one is its own code chunk. */
 export const games: GameDef[] = [
   {
+    id: "local",
+    title: "Mumbai Local Dash",
+    tagline: "Run Dadar, Marine Drive and the Sea Link. Mind the gap!",
+    controls: {
+      keys: "← → switch lanes · ↑ jump · ↓ slide (or WASD) · Space or Enter to start and pause",
+      touch: "Swipe left or right to switch lanes, up to jump, down to slide"
+    },
+    glyph: "i-ph:train-bold",
+    tile: "tile-game-local",
+    unit: "points",
+    load: () => import("./LocalDash")
+  },
+  {
     id: "snake",
     title: "Snake",
     tagline: "Eat, grow, and don't bite your own tail.",

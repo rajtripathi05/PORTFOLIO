@@ -1,6 +1,6 @@
 import type { ComponentType } from "react";
 
-export type GameId = "snake" | "2048" | "memory" | "minesweeper" | "tictactoe" | "quiz";
+export type GameId = "local" | "snake" | "2048" | "memory" | "minesweeper" | "tictactoe" | "quiz";
 
 /** What the Arcade gives every game. */
 export interface GameProps {

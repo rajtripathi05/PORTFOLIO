@@ -151,6 +151,49 @@
   --icon-hire-1: #0f9f7c;
   --icon-hire-2: #0b5f73;
 
+  /* Mumbai Local Dash (features/games/dash): flat scene colours, read once per run. */
+  --dash-track: #8a7d70;
+  --dash-sleeper: #5a4636;
+  --dash-rail: #b8c0c8;
+  --dash-dadar-sky: #a9d0f2;
+  --dash-platform: #b9b2a6;
+  --dash-edge-yellow: #f2c230;
+  --dash-edge-black: #26262b;
+  --dash-pillar: #6b7a8f;
+  --dash-roof: #4d5a6b;
+  --dash-board: #f2c230;
+  --dash-board-ink: #111111;
+  --dash-marine-sky: #f3a46f;
+  --dash-sea: #2f5d8a;
+  --dash-promenade: #cfc6b8;
+  --dash-road: #4a4d55;
+  --dash-lamp-pole: #3b3f4a;
+  --dash-lamp: #ffe6a8;
+  --dash-building: #6e5a7e;
+  --dash-link-sky: #8fb8de;
+  --dash-deck: #7d848c;
+  --dash-tower: #e8e4dc;
+  --dash-cable: #f5f5f0;
+  --dash-rick-body: #1f7a3a;
+  --dash-rick-roof: #f2c230;
+  --dash-wheel: #222226;
+  --dash-cart: #a0522d;
+  --dash-barrier: #d83a3a;
+  --dash-barrier-ink: #ffffff;
+  --dash-train: #7a1f2b;
+  --dash-train-stripe: #f2c230;
+  --dash-window: #2a3440;
+  --dash-warn: #ff4d4d;
+  --dash-shirt: #2f6fe0;
+  --dash-pants: #2b2f3a;
+  --dash-skin: #c68642;
+  --dash-hair: #1b1b1b;
+  --dash-chai-glass: #f4efe6;
+  --dash-chai: #b5651d;
+  --dash-umbrella: #24304a;
+  --dash-handle: #6b4a2b;
+  --dash-speedline: rgba(255, 255, 255, 0.55);
+
   /* Vada pav easter egg (features/vadapav): decorative, drawn on a canvas. */
   --vp-bun: #e2a03f;
   --vp-bun-light: #f6cf74;
