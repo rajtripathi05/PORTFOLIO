@@ -158,6 +158,18 @@ export const apps: AppDef[] = [
     ...lazyApp(() => import("~/apps/Terminal"))
   },
   {
+    id: "hire",
+    title: "Hire Raj",
+    shortTitle: "Hire",
+    description: "Match a role to Raj's work: a short pitch with evidence",
+    icon: { glyph: "i-ph:handshake-fill", tile: "tile-hire" },
+    width: 720,
+    height: 720,
+    minWidth: 360,
+    minHeight: 420,
+    ...lazyApp(() => import("~/apps/Hire"))
+  },
+  {
     id: "arcade",
     title: "Arcade",
     description: "Snake, 2048, Memory, Minesweeper, Tic-Tac-Toe and a quiz about Raj",

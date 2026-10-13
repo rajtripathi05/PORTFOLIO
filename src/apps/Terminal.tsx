@@ -27,6 +27,7 @@ const COMMANDS: Record<string, string> = {
   resume: "Open the resume PDF",
   games: "List the Arcade's games",
   play: "Play a game, e.g. play snake",
+  hire: "Match a role to Raj's work, e.g. hire Data Analyst",
   neofetch: "This system, at a glance",
   whoami: "Who you're looking at",
   clear: "Clear the screen",
@@ -340,6 +341,11 @@ export default function Terminal() {
       vadaPav();
       return push(line, <span className={C.ok}>Order up. 🌶️</span>);
     }
+    if (cmd === "hire") {
+      const role = rest.join(" ").trim();
+      openApp("hire", role ? { q: role } : undefined);
+      return push(line, <span className={C.ok}>{role ? `Matching Raj to “${role}”…` : "Opening Hire Raj…"}</span>);
+    }
     if (cmd === "resume") {
       openApp("resume");
       return push(line, <span className={C.ok}>Opening the resume…</span>);
@@ -399,7 +405,7 @@ export default function Terminal() {
     } else if (e.key === "Tab") {
       e.preventDefault();
       const matches = Object.keys(COMMANDS).filter((c) => c.startsWith(input.trim().toLowerCase()));
-      if (matches.length === 1) setInput(matches[0] + (matches[0] === "ai" || matches[0] === "play" ? " " : ""));
+      if (matches.length === 1) setInput(matches[0] + (matches[0] === "ai" || matches[0] === "play" || matches[0] === "hire" ? " " : ""));
       else if (matches.length > 1) push(input, <span className={C.dim}>{matches.join("   ")}</span>);
     } else if (e.key === "l" && e.ctrlKey) {
       e.preventDefault();

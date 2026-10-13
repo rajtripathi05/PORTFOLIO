@@ -251,6 +251,11 @@ export default function QuickView() {
                 <span className="i-ph:phone-bold" aria-hidden="true" />
                 Call
               </a>
+              {/* Opens the Hire Raj app on the main site (a plain link, so it prerenders). */}
+              <a className="btn-secondary" href="/?open=hire">
+                <span className="i-ph:handshake-bold" aria-hidden="true" />
+                Hire Raj
+              </a>
               {mounted && (
                 <>
                   <button type="button" className="btn-secondary" onClick={downloadVCard}>

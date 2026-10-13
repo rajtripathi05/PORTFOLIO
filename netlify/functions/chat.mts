@@ -3,12 +3,16 @@
  * Body: { messages: { role: "user" | "assistant", content: string }[] }
  * Response: streamed text/plain answer (ACTION: lines may appear at the end).
  *
+ * Body: { mode: "hire", role: string, jd?: string }   (Hire Raj, src/data/hire.ts)
+ * Response: JSON { pitch, picks } — ids validated here and again in the browser.
+ *
  * The OpenRouter key lives only in this function's environment variables
  * (OPENROUTER_API_KEY, OPENROUTER_MODEL, SITE_URL) and never reaches the browser.
  * Message contents and the key are never logged.
  */
 import type { Context } from "@netlify/functions";
 import { buildSystemPrompt, MAX_HISTORY, MAX_USER_CHARS } from "../../src/data/assistant";
+import { cleanInput, hireSystemPrompt, hireUserMessage, MAX_JD_CHARS, MAX_ROLE_CHARS, parseHireReply } from "../../src/data/hire";
 
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 const UPSTREAM_TIMEOUT_MS = 20_000;
@@ -53,6 +57,50 @@ const parseMessages = (body: unknown): Msg[] | string => {
 };
 
 let systemPrompt: string | null = null;
+let hirePrompt: string | null = null;
+
+/** Hire Raj: one short JSON answer (not streamed). Same key, rate limit and no logging of content. */
+const hire = async (body: Record<string, unknown>, apiKey: string, model: string): Promise<Response> => {
+  const role = cleanInput(body.role, MAX_ROLE_CHARS);
+  const jd = cleanInput(body.jd, MAX_JD_CHARS);
+  if (!role) return json(400, { error: "bad_request", detail: "role is required" });
+  hirePrompt ??= hireSystemPrompt();
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), UPSTREAM_TIMEOUT_MS);
+  try {
+    const upstream = await fetch(OPENROUTER_URL, {
+      method: "POST",
+      signal: controller.signal,
+      headers: {
+        authorization: `Bearer ${apiKey}`,
+        "content-type": "application/json",
+        "HTTP-Referer": process.env.SITE_URL || "https://localhost",
+        "X-Title": "Raj Tripathi Portfolio"
+      },
+      body: JSON.stringify({
+        model,
+        temperature: 0.2,
+        max_tokens: 300,
+        messages: [
+          { role: "system", content: hirePrompt },
+          { role: "user", content: hireUserMessage(role, jd) }
+        ]
+      })
+    });
+    if (!upstream.ok) {
+      console.error("hire: upstream status", upstream.status);
+      return json(upstream.status === 429 ? 429 : 502, { error: upstream.status === 429 ? "rate_limited" : "upstream_error" });
+    }
+    const data = (await upstream.json()) as { choices?: { message?: { content?: string } }[] };
+    const reply = parseHireReply(data?.choices?.[0]?.message?.content ?? "");
+    return reply ? json(200, reply) : json(502, { error: "bad_reply" });
+  } catch (e) {
+    console.error("hire: upstream request failed", (e as Error).name);
+    return json(504, { error: "upstream_timeout" });
+  } finally {
+    clearTimeout(timer);
+  }
+};
 
 export default async (req: Request, context: Context) => {
   if (req.method !== "POST") return json(405, { error: "method_not_allowed" });
@@ -70,6 +118,8 @@ export default async (req: Request, context: Context) => {
   } catch {
     return json(400, { error: "invalid_json" });
   }
+  if ((body as { mode?: unknown })?.mode === "hire") return hire(body as Record<string, unknown>, apiKey, model);
+
   const messages = parseMessages(body);
   if (typeof messages === "string") return json(400, { error: "bad_request", detail: messages });
 

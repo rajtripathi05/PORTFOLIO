@@ -127,6 +127,9 @@ button:disabled {
 .tile-arcade {
   background: linear-gradient(135deg, var(--icon-arcade-1), var(--icon-arcade-2));
 }
+.tile-hire {
+  background: linear-gradient(180deg, var(--icon-hire-1), var(--icon-hire-2));
+}
 
 /* Labels drawn directly on media (Launchpad over a blurred scrim). */
 .label-on-media {

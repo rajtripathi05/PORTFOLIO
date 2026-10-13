@@ -24,6 +24,7 @@ export type AppId =
   | "assistant"
   | "terminal"
   | "arcade"
+  | "hire"
   | "settings";
 
 /**

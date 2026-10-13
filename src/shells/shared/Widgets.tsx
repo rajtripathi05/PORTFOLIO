@@ -18,7 +18,7 @@ const tap = (open: OpenFrom, id: AppId, params?: AppParams) => (e: React.MouseEv
   open(id, e.currentTarget, params);
 };
 
-/** Photo, name, degree and the two ways in: the About Me app or the one-page Quick View. */
+/** Photo, name, degree and the ways in: About Me, the one-page Quick View, or Hire Raj. */
 export function ProfileWidget({ open }: { open: OpenFrom }) {
   return (
     <section className="widget glass" aria-labelledby="widget-name">
@@ -49,6 +49,14 @@ export function ProfileWidget({ open }: { open: OpenFrom }) {
           Quick View
         </a>
       </div>
+      <button
+        type="button"
+        className="btn !h-10 mt-2 w-full !rounded-full glass glass-flat glass-press text-ink-1"
+        onClick={tap(open, "hire")}
+      >
+        <span className="i-ph:handshake-bold" aria-hidden="true" />
+        Hire Raj: match a role
+      </button>
     </section>
   );
 }
