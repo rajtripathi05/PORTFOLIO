@@ -73,7 +73,9 @@ export function AwardsWidget({ open }: { open: OpenFrom }) {
       </span>
       <span className="mt-2 flex items-baseline gap-1.5">
         <span className="widget-big">{achievements.length}</span>
-        <span className="text-footnote font-semibold text-ink-2">{wins} wins</span>
+        <span className="whitespace-nowrap text-caption font-semibold text-ink-2">
+          {achievements.length === 1 ? "award" : "awards"} · {wins} {wins === 1 ? "win" : "wins"}
+        </span>
       </span>
       <span className="mt-auto line-clamp-2 text-footnote font-semibold leading-snug">{top.name}</span>
       <span className="text-caption text-ink-2">{[top.result, top.prize].filter(Boolean).join(" · ")}</span>
@@ -95,7 +97,8 @@ export function FeaturedWidget({ open }: { open: OpenFrom }) {
     >
       {featuredPreview && (
         <img
-          src={featuredPreview.srcSm}
+          // Full size: the widget shows it zoomed 1.6x (widgets.css).
+          src={featuredPreview.src}
           alt=""
           width={480}
           height={300}

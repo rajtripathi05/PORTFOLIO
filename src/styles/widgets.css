@@ -80,11 +80,14 @@ a.widget:active {
   height: 100%;
   object-fit: cover;
   object-position: top;
+  /* Crop to the top of the site (its header and hero) at a legible size. */
+  transform: scale(1.6);
+  transform-origin: top center;
   transition: transform var(--duration-emphasis) var(--ease-standard);
 }
 @media (hover: hover) {
   .widget-featured:hover img {
-    transform: scale(1.03);
+    transform: scale(1.65);
   }
 }
 .widget-caption {

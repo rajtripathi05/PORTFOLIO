@@ -20,3 +20,6 @@ media-src/
 
 # Screenshot / a11y review output
 review/
+
+# Local dev server log
+review-dev.log
