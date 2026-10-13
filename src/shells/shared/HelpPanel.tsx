@@ -43,6 +43,20 @@ export default function HelpPanel({ onClose }: { onClose: () => void }) {
             </span>
           </li>
           <li className="flex gap-3">
+            <span className="i-ph:sliders-horizontal-bold mt-0.5 text-[18px] text-accent-text" aria-hidden="true" />
+            <span>
+              <strong>Control Center</strong> (the sliders icon at the top) switches dark mode, sound, the
+              wallpaper, and Clear or Tinted glass.
+            </span>
+          </li>
+          <li className="flex gap-3">
+            <span className="i-ph:game-controller-bold mt-0.5 text-[18px] text-accent-text" aria-hidden="true" />
+            <span>
+              Need a break? The <strong>Arcade</strong> has Snake, 2048, Memory, Minesweeper, Tic-Tac-Toe and a quiz
+              about Raj.
+            </span>
+          </li>
+          <li className="flex gap-3">
             <span className="i-ph:article-bold mt-0.5 text-[18px] text-accent-text" aria-hidden="true" />
             <span>
               Prefer a normal web page?{" "}

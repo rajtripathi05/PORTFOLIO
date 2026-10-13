@@ -134,6 +134,8 @@ export default function Settings() {
   const setTheme = useStore((s) => s.setTheme);
   const wallpaper = useStore((s) => s.wallpaper);
   const setWallpaper = useStore((s) => s.setWallpaper);
+  const glass = useStore((s) => s.glass);
+  const setGlass = useStore((s) => s.setGlass);
   const viewAs = useStore((s) => s.viewAs);
   const setViewAs = useStore((s) => s.setViewAs);
   const showToast = useStore((s) => s.showToast);
@@ -148,16 +150,41 @@ export default function Settings() {
           <Row label="Theme">
             <Segmented label="Theme" value={theme} options={THEMES} onChange={setTheme} />
           </Row>
-          {shell === "desktop" && (
-            <Row label="Wallpaper">
-              <Segmented
-                label="Wallpaper"
-                value={wallpaper}
-                options={wallpapers.map((w) => ({ id: w.id, label: w.name }))}
-                onChange={setWallpaper}
-              />
-            </Row>
-          )}
+          <Row label="Wallpaper" hint="Original designs, made for the glass.">
+            <div role="radiogroup" aria-label="Wallpaper" className="flex flex-wrap gap-2.5">
+              {wallpapers.map((w) => (
+                <button
+                  key={w.id}
+                  type="button"
+                  role="radio"
+                  aria-checked={wallpaper === w.id}
+                  className="flex flex-col items-center gap-1"
+                  onClick={(e) => {
+                    feedback("selection", { el: e.currentTarget });
+                    setWallpaper(w.id);
+                  }}
+                >
+                  <span
+                    className={`cc-wallpaper block w-16${wallpaper === w.id ? " is-on" : ""}`}
+                    style={{ background: w.background }}
+                    aria-hidden="true"
+                  />
+                  <span className="text-caption font-semibold text-ink-2">{w.name}</span>
+                </button>
+              ))}
+            </div>
+          </Row>
+          <Row label="Glass" hint="Tinted glass is more opaque, so text over it is easier to read.">
+            <Segmented
+              label="Glass"
+              value={glass}
+              options={[
+                { id: "clear", label: "Clear" },
+                { id: "tinted", label: "Tinted" }
+              ]}
+              onChange={setGlass}
+            />
+          </Row>
           <Row label="View as" hint="Force the desktop, tablet or phone layout.">
             <Segmented label="View as" value={viewAs} options={VIEWS} onChange={setViewAs} />
           </Row>

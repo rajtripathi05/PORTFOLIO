@@ -36,12 +36,13 @@
     <meta name="twitter:image" content="%SITE_URL%/og-image.png" />
 
     <script>
-      // Apply the saved/system theme before first paint to avoid a light flash in dark mode.
+      // Apply the saved/system theme and glass tint before first paint (no flash).
       (function () {
         try {
           var t = localStorage.getItem("rt-portfolio:theme") || "system";
           var d = t === "dark" || (t === "system" && matchMedia("(prefers-color-scheme: dark)").matches);
           if (d) document.documentElement.classList.add("dark");
+          if (localStorage.getItem("rt-portfolio:glass") === "tinted") document.documentElement.dataset.glass = "tinted";
         } catch (e) {}
       })();
     </script>

@@ -11,9 +11,15 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { transform } from "esbuild";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const css = fs.readFileSync(path.join(ROOT, "src/styles/tokens.css"), "utf8");
+
+// The wallpaper palettes (src/configs/wallpapers.ts has no imports, so it loads directly).
+const wpSource = fs.readFileSync(path.join(ROOT, "src/configs/wallpapers.ts"), "utf8");
+const { code: wpCode } = await transform(wpSource, { loader: "ts", format: "esm" });
+const { wallpapers } = await import(`data:text/javascript;base64,${Buffer.from(wpCode).toString("base64")}`);
 
 const block = (selector) => {
   const start = css.indexOf(`${selector} {`);
@@ -61,10 +67,17 @@ const ratio = (a, b) => {
   return (x + 0.05) / (y + 0.05);
 };
 
+// Every colour a wallpaper can show behind glass: each ribbon palette (minus its thin
+// decorative highlight) and the stops of CSS-gradient wallpapers such as Mist.
 const wallpaperStops = (vars) =>
-  ["dusk", "ocean", "sunrise"].flatMap((w) =>
-    [...resolve(vars, vars[`wallpaper-${w}`]).matchAll(/#[0-9a-f]{6}/gi)].map((m) => ({ w, c: parseColor(m[0]) }))
-  );
+  wallpapers.flatMap((w) => {
+    if (w.ribbons) {
+      const p = vars === dark ? w.ribbons.dark : w.ribbons.light;
+      return [...p.bg, ...p.glow, ...p.back, ...p.main, ...p.front].map((c) => ({ w: w.id, c: parseColor(c) }));
+    }
+    const value = resolve(vars, w.background);
+    return [...value.matchAll(/#[0-9a-f]{6}/gi)].map((m) => ({ w: w.id, c: parseColor(m[0]) }));
+  });
 
 // [label, foreground token, background token(s) composited bottom→top, minimum ratio]
 // Background "WALLPAPER" means: worst case over every wallpaper colour stop.
@@ -90,7 +103,14 @@ const pairs = [
   ["Success on surface", "success", ["surface"], AA],
   ["Danger on surface", "danger", ["surface"], AA],
   ["Menu bar text on menu-bar material", "text-1", ["WALLPAPER", "material-menubar"], AA],
-  ["Dock label on dock material", "text-1", ["WALLPAPER", "material-menubar"], AA],
+  ["Dock label on clear glass", "text-1", ["WALLPAPER", "glass-clear"], AA],
+  ["Widget text on glass", "text-1", ["WALLPAPER", "glass-regular"], AA],
+  ["Widget secondary text on glass", "text-2", ["WALLPAPER", "glass-regular"], AA],
+  ["Search pill text on clear glass", "text-1", ["WALLPAPER", "glass-clear"], AA],
+  ["Control Center text on thick glass", "text-1", ["WALLPAPER", "glass-thick"], AA],
+  ["Control Center hint on thick glass", "text-2", ["WALLPAPER", "glass-thick"], AA],
+  ["Home-screen label on wallpaper", "text-1", ["WALLPAPER"], AA],
+  ["Launchpad label on clear glass", "text-1", ["WALLPAPER", "glass-clear"], AA],
   ["Menu item text on popover", "text-1", ["WALLPAPER", "material-popover"], AA],
   ["Menu hint on popover", "text-3", ["WALLPAPER", "material-popover"], AA],
   ["Window title on sidebar material", "text-2", ["WALLPAPER", "material-sidebar"], AA],
@@ -118,7 +138,15 @@ const pairs = [
   ["Skills category 4 text on its tint", "cat-4", ["surface-2", "cat-4-subtle"], AA],
   ["Skills category 5 text on its tint", "cat-5", ["surface-2", "cat-5-subtle"], AA],
   ["Skills category 6 text on its tint", "cat-6", ["surface-2", "cat-6-subtle"], AA],
-  ["Focus ring vs surface (non-text 3:1)", "ring", ["surface"], LARGE]
+  ["Focus ring vs surface (non-text 3:1)", "ring", ["surface"], LARGE],
+  // Games (big bold numerals count as large text).
+  ["2048: 2 tile", "tile-ink-low", ["tile-2"], AA],
+  ["2048: 4 tile", "tile-ink-low", ["tile-4"], AA],
+  ...["8", "16", "32", "64", "128", "256", "512", "1024"].map((v) => [`2048: ${v} tile`, "tile-ink", [`tile-${v}`], LARGE]),
+  ["2048: 2048 tile", "tile-ink-top", ["tile-2048"], LARGE],
+  ...["1", "2", "3", "4", "5", "6", "7", "8"].map((n) => [`Minesweeper ${n}`, `game-${n}`, ["surface", "game-board"], AA]),
+  ["Tic-tac-toe X", "game-x", ["surface", "game-board", "game-cell"], LARGE],
+  ["Tic-tac-toe O", "game-o", ["surface", "game-board", "game-cell"], LARGE]
 ];
 
 const evaluate = (vars, theme) =>

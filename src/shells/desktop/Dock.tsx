@@ -8,7 +8,17 @@ import { useEscape } from "~/hooks/useEscape";
 import { feedback } from "~/sensory/feedback";
 
 // The dock shows these; everything else lives in the "More" stack (an open app always shows too).
-const PRIMARY: AppId[] = ["about", "projects", "experience", "achievements", "assistant", "resume", "contact", "safari"];
+const PRIMARY: AppId[] = [
+  "about",
+  "projects",
+  "experience",
+  "achievements",
+  "assistant",
+  "resume",
+  "contact",
+  "safari",
+  "arcade"
+];
 const moreIcon = { ...launchpadIcon, glyph: "i-ph:dots-three-circle-fill" };
 import { isTouchDevice } from "~/utils";
 import DockItem from "./DockItem";
@@ -67,7 +77,7 @@ export default function Dock() {
         aria-label="Apps"
         aria-orientation="horizontal"
         onKeyDown={onToolbarKeyDown}
-        className="dock-bar material-menubar max-w-full"
+        className="dock-bar glass glass-clear glass-lens max-w-full"
         onMouseMove={(e) => magnify && mouseX.set(e.nativeEvent.x)}
         onMouseLeave={() => mouseX.set(null)}
       >

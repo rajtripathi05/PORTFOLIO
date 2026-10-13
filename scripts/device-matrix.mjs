@@ -28,7 +28,7 @@ const DEVICES = [
 ];
 const APPS = [
   "about", "projects", "experience", "achievements", "safari", "assistant", "resume",
-  "contact", "research", "leadership", "certifications", "skills", "terminal", "settings"
+  "contact", "research", "leadership", "certifications", "skills", "terminal", "arcade", "settings"
 ];
 
 const proc = spawn("npx", ["vite", "preview", "--port", String(PORT), "--strictPort"], { cwd: ROOT, shell: true, stdio: "ignore" });

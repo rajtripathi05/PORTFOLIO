@@ -1,0 +1,14 @@
+{
+  // UnoCSS IntelliSense reads unocss.config.ts (design-token utilities like text-ink-2, bg-panel).
+  "unocss.root": ".",
+  // Iconify IntelliSense: preview the Phosphor icons used as i-ph:* classes, inline.
+  "iconify.includes": ["ph"],
+  "iconify.inplace": true,
+  "iconify.annotations": true,
+  // Most files predate the Prettier config, so formatting warnings would drown out real
+  // lint errors in the editor. Lint still runs Prettier from the command line (npm run lint).
+  "eslint.rules.customizations": [{ "rule": "prettier/prettier", "severity": "off" }],
+  "editor.formatOnSave": false,
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "search.exclude": { "dist": true, ".ssr": true, "review": true, "media-src": true }
+}

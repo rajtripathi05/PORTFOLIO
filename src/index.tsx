@@ -3,6 +3,7 @@ import { createRoot, hydrateRoot } from "react-dom/client";
 import { resolveShell, useShellKind } from "~/shells/device";
 import { initSensory } from "~/sensory";
 import { TourLayer } from "~/features/tour";
+import { initGlass, LiquidFilters } from "~/features/glass";
 import { storage } from "~/utils/storage";
 
 import "@fontsource-variable/inter";
@@ -47,6 +48,7 @@ export default function App() {
   // The shell mounts underneath the boot screen, so it is ready when boot fades out.
   return (
     <>
+      <LiquidFilters />
       <Suspense fallback={null}>
         {shell === "desktop" ? <DesktopShell /> : shell === "tablet" ? <TabletShell /> : <PhoneShell />}
       </Suspense>
@@ -81,6 +83,7 @@ if (isQuickView) {
     </Suspense>
   );
 } else if (route === "/styleguide") {
+  initGlass();
   createRoot(rootElement).render(
     <Suspense fallback={null}>
       <Styleguide />
@@ -88,6 +91,7 @@ if (isQuickView) {
   );
 } else {
   initSensory();
+  initGlass();
   createRoot(rootElement).render(
     <React.StrictMode>
       <App />

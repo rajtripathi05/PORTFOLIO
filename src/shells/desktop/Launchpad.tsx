@@ -15,7 +15,7 @@ export default function Launchpad({ onClose }: { onClose: () => void }) {
       role="dialog"
       aria-modal="true"
       aria-label="All apps"
-      className="fixed inset-0 z-[140] flex items-center justify-center bg-scrim px-6 backdrop-blur-2xl"
+      className="launchpad fixed inset-0 z-[140] flex items-center justify-center px-6"
       onMouseDown={(e) => e.target === e.currentTarget && onClose()}
       initial={reduced ? { opacity: 0 } : { opacity: 0, scale: 1.06 }}
       animate={{ opacity: 1, scale: 1 }}
@@ -32,14 +32,14 @@ export default function Launchpad({ onClose }: { onClose: () => void }) {
               ref={i === 0 ? firstRef : undefined}
               data-tour-id={app.id}
               type="button"
-              className="flex w-28 flex-col items-center gap-2 rounded-panel p-2 text-on-media transition-transform active:scale-95"
+              className="flex w-28 flex-col items-center gap-2 rounded-panel p-2 text-ink-1 transition-transform active:scale-95"
               onClick={() => {
                 onClose();
                 openApp(app.id);
               }}
             >
               <AppIcon icon={app.icon} size={76} />
-              <span className="text-body font-medium label-on-media">{app.title}</span>
+              <span className="glass-text text-body font-semibold">{app.title}</span>
             </button>
           </li>
         ))}

@@ -184,11 +184,11 @@ export default function QuickView() {
 
       <header className="qv-header material-menubar">
         <div className="qv-wrap flex h-14 items-center gap-4">
-          <a href="#top" className="hstack gap-2 font-bold text-ink-1">
+          <a href="#top" className="hstack flex-none gap-2 whitespace-nowrap font-bold text-ink-1">
             <Monogram size={20} />
             <span>{identity.name}</span>
           </a>
-          <nav aria-label="Sections" className="qv-nav ml-auto hidden md:flex">
+          <nav aria-label="Sections" className="qv-nav ml-auto hidden lg:flex">
             {sections.map((s) => (
               <a key={s.id} href={`#${s.id}`} aria-current={active === s.id ? "location" : undefined}>
                 {s.label}

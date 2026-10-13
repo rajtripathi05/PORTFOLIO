@@ -1,6 +1,9 @@
 @import "./tokens.css";
 @import "./base.css";
+@import "./glass.css";
+@import "./widgets.css";
 @import "./shell.css";
 @import "./touch-shell.css";
 @import "./apps.css";
+@import "./games.css";
 @import "./quick.css";

@@ -9,6 +9,8 @@ import { useParallax } from "~/sensory/parallax";
 import Spotlight from "~/features/spotlight/Spotlight";
 import MenuBar from "./desktop/MenuBar";
 import DesktopIcons from "./desktop/DesktopIcons";
+import DesktopWidgets from "./desktop/DesktopWidgets";
+import ControlCenter from "./shared/ControlCenter";
 import AppWindow from "./desktop/AppWindow";
 import FloatingPanel from "./desktop/FloatingPanel";
 import Dock from "./desktop/Dock";
@@ -108,7 +110,7 @@ export default function DesktopShell() {
       className="fixed inset-0 overflow-hidden"
       onContextMenu={(e) => {
         // Only the bare desktop: windows, menus and the dock keep their own behaviour.
-        if ((e.target as HTMLElement).closest(".window, header, nav, [role=dialog], [role=menu]")) return;
+        if ((e.target as HTMLElement).closest(".window, header, nav, aside, [role=dialog], [role=menu]")) return;
         e.preventDefault();
         feedback("tap");
         setContextMenu({ kind: "desktop", x: e.clientX, y: e.clientY });
@@ -137,6 +139,7 @@ export default function DesktopShell() {
       </a>
 
       <MenuBar />
+      <DesktopWidgets />
       <DesktopIcons />
 
       <main
@@ -170,6 +173,7 @@ export default function DesktopShell() {
         {overlay === "credits" && <Credits key="credits" onClose={closeOverlay} />}
         {overlay === "spotlight" && <Spotlight key="spotlight" onClose={() => setOverlay(null)} />}
         {overlay === "launchpad" && <Launchpad key="launchpad" onClose={closeOverlay} />}
+        {overlay === "control" && <ControlCenter key="control" onClose={() => setOverlay(null)} />}
       </AnimatePresence>
 
       <ShellContextMenu />

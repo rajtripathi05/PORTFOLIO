@@ -1,8 +1,18 @@
 import { apps, type AppId } from "~/configs/apps";
 import type { AppParams } from "~/types";
 import { achievementTitle, portfolio } from "~/data/portfolio";
+import { games } from "~/features/games/registry";
 
-export type SearchGroup = "Apps" | "Projects" | "Achievements" | "Experience" | "Research & IP" | "Leadership" | "Certifications" | "Skills";
+export type SearchGroup =
+  | "Apps"
+  | "Projects"
+  | "Achievements"
+  | "Experience"
+  | "Research & IP"
+  | "Leadership"
+  | "Certifications"
+  | "Skills"
+  | "Games";
 
 export interface SearchItem {
   key: string;
@@ -117,6 +127,16 @@ export const searchIndex: SearchItem[] = [
     app: "skills" as const,
     params: { q: skill },
     icon: "i-ph:stack-fill"
+  })),
+  ...games.map((g) => ({
+    key: `game-${g.id}`,
+    group: "Games" as const,
+    title: g.title,
+    subtitle: g.tagline,
+    body: "game play arcade",
+    app: "arcade" as const,
+    params: { id: g.id },
+    icon: g.glyph
   }))
 ];
 
@@ -169,4 +189,14 @@ export const search = (raw: string): SearchItem[] => {
   return scored.sort((a, b) => b.s - a.s).map((x) => x.item);
 };
 
-export const groupOrder: SearchGroup[] = ["Apps", "Projects", "Achievements", "Experience", "Research & IP", "Leadership", "Certifications", "Skills"];
+export const groupOrder: SearchGroup[] = [
+  "Apps",
+  "Projects",
+  "Achievements",
+  "Experience",
+  "Research & IP",
+  "Leadership",
+  "Certifications",
+  "Skills",
+  "Games"
+];

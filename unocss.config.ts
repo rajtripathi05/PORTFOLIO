@@ -3,6 +3,13 @@ import { defineConfig, presetIcons, presetUno, transformerDirectives, transforme
 // The theme only points at design tokens (src/styles/tokens.css), so light/dark,
 // reduced motion and reduced transparency are handled in one place.
 export default defineConfig({
+  // Also scan plain .ts/.js modules: icon names live in data files too (game registry,
+  // Spotlight index). UnoCSS skips them by default, which silently drops those icons.
+  content: {
+    pipeline: {
+      include: [/\.(vue|svelte|[jt]sx?|mdx?|astro|elm|php|phtml|html)($|\?)/]
+    }
+  },
   theme: {
     colors: {
       accent: {

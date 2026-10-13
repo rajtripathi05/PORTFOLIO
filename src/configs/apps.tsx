@@ -158,6 +158,17 @@ export const apps: AppDef[] = [
     ...lazyApp(() => import("~/apps/Terminal"))
   },
   {
+    id: "arcade",
+    title: "Arcade",
+    description: "Snake, 2048, Memory, Minesweeper, Tic-Tac-Toe and a quiz about Raj",
+    icon: { glyph: "i-ph:game-controller-fill", tile: "tile-arcade" },
+    width: 760,
+    height: 720,
+    minWidth: 360,
+    minHeight: 420,
+    ...lazyApp(() => import("~/apps/Arcade"))
+  },
+  {
     id: "settings",
     title: "Settings",
     description: "Theme, wallpaper, view mode, sound and haptics",

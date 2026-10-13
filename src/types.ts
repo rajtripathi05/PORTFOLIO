@@ -23,6 +23,7 @@ export type AppId =
   | "safari"
   | "assistant"
   | "terminal"
+  | "arcade"
   | "settings";
 
 /**
@@ -30,7 +31,7 @@ export type AppId =
  * Spotlight results, AI actions and the tour all use this shape.
  */
 export interface AppParams {
-  /** Item to select or scroll to: a project, achievement, role or certification id. */
+  /** Item to select or scroll to: a project, achievement, role, certification or game id. */
   id?: string;
   /** Pre-filled text: the Skills filter, or a question for the AI. */
   q?: string;

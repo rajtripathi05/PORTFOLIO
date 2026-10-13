@@ -1,0 +1,232 @@
+/* Home-screen / desktop widgets (src/shells/shared/Widgets.tsx). Glass cards; tokens only. */
+
+.widget {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 16px;
+  border-radius: var(--radius-widget);
+  border: 1px solid var(--glass-border);
+  color: var(--text-1);
+  text-align: left;
+  overflow: hidden;
+}
+button.widget,
+a.widget {
+  transition:
+    transform var(--duration-standard) var(--ease-spring),
+    box-shadow var(--duration-standard) var(--ease-standard);
+  -webkit-tap-highlight-color: transparent;
+}
+@media (hover: hover) {
+  button.widget:hover,
+  a.widget:hover {
+    transform: translateY(-2px);
+  }
+}
+button.widget:active,
+a.widget:active {
+  transform: scale(0.97);
+}
+
+.widget-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-caption);
+  line-height: var(--lh-caption);
+  font-weight: 700;
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+.widget-big {
+  font-family: var(--font-rounded);
+  font-size: 34px;
+  line-height: 38px;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.widget-glyph {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  color: var(--on-accent);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+.widget-photo {
+  flex: none;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow:
+    0 0 0 2px var(--glass-rim),
+    var(--shadow-raised);
+}
+
+/* Featured project: a live-site screenshot under a glass caption. */
+.widget-featured {
+  position: relative;
+  padding: 0;
+  min-height: 176px;
+}
+.widget-featured img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  transition: transform var(--duration-emphasis) var(--ease-standard);
+}
+@media (hover: hover) {
+  .widget-featured:hover img {
+    transform: scale(1.03);
+  }
+}
+.widget-caption {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  padding: 10px 12px;
+  border-radius: 15px;
+}
+
+/* Desktop widget column (src/shells/desktop/DesktopWidgets.tsx). */
+.desktop-widgets {
+  position: fixed;
+  left: 16px;
+  z-index: 5;
+  display: grid;
+  gap: 12px;
+  width: 316px;
+}
+
+/* ---------------- Control Center (src/shells/shared/ControlCenter.tsx) ---------------- */
+.cc-panel {
+  position: fixed;
+  right: 8px;
+  z-index: 160;
+  width: 340px;
+  max-width: calc(100vw - 16px);
+  padding: 12px;
+  border-radius: 28px;
+  border: 1px solid var(--glass-border);
+  color: var(--text-1);
+  box-shadow: var(--glass-shadow-lg);
+}
+.cc-panel.is-touch {
+  top: calc(env(safe-area-inset-top) + 8px);
+  left: 8px;
+  right: 8px;
+  width: auto;
+  max-width: 420px;
+  margin: 0 auto;
+}
+.cc-tile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  min-height: 60px;
+  padding: 10px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--glass-border);
+  text-align: left;
+  color: var(--text-1);
+}
+.cc-wide {
+  grid-column: span 2;
+}
+.cc-icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: var(--text-1);
+  background: var(--hover-tint);
+  transition:
+    background-color var(--duration-standard) var(--ease-standard),
+    color var(--duration-standard) var(--ease-standard);
+}
+.cc-icon.is-on {
+  color: var(--on-accent);
+  background: var(--accent);
+}
+.cc-slider {
+  flex: 1;
+  min-width: 0;
+  height: 28px;
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+.cc-slider::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: var(--radius-chip);
+  background: linear-gradient(to right, var(--accent) var(--fill), var(--hover-tint) var(--fill));
+}
+.cc-slider::-moz-range-track {
+  height: 8px;
+  border-radius: var(--radius-chip);
+  background: linear-gradient(to right, var(--accent) var(--fill), var(--hover-tint) var(--fill));
+}
+.cc-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  margin-top: -7px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow:
+    0 1px 4px rgba(0, 0, 0, 0.3),
+    0 0 0 0.5px rgba(0, 0, 0, 0.1);
+}
+.cc-slider::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+.cc-wallpaper {
+  aspect-ratio: 4 / 3;
+  border-radius: 10px;
+  box-shadow: inset 0 0 0 1px var(--hairline);
+  transition: transform var(--duration-standard) var(--ease-spring);
+}
+.cc-wallpaper:hover {
+  transform: scale(1.05);
+}
+.cc-wallpaper.is-on {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cc-wallpaper,
+  .cc-wallpaper:hover {
+    transition: none;
+    transform: none;
+  }
+  button.widget,
+  a.widget,
+  .widget-featured img {
+    transition: none;
+  }
+  button.widget:hover,
+  a.widget:hover,
+  button.widget:active,
+  a.widget:active,
+  .widget-featured:hover img {
+    transform: none;
+  }
+}

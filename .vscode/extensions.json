@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "antfu.unocss",
+    "antfu.iconify",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "usernamehw.errorlens",
+    "yoavbls.pretty-ts-errors",
+    "deque-systems.vscode-axe-linter",
+    "ms-playwright.playwright"
+  ]
+}

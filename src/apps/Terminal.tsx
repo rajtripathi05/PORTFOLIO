@@ -2,11 +2,15 @@ import type React from "react";
 import { achievementTitle, isTodoLink, portfolio } from "~/data/portfolio";
 import { MAX_USER_CHARS } from "~/data/assistant";
 import { askAssistant } from "~/features/ai/askAssistant";
+import { games, getGame } from "~/features/games/registry";
+import { apps } from "~/configs/apps";
+import { getWallpaper } from "~/configs/wallpapers";
 import { feedback } from "~/sensory/feedback";
 import type { Role } from "~/types";
 
 const p = portfolio;
 const PROMPT = "raj@portfolio ~ %";
+const loadedAt = Date.now();
 
 const COMMANDS: Record<string, string> = {
   help: "List available commands",
@@ -20,8 +24,20 @@ const COMMANDS: Record<string, string> = {
   certifications: "Courses and verified certificates",
   contact: "How to get in touch",
   resume: "Open the resume PDF",
+  games: "List the Arcade's games",
+  play: "Play a game, e.g. play snake",
+  neofetch: "This system, at a glance",
+  whoami: "Who you're looking at",
   clear: "Clear the screen",
   ai: "Ask the AI assistant, e.g. ai What has he won?"
+};
+
+// "RT" monogram for neofetch.
+const LOGO = [" ____  _____ ", "|  _ \\|_   _|", "| |_) | | |  ", "|  _ <  | |  ", "|_| \\_\\ |_|  "];
+
+const uptime = () => {
+  const m = Math.floor((Date.now() - loadedAt) / 60000);
+  return m < 1 ? "less than a minute" : m === 1 ? "1 minute" : `${m} minutes`;
 };
 
 const C = {
@@ -59,6 +75,54 @@ const roleList = (roles: Role[], topic?: (r: Role) => string | undefined) => (
 );
 
 const outputs: Record<string, () => React.ReactNode> = {
+  games: () => (
+    <div>
+      <p className={C.head}>Arcade</p>
+      {games.map((g) => (
+        <p key={g.id}>
+          <span className={`${C.key} inline-block w-32`}>play {g.id}</span>
+          <span className={C.dim}>{g.tagline}</span>
+        </p>
+      ))}
+    </div>
+  ),
+  whoami: () => (
+    <p>
+      <span className={C.head}>{p.identity.name}</span> <span className={C.dim}>— {p.identity.headline}</span>
+    </p>
+  ),
+  neofetch: () => {
+    const s = useStore.getState();
+    const rows: [string, string][] = [
+      ["OS", "RajOS (web, Liquid Glass)"],
+      ["Shell", document.documentElement.dataset.shell ?? "desktop"],
+      ["Theme", `${s.dark ? "Dark" : "Light"} · ${s.glass === "tinted" ? "tinted" : "clear"} glass`],
+      ["Wallpaper", getWallpaper(s.wallpaper).name],
+      ["Apps", String(apps.length)],
+      ["Games", String(games.length)],
+      ["Uptime", uptime()],
+      ["Degree", p.education.degree],
+      ["Awards", String(p.achievements.length)]
+    ];
+    return (
+      <div className="flex flex-wrap gap-x-6 gap-y-2">
+        <pre className={`${C.ok} leading-tight`} aria-hidden="true">
+          {LOGO.join("\n")}
+        </pre>
+        <div>
+          <p>
+            <span className={C.head}>raj</span>@<span className={C.head}>portfolio</span>
+          </p>
+          <p className={C.dim}>{"-".repeat(15)}</p>
+          {rows.map(([k, v]) => (
+            <p key={k}>
+              <span className={C.key}>{k}</span>: {v}
+            </p>
+          ))}
+        </div>
+      </div>
+    );
+  },
   research: () => (
     <div className="space-y-3">
       {roleList(p.research, (r) => (r as (typeof p.research)[number]).topic)}
@@ -274,6 +338,25 @@ export default function Terminal() {
       openApp("resume");
       return push(line, <span className={C.ok}>Opening the resume…</span>);
     }
+    // play <game>, or a game's name on its own ("snake", "2048").
+    const gameName = cmd === "play" ? rest.join(" ").toLowerCase() : getGame(cmd) ? cmd : null;
+    if (gameName !== null) {
+      const game = games.find((g) => g.id === gameName || g.title.toLowerCase() === gameName);
+      if (cmd === "play" && !gameName) {
+        openApp("arcade");
+        return push(line, <span className={C.ok}>Opening the Arcade…</span>);
+      }
+      if (!game)
+        return push(
+          line,
+          <span className={C.err}>
+            No game called “{gameName}”. Type <span className={C.key}>games</span> to see them all.
+          </span>
+        );
+      openApp("arcade", { id: game.id });
+      return push(line, <span className={C.ok}>Starting {game.title}… good luck!</span>);
+    }
+    if (cmd === "sudo") return push(line, <span className={C.dim}>Nice try. This portfolio runs in user mode. 🙂</span>);
     const out = outputs[cmd];
     push(
       line,
@@ -310,7 +393,7 @@ export default function Terminal() {
     } else if (e.key === "Tab") {
       e.preventDefault();
       const matches = Object.keys(COMMANDS).filter((c) => c.startsWith(input.trim().toLowerCase()));
-      if (matches.length === 1) setInput(matches[0] + (matches[0] === "ai" ? " " : ""));
+      if (matches.length === 1) setInput(matches[0] + (matches[0] === "ai" || matches[0] === "play" ? " " : ""));
       else if (matches.length > 1) push(input, <span className={C.dim}>{matches.join("   ")}</span>);
     } else if (e.key === "l" && e.ctrlKey) {
       e.preventDefault();

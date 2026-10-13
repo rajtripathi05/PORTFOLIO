@@ -1,6 +1,6 @@
 import type { StateCreator } from "zustand";
 
-export type Overlay = "spotlight" | "launchpad" | "help" | "credits" | "welcome" | null;
+export type Overlay = "spotlight" | "launchpad" | "help" | "credits" | "welcome" | "control" | null;
 
 export interface ContextMenuState {
   x: number;

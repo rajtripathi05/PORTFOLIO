@@ -1,6 +1,6 @@
 # Raj Tripathi — Portfolio
 
-A macOS-style desktop portfolio that anyone can use in seconds, with a plain **Quick View** page, device-adaptive shells (desktop, tablet and phone), an AI assistant grounded in the portfolio, and an accessible, token-based design system.
+A macOS-style desktop portfolio that anyone can use in seconds, finished in Apple-style **Liquid Glass**: device-adaptive shells (desktop, tablet and phone) with glass widgets and Control Center, an **Arcade** of six games, an AI assistant grounded in the portfolio, a plain **Quick View** page, and an accessible, token-based design system.
 
 Built with React 18, TypeScript, Vite, UnoCSS, Zustand and Framer Motion. Deployed on Netlify.
 
@@ -90,7 +90,9 @@ The function sends the portfolio as the system prompt, limits user messages to 5
 | `npm run media` | Optimize achievements media from `media-src/` |
 | `npm run previews` | Screenshot live project sites for previews |
 | `npm run check:content` | Verify tags/stats come from the content |
-| `npm run check:contrast` | WCAG contrast ratios for every design-token pair (both themes, over each wallpaper) |
+| `npm run check:contrast` | WCAG contrast ratios for every design-token pair (both themes, worst case over every wallpaper colour, under each glass tint) |
+| `npm run check:icons` | Every `i-ph:*` icon exists and is written in full (UnoCSS drops unknown or runtime-built names silently) |
+| `npm run matrix` | Build first; loads every app on six viewports (desktop → phone): right shell, no overflow, no errors |
 | `npm run review -- <label> --axe` | Build first; captures review screenshots + axe-core results into `review/<label>/` |
 | `node scripts/generate-brand.mjs` | Regenerates favicon, touch icon and the Open Graph card |
 
@@ -98,13 +100,23 @@ The function sends the portfolio as the system prompt, limits user messages to 5
 
 All colours, type sizes, spacing, radii, shadows, materials and motion live in `src/styles/tokens.css` (motion values mirrored in `src/styles/motion.ts`). Open **`/styleguide`** (not linked, `noindex`) to see every token in light and dark.
 
+### Liquid Glass
+
+Floating surfaces are glass (`src/styles/glass.css`): `glass` (widgets), `glass-clear` (dock, search pill), `glass-thick` (menus, dialogs, Control Center). Each has a specular rim that turns toward the pointer or device tilt. In Chromium browsers, the dock and phone chrome also bend the wallpaper at their edges, through an SVG displacement filter that sizes itself to the element (`src/features/glass/LiquidFilters.tsx`). Other browsers get the same frosted glass without refraction, and glass turns solid when the visitor asks for reduced transparency. **Control Center** (sliders icon) and **Settings** offer dark mode, wallpapers and Clear/Tinted glass.
+
+The wallpapers (Peacock, Marigold, Lagoon, Mist) are original SVGs generated from palettes in `src/configs/wallpapers.ts`, with light and dark versions. Their colours are kept within luminance limits so text stays AA-legible, and `check:contrast` verifies every colour.
+
+## Arcade
+
+`src/apps/Arcade.tsx` hosts six games: Snake, 2048, Memory, Minesweeper, Tic-Tac-Toe and **Raj Quiz**. Each game plays by keyboard and touch, pauses when hidden, respects reduced motion, and is its own code chunk (`src/features/games/`). Best scores stay in the visitor's browser. Memory and the Quiz build their facts from `portfolio.ts` by id, so they always match the content. Deep link a game with `/?open=arcade&id=snake`; in the Terminal, type `games` or `play 2048`.
+
 ## Sound & haptics
 
 Nothing plays until the visitor interacts. UI sounds (soft taps, open/close, success) are synthesised in the browser with the Web Audio API — **no audio files ship** — and loaded lazily on the first interaction (`src/sensory`). They are off by default under reduced motion. The optional **ambient pad** is off on every load and starts only from a click (Settings, the menu-bar speaker, or **View → Ambient Music**). **Mute** is always one tap away (menu bar, phone/tablet status bar). Haptics use the Vibration API on touch devices and can be turned off in Settings.
 
 ## Device shells
 
-`src/shells/device.ts` picks Desktop (windows + dock), Tablet (iPadOS-style home and page cards) or Phone (iOS-style home and full-screen apps). Apps never import shell code; they read `useAppHost()` (`src/shells/host.tsx`) for `params`, width and in-app back steps. **Settings → View as** forces a shell.
+`src/shells/device.ts` picks Desktop (windows + dock + widget column), Tablet (iPadOS-style home and page cards) or Phone (iOS 26-style home and full-screen apps). Apps never import shell code; they read `useAppHost()` (`src/shells/host.tsx`) for `params`, width and in-app back steps. **Settings → View as** forces a shell. On phones and tablets, an open app can be pulled down by its bar to close it, and the home indicator closes it with a swipe up. On phones, toasts appear as a Dynamic Island.
 
 ## Pending content (TODO_ placeholders)
 

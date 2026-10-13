@@ -20,11 +20,11 @@ export const downloadResume = () => {
 export default function MenuBar() {
   const openApp = useStore((s) => s.openApp);
   const setOverlay = useStore((s) => s.setOverlay);
+  const toggleOverlay = useStore((s) => s.toggleOverlay);
+  const overlay = useStore((s) => s.overlay);
   const closeFocused = useStore((s) => s.closeFocused);
   const theme = useStore((s) => s.theme);
   const setTheme = useStore((s) => s.setTheme);
-  const dark = useStore((s) => s.dark);
-  const toggleDark = useStore((s) => s.toggleDark);
   const wallpaper = useStore((s) => s.wallpaper);
   const setWallpaper = useStore((s) => s.setWallpaper);
   const muted = useSensory((s) => s.muted);
@@ -171,11 +171,13 @@ export default function MenuBar() {
         <button
           type="button"
           className="menubar-btn"
-          onClick={toggleDark}
-          aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
-          title={dark ? "Light mode" : "Dark mode"}
+          data-cc-toggle
+          onClick={() => toggleOverlay("control")}
+          aria-expanded={overlay === "control"}
+          aria-label="Control Center: theme, sound, wallpaper and glass"
+          title="Control Center"
         >
-          <span className={`${dark ? "i-ph:sun-bold" : "i-ph:moon-bold"} text-[15px]`} />
+          <span className="i-ph:sliders-horizontal-bold text-[15px]" />
         </button>
         <time className="menubar-btn tabular-nums cursor-default" dateTime={now.toISOString()}>
           {winWidth >= 1050 && <span>{format(now, "EEE d MMM")}</span>}

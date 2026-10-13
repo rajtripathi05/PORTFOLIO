@@ -1,0 +1,169 @@
+/* =============================================================================
+   Liquid Glass — the material every floating surface is made of.
+
+   .glass          frosted glass for widgets, panels and controls (regular tint)
+   .glass-clear    clearer tint for lens surfaces (dock, search pill)
+   .glass-thick    near-opaque tint for text-heavy surfaces (menus, dialogs)
+   .glass-lens     edge refraction (Chromium only: html[data-lens="on"], filter in
+                   src/features/glass/LiquidFilters.tsx)
+   .material-*     the menu bar, window chrome and popovers, mapped onto glass
+
+   Glass is the default wherever backdrop-filter works; it turns solid only when the
+   visitor asks for reduced transparency (Safari doesn't support that media feature,
+   so testing for "reduce" — not "no-preference" — keeps glass on there).
+   The specular rim faces --light-angle, which follows the pointer or device tilt
+   (src/features/glass/light.ts). Tokens live in tokens.css.
+   ========================================================================== */
+
+@property --light-angle {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 315deg;
+}
+
+/* Hosts the rim. :where() keeps it at zero specificity so `fixed`/`absolute` win. */
+:where(.glass, .material-menubar, .material-sidebar, .material-popover) {
+  position: relative;
+}
+.glass,
+.material-menubar,
+.material-sidebar,
+.material-popover {
+  isolation: isolate;
+  border-color: var(--glass-border);
+}
+
+/* ---------------- fills: solid first, glass where supported ---------------- */
+.glass {
+  background-color: var(--glass-solid);
+  box-shadow:
+    var(--glass-shadow),
+    inset 0 1px 0 var(--glass-edge-hi),
+    inset 0 -1px 0 var(--glass-edge-lo),
+    inset 0 0 20px var(--glass-glow);
+}
+.glass-flat {
+  box-shadow:
+    inset 0 1px 0 var(--glass-edge-hi),
+    inset 0 -1px 0 var(--glass-edge-lo),
+    inset 0 0 20px var(--glass-glow);
+}
+.material-menubar {
+  background-color: var(--material-menubar-solid);
+}
+.material-sidebar {
+  background-color: var(--material-sidebar-solid);
+}
+.material-popover {
+  background-color: var(--material-popover-solid);
+}
+
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass,
+  .material-menubar {
+    background-color: var(--glass-regular);
+    background-image: var(--glass-sheen);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  }
+  .glass-thick,
+  .material-sidebar,
+  .material-popover {
+    background-color: var(--glass-thick);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  }
+  .glass-clear {
+    background-color: var(--glass-clear);
+    -webkit-backdrop-filter: blur(10px) saturate(var(--glass-saturate));
+    backdrop-filter: blur(10px) saturate(var(--glass-saturate));
+  }
+  /* Real refraction at the edges; the light blur keeps the lens readable. */
+  html[data-lens="on"] .glass-lens {
+    backdrop-filter: url(#lg-lens) blur(var(--glass-lens-blur)) saturate(var(--glass-saturate));
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass,
+  .glass-clear,
+  .glass-thick,
+  .material-menubar {
+    background-color: var(--glass-solid);
+    background-image: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .material-sidebar {
+    background-color: var(--material-sidebar-solid);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .material-popover {
+    background-color: var(--material-popover-solid);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  html[data-lens="on"] .glass-lens {
+    backdrop-filter: none;
+  }
+}
+
+/* ---------------- specular rim ----------------
+   A 1px ring inside the edge, brightest where it faces the light and again (fainter)
+   on the opposite side, like a real bevel catching light. */
+.glass::before,
+.material-menubar::before,
+.material-sidebar::before,
+.material-popover::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  border-radius: inherit;
+  padding: 1px;
+  pointer-events: none;
+  background: conic-gradient(
+    from var(--light-angle),
+    var(--glass-rim),
+    var(--glass-rim-dim) 18%,
+    var(--glass-rim-dim) 40%,
+    var(--glass-rim-2) 50%,
+    var(--glass-rim-dim) 60%,
+    var(--glass-rim-dim) 82%,
+    var(--glass-rim)
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+/* The menu bar is a strip: only its bottom edge catches light. */
+.material-menubar.menubar::before {
+  padding: 0 0 1px;
+}
+
+/* ---------------- text and controls on glass ---------------- */
+.glass-text {
+  text-shadow: var(--glass-text-halo);
+}
+.glass-press {
+  transition:
+    transform var(--duration-standard) var(--ease-spring),
+    box-shadow var(--duration-standard) var(--ease-standard);
+  -webkit-tap-highlight-color: transparent;
+}
+.glass-press:hover {
+  --glass-edge-hi: var(--glass-rim);
+}
+.glass-press:active {
+  transform: scale(0.96);
+}
+@media (prefers-reduced-motion: reduce) {
+  .glass-press,
+  .glass-press:active {
+    transition: none;
+    transform: none;
+  }
+}

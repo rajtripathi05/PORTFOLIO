@@ -2,6 +2,7 @@ import { lazy, Suspense, type ComponentType } from "react";
 import { AnimatePresence } from "framer-motion";
 import type { ShellKind } from "~/types";
 import { TourLayer } from "~/features/tour";
+import ControlCenter from "~/shells/shared/ControlCenter";
 import Credits from "~/shells/shared/Credits";
 import HelpPanel from "~/shells/shared/HelpPanel";
 import OfflineNotice from "~/shells/shared/OfflineNotice";
@@ -25,6 +26,7 @@ export default function TouchOverlays({ shell }: { shell: ShellKind }) {
           {overlay === "spotlight" && <Spotlight key="spotlight" onClose={close} shell={shell} />}
           {overlay === "credits" && <Credits key="credits" onClose={close} />}
           {overlay === "help" && <HelpPanel key="help" onClose={close} />}
+          {overlay === "control" && <ControlCenter key="control" onClose={close} touch />}
         </AnimatePresence>
       </Suspense>
       <TourLayer />
