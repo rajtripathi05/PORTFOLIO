@@ -154,7 +154,14 @@ const pairs = [
   ["Tic-tac-toe O", "game-o", ["surface", "game-board", "game-cell"], LARGE],
   // Mumbai Local Dash HUD glass over the 3D scene; worst case is a white sky behind it.
   ["Runner HUD text on HUD glass", "dash-hud-ink", ["dash-hud-bg"], AA],
-  ["Runner HUD secondary on HUD glass", "dash-hud-ink-2", ["dash-hud-bg"], AA]
+  ["Runner HUD secondary on HUD glass", "dash-hud-ink-2", ["dash-hud-bg"], AA],
+  ["Runner card text", "dash-hud-ink", ["dash-card-bg"], AA],
+  ["Runner card secondary on stat tile", "dash-hud-ink-2", ["dash-card-bg", "dash-hud-bg"], AA],
+  ["Runner New best badge", "dash-best-ink", ["dash-best-bg"], AA],
+  ["Runner train warning chip", "dash-warn-ink", ["dash-warn-bg"], AA],
+  ["Runner selected graphics option", "dash-seg-on-ink", ["dash-seg-on"], AA],
+  ["Runner title accent (large) on title scrim", "dash-title-accent", ["dash-title-scrim"], LARGE],
+  ["Runner title (large) on title scrim", "dash-hud-ink", ["dash-title-scrim"], LARGE]
 ];
 
 const evaluate = (vars, theme) =>
